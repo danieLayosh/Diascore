@@ -1,0 +1,5 @@
+fastapi
+pandas
+SQLAlchemy
+pydantic
+python-dotenv
