@@ -22,4 +22,4 @@ async def get_scores(request: ScoreRequest):
     combind_pd = load_excel_file(gender.lower(), age, "I", pORt, kORs)
     normal_pd = load_excel_file(gender.lower(), age, "S", pORt, kORs)
         
-    return return_scores(scores, combind_pd, total_pd, normal_pd)
+    return return_scores(scores, total_pd, combind_pd, normal_pd)
