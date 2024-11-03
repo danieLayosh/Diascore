@@ -5,9 +5,9 @@ import os
 router = APIRouter()
 
 # Define the path to the Excel files directory
-DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../data/breif/briefP'))
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../data/brief/briefP'))
 
-def get_file_name(gender: str, age: float, file_type: str, pORt: str) -> str:
+def get_fileName_full_path(gender: str, age: float, file_type: str, pORt: str) -> str:
     """Constructs the file name based on gender, age, and file type."""
        
     if pORt.lower() not in ["p", "t"]:
@@ -29,17 +29,24 @@ def get_file_name(gender: str, age: float, file_type: str, pORt: str) -> str:
 
     gender_prefix = 'b_' if gender.lower() == 'boy' else 'g_'
     
+    # check if the file type is valid
+    if file_type.lower() not in ["gen", "I", "S"]:
+        raise HTTPException(status_code=400, detail="Invalid file type specified. Must be 'gen', 'I', or 'S'.")
+    
     # Create the file name
     file_name = f"{gender_prefix}{age_range}_{file_type}.xlsx"
+    
+    # Combine the directoty and file name to get the full path
+    file_name = os.path.join(dir, file_name)
+    
     return file_name
 
-def load_excel_file(gender: str, age: float, file_type: str) -> pd.DataFrame:
+def load_excel_file(gender: str, age: float, file_type: str, pORt: str) -> pd.DataFrame:
     """Loads the appropriate Excel file based on gender, age, and file type."""
-    file_name = get_file_name(gender, age, file_type)
-    file_path = os.path.join(DATA_DIR, file_name)
+    file_path = get_fileName_full_path(gender, age, file_type, pORt)
 
     if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail=f"File {file_name} not found")
+        raise HTTPException(status_code=404, detail=f"File {file_path} not found")
     
     return pd.read_excel(file_path)
 
