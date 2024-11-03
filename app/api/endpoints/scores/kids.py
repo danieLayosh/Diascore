@@ -5,10 +5,21 @@ import os
 router = APIRouter()
 
 # Define the path to the Excel files directory
-DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../data'))
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../data/breif/briefP'))
 
-def get_file_name(gender: str, age: float, file_type: str) -> str:
+def get_file_name(gender: str, age: float, file_type: str, pORt: str) -> str:
     """Constructs the file name based on gender, age, and file type."""
+       
+    if pORt.lower() not in ["p", "t"]:
+        raise HTTPException(status_code=400, detail="Invalid pORt specified. Must be 'p' or 't'.")
+
+    # Set the correct directory based on the pORt
+    if pORt.lower() == "p":
+        dir = os.path.join(DATA_DIR, "Parents")
+    else:
+        dir = os.path.join(DATA_DIR, "Teachers")
+    
+    # Validate the age range
     if age >= 2.0 and age <= 3.11:
         age_range = "2.0-3.11"
     elif age >= 4.0 and age <= 5.11:
