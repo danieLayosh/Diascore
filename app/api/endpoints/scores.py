@@ -5,7 +5,7 @@ import os
 router = APIRouter()
 
 # Define the path to the Excel files directory
-DATA_DIR = os.path.join(os.path.dirname(__file__), '../../../data')
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../data'))
 
 def get_file_name(gender: str, age: float, file_type: str) -> str:
     """Constructs the file name based on gender, age, and file type."""
