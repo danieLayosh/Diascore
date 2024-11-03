@@ -1,10 +1,18 @@
 from fastapi import APIRouter, HTTPException
+from models.ScoreRequest import ScoreRequest
 from services.excel_service import load_excel_file, return_scores
 
 router = APIRouter()
 
-@router.get("/scores/kids/")
-async def get_scores(scores: list, gender: str, age: float, pORt: str, kORs: str):
+@router.post("/scores/kids/")
+async def get_scores(request: ScoreRequest):
+    # Extract parameters from the request
+    scores = request.scores
+    gender = request.gender
+    age = request.age
+    pORt = request.pORt
+    kORs = request.kORs
+    
     # Validate gender
     if gender.lower() not in ["boy", "girl"]:
         raise HTTPException(status_code=400, detail="Invalid gender specified. Must be 'boy' or 'girl'.")
