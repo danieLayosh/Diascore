@@ -1,21 +1,22 @@
 import os
 from fastapi import HTTPException
 
-DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../data/brief'))
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../data/brief'))
 
 def get_fileName_full_path(gender: str, age: float, file_type: str, pORt: str, kORs: str) -> str:
     """Constructs the file name based on gender, age, file type, and kORs."""
     
+    # Validate pORt
     if pORt.lower() not in ["p", "t"]:
         raise HTTPException(status_code=400, detail="Invalid pORt specified. Must be 'p' or 't'.")
 
     # Determine the base directory based on kORs
     if kORs.lower() == "school":
         base_dir = "briefSchool"
-    elif kORs.lower() == "p":
+    elif kORs.lower() == "kids":
         base_dir = "briefP"
     else:
-        raise HTTPException(status_code=400, detail="Invalid kORs specified. Must be 'school' or 'p'.")
+        raise HTTPException(status_code=400, detail="Invalid kORs specified. Must be 'school' or 'kids'.")
 
     # Set the correct directory based on the pORt
     dir = os.path.join(DATA_DIR, base_dir, "Parents" if pORt.lower() == "p" else "Teachers")
@@ -28,7 +29,7 @@ def get_fileName_full_path(gender: str, age: float, file_type: str, pORt: str, k
     gender_prefix = 'b_' if gender.lower() == 'boy' else 'g_'
     
     # Validate file type
-    if file_type.lower() not in ["gen", "I", "S"]:
+    if file_type.lower() not in ["gen", "i", "s"]:
         raise HTTPException(status_code=400, detail="Invalid file type specified. Must be 'gen', 'I', or 'S'.")
 
     # Create the file name
