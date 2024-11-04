@@ -38,26 +38,26 @@ def return_scores(score_dict: dict, total_df: pd.DataFrame, combind_df: pd.DataF
 def get_score_from_column(df: pd.DataFrame, column_name: str, score_value) -> int:
     """Retrieves the score for a specified column based on the raw score."""
     if column_name not in df.columns:
-        raise ValueError(f"Column '{column_name}' not found in the DataFrame")
+        raise HTTPException(status_code=400, detail=f"Column '{column_name}' not found in the DataFrame")
     
     # Ensure 'raw score' column exists
     if 'raw score' not in df.columns:
-        raise ValueError("Column 'raw score' not found in the DataFrame")
+        raise HTTPException(status_code=400, detail="Column 'raw score' not found in the DataFrame")
     
     # Check if the score_value exists in the 'raw score' column
     if score_value not in df['raw score'].values:
-        raise ValueError(f"Raw score {score_value} not found in the DataFrame")
+        raise HTTPException(status_code=404, detail=f"Raw score {score_value} not found in the DataFrame")
     
     res = df[df['raw score'] == score_value]
     
     if res.empty:
-        raise ValueError(f"No matching entry found for {column_name}: {score_value}")
+        raise HTTPException(status_code=404, detail=f"No matching entry found for {column_name}: {score_value}")
     
     # Check if the value is not NaN before returning it
     if pd.notna(res[column_name].values[0]):
         return int(res[column_name].values[0])
     else:
-        raise ValueError(f"The score for {column_name} with raw score {score_value} is NaN")
+        raise HTTPException(status_code=400, detail=f"The score for {column_name} with raw score {score_value} is NaN")
 
 def get_total_score(score_dict: dict, df: pd.DataFrame) -> int:
     """Returns the total score based on the raw score."""
@@ -65,21 +65,21 @@ def get_total_score(score_dict: dict, df: pd.DataFrame) -> int:
     df.columns = df.columns.str.strip().str.lower()
     
     if 'raw score' not in df.columns:
-        raise ValueError("Column 'raw score' not found in the DataFrame")
+        raise HTTPException(status_code=400, detail="Column 'raw score' not found in the DataFrame")
     
     # Check if the raw_score exists in the 'raw score' column
     if raw_score not in df['raw score'].values:
-        raise ValueError(f"Raw score {raw_score} not found in the DataFrame")
+        raise HTTPException(status_code=404, detail=f"Raw score {raw_score} not found in the DataFrame")
 
     res = df[df['raw score'] == raw_score]
 
     if res.empty:
-        raise ValueError(f"No matching entry found for raw score: {raw_score}")
+        raise HTTPException(status_code=404, detail=f"No matching entry found for raw score: {raw_score}")
     
     if pd.notna(res['t score'].values[0]):
         return int(res['t score'].values[0])
     else:
-        raise ValueError(f"The score for 't score' with raw score {raw_score} is NaN")
+        raise HTTPException(status_code=400, detail=f"The score for 't score' with raw score {raw_score} is NaN")
 
 def get_normal_score(scores: dict, df: pd.DataFrame) -> int:
     """Returns the normal score based on the raw score."""
@@ -92,21 +92,21 @@ def get_normal_score(scores: dict, df: pd.DataFrame) -> int:
     df.columns = df.columns.str.strip().str.lower()
     
     if 'raw score' not in df.columns:
-        raise ValueError("Column 'raw score' not found in the DataFrame")
+        raise HTTPException(status_code=400, detail="Column 'raw score' not found in the DataFrame")
     
     # Check if the raw_score exists in the 'raw score' column
     if raw_score not in df['raw score'].values:
-        raise ValueError(f"Raw score {raw_score} not found in the DataFrame")
+        raise HTTPException(status_code=404, detail=f"Raw score {raw_score} not found in the DataFrame")
     
     if key not in df.columns:
-        raise ValueError(f"Column '{key}' not found in the DataFrame")
+        raise HTTPException(status_code=400, detail=f"Column '{key}' not found in the DataFrame")
     
     res = df[df['raw score'] == raw_score]
     
     if res.empty:
-        raise ValueError(f"No matching entry found for raw score: {raw_score}")
+        raise HTTPException(status_code=404, detail=f"No matching entry found for raw score: {raw_score}")
     
     if pd.notna(res[key].values[0]):
         return int(res[key].values[0])
     else:
-        raise ValueError(f"The score for {key} with raw score {raw_score} is NaN")
+        raise HTTPException(status_code=400, detail=f"The score for {key} with raw score {raw_score} is NaN")
