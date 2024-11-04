@@ -7,11 +7,11 @@ router = APIRouter()
 @router.post("/scores/kids/")
 async def get_scores(request: ScoreRequest):
     # Extract parameters from the request
-    scores = request.scores
-    gender = request.gender
-    age = request.age
-    pORt = request.pORt
-    kORs = request.kORs
+    scores = request.scores # Dictionary of scores
+    gender = request.gender # boy or girl
+    age = request.age # Age of the child
+    pORt = request.pORt # p for parents, t for teachers
+    kORs = request.kORs # briefP or school
     
     # Validate gender
     if gender.lower() not in ["boy", "girl"]:
