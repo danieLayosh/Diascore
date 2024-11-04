@@ -22,10 +22,10 @@ def get_fileName_full_path(gender: str, age: float, file_type: str, pORt: str, k
     dir = os.path.join(DATA_DIR, base_dir, "Parents" if pORt.lower() == "p" else "Teachers")
     
     # Validate the age range
-    if age < 2.0 or age > 5.11:
+    if age < 2.0:
         raise HTTPException(status_code=400, detail="Age not supported")
 
-    age_range = "2.0-3.11" if age <= 3.11 else "4.0-5.11"
+    age_range = "2.0-3.11" if age < 4.0 else "4.0-5.11"
     gender_prefix = 'b_' if gender.lower() == 'boy' else 'g_'
     
     # Validate file type
