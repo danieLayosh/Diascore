@@ -12,6 +12,10 @@ WORKING_MEMORY_ROWS = [ 2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 51, 53, 55, 57, 59
 PLAN_ORG_ROWS = [ 4, 9, 14, 19, 24, 29, 34, 39, 44, 49 ] #10
 
 def check_questions(answers: List[int]):
+     # Check if the answers list is empty
+    if not answers:
+        raise HTTPException(status_code=400, detail="Answers list cannot be empty")
+    
     # Check if all questions have been answered
     if len(answers) != 63:
         raise HTTPException(status_code=400, detail="All questions must be answered")
@@ -58,9 +62,9 @@ def check_negativity(answers):
 def check_inconsistency(answers):
     """Check for inconsistency in the answers"""
     
-    # Ensure answers is valid and has 63 entries
-    if len(answers) < max(INCONSISTENCY_ROWS_A + INCONSISTENCY_ROWS_B):
-        raise HTTPException(status_code=400, detail="Not enough scores to calculate inconsistency")
+    # Check for valid indices
+    if len(INCONSISTENCY_ROWS_A) != len(INCONSISTENCY_ROWS_B):
+        raise HTTPException(status_code=400, detail="Inconsistency row lists must have the same length")
     
     # Calculate the inconsistency
     num_list = []
@@ -69,7 +73,4 @@ def check_inconsistency(answers):
             inconsistency_value = answers[INCONSISTENCY_ROWS_A[i] - 1] - answers[INCONSISTENCY_ROWS_B[i] - 1]
             num_list.append(inconsistency_value)
             
-    print(num_list)
-    total_inconsistency = sum(abs(num) for num in num_list)
-            
-    return total_inconsistency
+    return sum(abs(num) for num in num_list)
