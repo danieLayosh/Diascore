@@ -3,9 +3,6 @@ from typing import List
 
 INCONSISTENCY_ROWS = [ 1, 3, 5, 10, 11, 16, 18, 33, 43, 48, 11, 33, 45, 20, 26, 21, 52, 38, 52, 54 ]
 NEGATIVITY_ROWS = [ 30, 44, 46, 47, 53, 55, 56, 57, 59, 63]
-ISCI_COMBO = ['inhibition', 'emotional control']
-FI_COMBO = ['shifting', 'emotional control']
-EMI_COMBO = [ 'working memory', 'plan/org']
 INHIBITION_ROWS = [ 3, 8, 13, 18, 23, 28, 33, 38, 43, 48, 52, 54, 56, 58, 60, 62 ] #16
 SHIFTING_ROWS = [ 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 ] #10
 EMOTIONAL_CONTROL_ROWS = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46 ] #10
