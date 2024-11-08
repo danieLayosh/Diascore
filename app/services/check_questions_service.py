@@ -49,6 +49,9 @@ def check_questions(answers: List[int]):
     scores['negativity_count'] = negativity_count
     scores['inconsistency'] = inconsistency_value
     
+    if len(scores) != 11:
+        raise HTTPException(status_code=400, detail="An error occurred while calculating the scores")
+    
     return scores
         
     

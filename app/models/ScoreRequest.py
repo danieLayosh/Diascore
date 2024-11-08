@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from models.AnswerRequest import AnswerSumRuqestWithCred
 
-class ScoreRequest(BaseModel):
-    scores: dict[str, int]
-    gender: str
-    age: float
+class ProcessingRequest(AnswerSumRuqestWithCred):
     pORt: str
     kORs: str
+    
+class processrequestDone(ProcessingRequest):
+    converted_scores: dict[str, int]

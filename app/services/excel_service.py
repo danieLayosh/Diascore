@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from fastapi import HTTPException
 from .file_service import get_fileName_full_path
+from models.ScoreRequest import ProcessingRequest, processrequestDone
 
 def load_excel_file(gender: str, age: float, file_type: str, pORt: str, kORs: str) -> pd.DataFrame:
     """Loads the appropriate Excel file based on gender, age, and file type."""
@@ -13,8 +14,34 @@ def load_excel_file(gender: str, age: float, file_type: str, pORt: str, kORs: st
         return pd.read_excel(file_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading Excel file: {e}")
+    
+def process_all_scores(request: ProcessingRequest) -> processrequestDone:
+    #Extract parameters from thr request
+    scores = request.preprocessed_scores # Dict of scores before calculating
+    gender = request.gender # boy or girl
+    age = request.age # Age og the child
+    pORt = request.pORt # p for parent, t for teacher
+    kORs = request.kORs # briefP or scholl        
+    
+    # Valid gender
+    if gender.lower() not in ["boy", "girl"]:
+        raise HTTPException(status_code=400, detail="Invalid gender specified, nust be a 'boy' or 'girl'")
+    
+    # Load the correct Excel file based on gender, age, and file type
+    total_df = load_excel_file(gender.lower(), age, "gen", pORt, kORs)
+    indexes_df = load_excel_file(gender.lower(), age, "I", pORt, kORs)
+    scale_df = load_excel_file(gender.lower(), age, "S", pORt, kORs)
+    
+    res_dict = convert_scores(scores, total_df, indexes_df, scale_df)
+    
+    result = processrequestDone(
+        **request.model_dump(),
+        converted_scores=res_dict
+    )
+    
+    return result
 
-def return_scores(score_dict: dict, total_df: pd.DataFrame, combind_df: pd.DataFrame, normal_df: pd.DataFrame) -> dict:
+def convert_scores(score_dict: dict, total_df: pd.DataFrame, combind_df: pd.DataFrame, normal_df: pd.DataFrame) -> dict:
     """Returns the scores as a dictionary."""
     result = {}
     
