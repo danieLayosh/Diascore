@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from fastapi import HTTPException
 from .file_service import get_fileName_full_path
-from models.ScoreRequest import ProcessingRequest, processrequestDone
+from models.MainLogicRequest import AnswerSumRuqestWithCred, processrequestDone
 
 def load_excel_file(gender: str, age: float, file_type: str, pORt: str, kORs: str) -> pd.DataFrame:
     """Loads the appropriate Excel file based on gender, age, and file type."""
@@ -15,13 +15,13 @@ def load_excel_file(gender: str, age: float, file_type: str, pORt: str, kORs: st
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading Excel file: {e}")
     
-def process_all_scores(request: ProcessingRequest) -> processrequestDone:
+def process_all_scores(request: AnswerSumRuqestWithCred) -> processrequestDone:
     #Extract parameters from thr request
     scores = request.preprocessed_scores # Dict of scores before calculating
     gender = request.gender # boy or girl
     age = request.age # Age og the child
     pORt = request.pORt # p for parent, t for teacher
-    kORs = request.kORs # briefP or scholl        
+    kORs = request.kORs # kids or school        
     
     # Valid gender
     if gender.lower() not in ["boy", "girl"]:
