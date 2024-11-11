@@ -1,11 +1,9 @@
 from fastapi import FastAPI
 import uvicorn
-from routers.score import router
 from routers.questions import router_questions
 
 app = FastAPI()
 
-app.include_router(router)
 app.include_router(router_questions)
 
 @app.get("/")
