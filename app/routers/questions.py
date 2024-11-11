@@ -21,4 +21,4 @@ async def calculate_answers(request: AnswerSumRequest) -> AnswerSumRuqestWithCre
     
 @router_questions.get("/questions/body/")
 async def get_request_body():
-    return AnswerSumRequest.schema_json().split("\n")
+    return AnswerSumRequest.schema_json().split()
