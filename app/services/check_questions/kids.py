@@ -11,6 +11,7 @@ EMOTIONAL_CONTROL_ROWS = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46 ] #10
 WORKING_MEMORY_ROWS = [ 2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 51, 53, 55, 57, 59, 61, 63 ] #17
 PLAN_ORG_ROWS = [ 4, 9, 14, 19, 24, 29, 34, 39, 44, 49 ] #10
 
+
 def check_questions(answers: List[int]):
      # Check if the answers list is empty
     if not answers:

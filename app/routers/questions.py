@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from models.MainLogicRequest import AnswerSumRequest, AnswerSumRuqestWithCred, processrequestDone
-from services.check_questions_service import check_questions
+from app.services.check_questions.kids import check_questions
 from services.excel_service import process_all_scores
 
 router_questions = APIRouter()
