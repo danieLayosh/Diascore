@@ -30,14 +30,14 @@ def check_questions(answers: List[int]):
     scores['total'] = sum(answers)
     scores['inhibition'] = sum(answers[row - 1] for row in INHIBITION_ROWS)
     scores['shifting'] = sum(answers[row - 1] for row in SHIFTING_ROWS)
-    scores['emotional_control'] = sum(answers[row - 1] for row in EMOTIONAL_CONTROL_ROWS)
-    scores['working_memory'] = sum(answers[row - 1] for row in WORKING_MEMORY_ROWS)
+    scores['emotional control'] = sum(answers[row - 1] for row in EMOTIONAL_CONTROL_ROWS)
+    scores['working memory'] = sum(answers[row - 1] for row in WORKING_MEMORY_ROWS)
     scores['plan/org'] = sum(answers[row - 1] for row in PLAN_ORG_ROWS)
     
     # Calculate the combination scores
-    scores['isci'] = scores['inhibition'] + scores['emotional_control']
-    scores['fi'] = scores['shifting'] + scores['emotional_control']
-    scores['emi'] = scores['working_memory'] + scores['plan/org']
+    scores['isci'] = scores['inhibition'] + scores['emotional control']
+    scores['fi'] = scores['shifting'] + scores['emotional control']
+    scores['emi'] = scores['working memory'] + scores['plan/org']
     
     # Check if the scores dict is empty
     if not scores:
