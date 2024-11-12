@@ -3,34 +3,23 @@ from models.MainLogicRequest import AnswerSumRequest, AnswerSumRuqestWithCred, p
 from services.check_questions.kids import check_questions as check_kids
 from services.check_questions.school import check_questions as check_school
 from services.excel_service import process_all_scores
+from services.validate_request import validate_request_params
 
 router_questions = APIRouter()
 
 @router_questions.post("/questions/sum/")
 async def calculate_answers(request: AnswerSumRequest) -> processrequestDone:
-    # age validation
-    # TODO: Add age validation
-    
-    # Extract parameters from the request
-    answers = request.answers
-    
-    if request.age < 6.0:
-        processed_dict = check_kids(answers)
-    else:
-        processed_dict = check_school(answers, request.pORt)
+    # request param validation
+    validate_request_params(request)
         
     # Creating the AnswerRequest instance and populating 
     result = AnswerSumRuqestWithCred(
         **request.model_dump(),
-        preprocessed_scores=processed_dict, 
-        kORs="kids" if request.age < 6.0 else "school"
+        preprocessed_scores=check_kids(request.answers) if request.kORs == "kids" else check_school(request.answers, request.pORt)
     )
-    
-    requestDone = process_all_scores(result)
-    
-    return requestDone
 
-    
+    return process_all_scores(result)
+
 @router_questions.get("/questions/body/")
 async def get_request_body():
     return AnswerSumRequest.schema_json().split()

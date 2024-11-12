@@ -5,25 +5,17 @@ INCONSISTENCY_ROWS_A = [ 1, 3, 5, 10, 11, 16, 18, 33, 43, 48]
 INCONSISTENCY_ROWS_B = [ 11, 33, 45, 20, 26, 21, 52, 38, 52, 54]
 NEGATIVITY_ROWS = [ 30, 44, 46, 47, 53, 55, 56, 57, 59, 63]
 
-INHIBITION_ROWS = [ 3, 8, 13, 18, 23, 28, 33, 38, 43, 48, 52, 54, 56, 58, 60, 62 ] #16
-SHIFTING_ROWS = [ 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 ] #10
-EMOTIONAL_CONTROL_ROWS = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46 ] #10
-WORKING_MEMORY_ROWS = [ 2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 51, 53, 55, 57, 59, 61, 63 ] #17
-PLAN_ORG_ROWS = [ 4, 9, 14, 19, 24, 29, 34, 39, 44, 49 ] #10
+INHIBITION_ROWS = [ 3, 8, 13, 18, 23, 28, 33, 38, 43, 48, 52, 54, 56, 58, 60, 62 ] 
+SHIFTING_ROWS = [ 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 ] 
+EMOTIONAL_CONTROL_ROWS = [ 1, 6, 11, 16, 21, 26, 31, 36, 41, 46 ] 
+WORKING_MEMORY_ROWS = [ 2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 51, 53, 55, 57, 59, 61, 63 ] 
+PLAN_ORG_ROWS = [ 4, 9, 14, 19, 24, 29, 34, 39, 44, 49 ]
 
 
-def check_questions(answers: List[int]):
-     # Check if the answers list is empty
-    if not answers:
-        raise HTTPException(status_code=400, detail="Answers list cannot be empty")
-    
+def check_questions(answers: List[int]):    
     # Check if all questions have been answered
     if len(answers) != 63:
         raise HTTPException(status_code=400, detail=f"All questions must be answered, only {len(answers)} questions were answered")
-    
-    # Check if all scores are either 1, 2, or 3
-    if not all(score in [1, 2, 3] for score in answers):
-        raise HTTPException(status_code=400, detail="All scores must be 1, 2, or 3")
     
     scores = {}
     
@@ -51,7 +43,7 @@ def check_questions(answers: List[int]):
     scores['inconsistency'] = inconsistency_value
     
     if len(scores) != 11:
-        raise HTTPException(status_code=400, detail="An error occurred while calculating the scores for kids")
+        raise HTTPException(status_code=400, detail=f"An error occurred while calculating the scores, expected 13 scores, got {len(scores)}")
     
     return scores
         

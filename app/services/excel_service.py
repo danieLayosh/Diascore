@@ -23,10 +23,6 @@ def process_all_scores(request: AnswerSumRuqestWithCred) -> processrequestDone:
     pORt = request.pORt # p for parent, t for teacher
     kORs = request.kORs # kids or school        
     
-    # Valid gender
-    if gender.lower() not in ["boy", "girl"]:
-        raise HTTPException(status_code=400, detail="Invalid gender specified, nust be a 'boy' or 'girl'")
-    
     # Load the correct Excel file based on gender, age, and file type
     total_df = load_excel_file(gender.lower(), age, "gen", pORt, kORs)
     indexes_df = load_excel_file(gender.lower(), age, "I", pORt, kORs)
@@ -73,10 +69,8 @@ def convert_scores_school(score_dict: dict, total_df: pd.DataFrame, combind_df: 
         result['total_score'] = int(get_total_score(score_dict, total_df))
 
     if 'bri' in score_dict and 'mi' in score_dict:        
-        # Get individual scores for ISCI, FI, and EMI
         result['bri_score'] = int(get_score_from_column(combind_df, 'bri', score_dict['bri']))
         result['mi_score'] = int(get_score_from_column(combind_df, 'mi', score_dict['mi']))
-        # result['gec_score'] = int(get_score_from_column(combind_df, 'gec', score_dict['gec']))
                         
     # Checking for normal scores
     normal_keys = ['inhibition', 'shifting', 'emotional control', 'initiative', 'working memory', 'plan/org', 'org environment', 'monitor']

@@ -30,21 +30,10 @@ ROWS_CONFIG = {
     }
 }
 
-def check_questions(answers: List[int], pORt: str):
-     # Check if the answers list is empty
-    if not answers:
-        raise HTTPException(status_code=400, detail="Answers list cannot be empty")
-    
+def check_questions(answers: List[int], pORt: str):  
     # Check if all questions have been answered
     if len(answers) != 86:
         raise HTTPException(status_code=400, detail=f"All questions must be answered, only {len(answers)} questions were answered")
-    
-    # Check if all scores are either 1, 2, or 3
-    if not all(score in [1, 2, 3] for score in answers):
-        raise HTTPException(status_code=400, detail="All scores must be 1, 2, or 3")
-    
-    if pORt not in ['p', 't']:
-        raise HTTPException(status_code=400, detail="The value of pORt must be either 'p' or 't'")
     
     scores = {}
     
@@ -74,7 +63,7 @@ def check_questions(answers: List[int], pORt: str):
     scores['inconsistency'] = inconsistency_value
     
     if len(scores) != 13:
-        raise HTTPException(status_code=400, detail="An error occurred while calculating the scores")
+        raise HTTPException(status_code=400, detail=f"An error occurred while calculating the scores, expected 13 scores, got {len(scores)}")
     
     return scores
         
