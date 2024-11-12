@@ -25,7 +25,21 @@ def get_fileName_full_path(gender: str, age: float, file_type: str, pORt: str, k
     if age < 2.0:
         raise HTTPException(status_code=400, detail="Age not supported")
 
-    age_range = "2.0-3.11" if age < 4.0 else "4.0-5.11"
+    if age < 4.0:
+        age_range = "2.0-3.11"
+    elif age < 6.0:
+        age_range = "4.0-5.11"
+    elif age < 7.0:
+        age_range = "5-6"
+    elif age < 8.0:
+        age_range = "7-8"
+    elif age < 9.0:
+        age_range = "9-13"
+    elif age < 14.0:
+        age_range = "14-18"
+    else:
+        raise HTTPException(status_code=400, detail="Age not supported")
+    
     gender_prefix = 'b_' if gender.lower() == 'boy' else 'g_'
     
     # Validate file type
