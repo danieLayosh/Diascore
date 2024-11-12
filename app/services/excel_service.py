@@ -32,7 +32,10 @@ def process_all_scores(request: AnswerSumRuqestWithCred) -> processrequestDone:
     indexes_df = load_excel_file(gender.lower(), age, "I", pORt, kORs)
     scale_df = load_excel_file(gender.lower(), age, "S", pORt, kORs)
     
-    res_dict = convert_scores(scores, total_df, indexes_df, scale_df)
+    if kORs == 'kids':
+        res_dict = convert_scores_kids(scores, total_df, indexes_df, scale_df)
+    elif kORs == 'school':
+        res_dict = convert_scores_school(scores, total_df, indexes_df, scale_df)
     
     result = processrequestDone(
         **request.model_dump(),
@@ -41,7 +44,7 @@ def process_all_scores(request: AnswerSumRuqestWithCred) -> processrequestDone:
     
     return result
 
-def convert_scores(score_dict: dict, total_df: pd.DataFrame, combind_df: pd.DataFrame, normal_df: pd.DataFrame) -> dict:
+def convert_scores_kids(score_dict: dict, total_df: pd.DataFrame, combind_df: pd.DataFrame, normal_df: pd.DataFrame) -> dict:
     """Returns the scores as a dictionary."""
     result = {}
     
@@ -56,6 +59,27 @@ def convert_scores(score_dict: dict, total_df: pd.DataFrame, combind_df: pd.Data
                         
     # Checking for normal scores
     normal_keys = ['inhibition', 'shifting', 'emotional control', 'working memory', 'plan/org']
+    for key in normal_keys:
+        if key in score_dict:
+            result[f'{key}_score'] = int(get_normal_score({key: score_dict[key]}, normal_df))
+
+    return result
+
+def convert_scores_school(score_dict: dict, total_df: pd.DataFrame, combind_df: pd.DataFrame, normal_df: pd.DataFrame) -> dict:
+    """Returns the scores as a dictionary."""
+    result = {}
+    
+    if 'total' in score_dict:
+        result['total_score'] = int(get_total_score(score_dict, total_df))
+
+    if 'bri' in score_dict and 'mi' in score_dict:        
+        # Get individual scores for ISCI, FI, and EMI
+        result['bri_score'] = int(get_score_from_column(combind_df, 'bri', score_dict['bri']))
+        result['mi_score'] = int(get_score_from_column(combind_df, 'mi', score_dict['mi']))
+        # result['gec_score'] = int(get_score_from_column(combind_df, 'gec', score_dict['gec']))
+                        
+    # Checking for normal scores
+    normal_keys = ['inhibition', 'shifting', 'emotional control', 'initiative', 'working memory', 'plan/org', 'org environment', 'monitor']
     for key in normal_keys:
         if key in score_dict:
             result[f'{key}_score'] = int(get_normal_score({key: score_dict[key]}, normal_df))

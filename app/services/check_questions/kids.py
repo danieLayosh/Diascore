@@ -19,7 +19,7 @@ def check_questions(answers: List[int]):
     
     # Check if all questions have been answered
     if len(answers) != 63:
-        raise HTTPException(status_code=400, detail="All questions must be answered")
+        raise HTTPException(status_code=400, detail=f"All questions must be answered, only {len(answers)} questions were answered")
     
     # Check if all scores are either 1, 2, or 3
     if not all(score in [1, 2, 3] for score in answers):
@@ -51,7 +51,7 @@ def check_questions(answers: List[int]):
     scores['inconsistency'] = inconsistency_value
     
     if len(scores) != 11:
-        raise HTTPException(status_code=400, detail="An error occurred while calculating the scores")
+        raise HTTPException(status_code=400, detail="An error occurred while calculating the scores for kids")
     
     return scores
         
