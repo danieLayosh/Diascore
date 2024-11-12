@@ -12,7 +12,6 @@ This example demonstrates a request for a client in kindergarten, with answers f
 **Request**
 ```http
 POST http://127.0.0.1:8000/questions/sum/
-```json
 {
   "name": "John Doe",
   "id": "111222333",
@@ -33,7 +32,6 @@ POST http://127.0.0.1:8000/questions/sum/
   "pORt": "p",
   "kORs": "kids"
 }
-```
 ```
 
 ### Example 2: School Client, Filled by Teacher
