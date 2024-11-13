@@ -21,14 +21,25 @@ def get_fileName_full_path(gender: str, age: float, file_type: str, pORt: str, k
         elif age < 6.0:
             age_range = "4.0-5.11"
     elif kORs.lower() == "school":
-        if age > 4 and age < 7:
-            age_range = "5-6"
-        elif age < 9:
-            age_range = "7-8"
-        elif age < 14:
-            age_range = "9-13"
-        elif age < 19:
-            age_range = "14-18"   
+        if pORt.lower() == "t":
+            if age >= 5 and age < 7:
+                age_range = "5-6"
+            elif age < 9:
+                age_range = "7-8"
+            elif age < 14:
+                age_range = "9-13"
+            elif age < 19:
+                age_range = "14-18"   
+        elif pORt.lower() == "p":
+            if age >= 5 and age < 8:
+                age_range = "5-7"
+            elif age < 11:
+                age_range = "8-10"
+            elif age < 14:
+                age_range = "11-13"
+            elif age < 19:
+                age_range = "14-18"
+            
     
     gender_prefix = 'b_' if gender.lower() == 'boy' else 'g_'
     
