@@ -88,3 +88,21 @@ def valTrackbars():
     Threshold2 = cv2.getTrackbarPos("Threshold2", "Trackbars")
     src = Threshold1,Threshold2
     return src
+
+
+def rectCounter(contours):
+    
+    rectCon = []
+    for i in contours:
+        area = cv2.contourArea(i)
+        print("Area", area)
+        if area > 50:
+            peri = cv2.arcLength(i, True)
+            approx = cv2.approxPolyDP(i, 0.02 * peri, True)
+            # print("Corner Points", len(approx))
+            if len(approx) == 4:
+                rectCon.append(i)
+                
+    rectCon = sorted(rectCon, key=cv2.contourArea, reverse=True)
+    
+    return rectCon
