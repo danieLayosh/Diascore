@@ -95,7 +95,7 @@ def rectCounter(contours):
     rectCon = []
     for i in contours:
         area = cv2.contourArea(i)
-        print("Area", area)
+        # print("Area", area)
         if area > 50:
             peri = cv2.arcLength(i, True)
             approx = cv2.approxPolyDP(i, 0.02 * peri, True)
@@ -106,3 +106,8 @@ def rectCounter(contours):
     rectCon = sorted(rectCon, key=cv2.contourArea, reverse=True)
     
     return rectCon
+
+def getConrnerPoints(cont):
+    peri = cv2.arcLength(cont, True)
+    approx = cv2.approxPolyDP(cont, 0.02 * peri, True)
+    return approx
