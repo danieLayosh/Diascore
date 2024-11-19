@@ -40,14 +40,23 @@ if biggestContour.size != 0:
 
     # APPLY THRESHOLD
     imgWarpGray = cv2.cvtColor(imgWarpColored, cv2.COLOR_BGR2GRAY)
-    imgThresh = cv2.threshold(imgWarpGray, 150, 255, cv2.THRESH_BINARY_INV)[1]
+    imgThresh = cv2.threshold(imgWarpGray, 170, 255, cv2.THRESH_BINARY_INV)[1]
+
+    boxes  = utils.splitBoxes(imgThresh, 22, 3, 10) # Splitting the boxes
+    # for i, box in enumerate(boxes):
+    #     cv2.imshow(f'Box {i}', box)
+    #     cv2.waitKey(0)
+    #     cv2.destroyAllWindows() 
+    cv2.imshow('Test', boxes[1])
+    cv2.imshow('Test2', boxes[2])
+    print(cv2.countNonZero(boxes[1]), cv2.countNonZero(boxes[2]))
 
 # imageArray = ([img, imgGray, imgBlur, imgCanny],
-#               [imgCountours, imgBiggestCountours,imgWarpColored,np.zeros_like(img)])
+#               [imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
-# imageArray = ([img, imgGray, imgBlur, imgCanny, imgCountours, imgBiggestCountours])
+imageArray = ([img, imgGray, imgBlur, imgCanny, imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
-imageArray = ([imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
+# imageArray = ([imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
 imgStacked = utils.stackImages(imageArray, 0.5)
 
