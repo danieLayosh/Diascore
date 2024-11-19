@@ -141,3 +141,38 @@ def reorder(myPoints):
     myPointsNew[2] = myPoints[np.argmax(diff)] # [0 , h]
     
     return myPointsNew
+
+def splitBoxes(img, num_rows, num_cols, row_padding=5):
+    """
+    Splits the image into equally sized boxes, with optional row padding for better coverage.
+    
+    :param img: The input image (grayscale or binary).
+    :param num_rows: Number of rows to split into.
+    :param num_cols: Number of columns to split into.
+    :param row_padding: Extra pixels added to each row split to extend downward.
+    :return: List of cropped image boxes.
+    """
+    h, w = img.shape
+    row_height = h / num_rows  # Compute row height as float
+    col_width = w / num_cols  # Compute column width as float
+
+    boxes = []
+    for row in range(num_rows):
+        for col in range(num_cols):
+            # Compute coordinates for each box
+            y1 = round(row * row_height)
+            y2 = round((row + 1) * row_height) + row_padding  # Add padding to the bottom
+            x1 = round(col * col_width)
+            x2 = round((col + 1) * col_width)
+
+            # Ensure the coordinates are within image bounds
+            y1 = max(0, min(h, y1))
+            y2 = max(0, min(h, y2))
+            x1 = max(0, min(w, x1))
+            x2 = max(0, min(w, x2))
+
+            # Crop the box from the image
+            box = img[y1:y2, x1:x2]
+            boxes.append(box)
+
+    return boxes
