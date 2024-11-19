@@ -3,16 +3,17 @@ import numpy as np
 import app.services.Utlis as utils
 
 ############################################################################################################
-path = 'OMR-API/app/data/firstPart2.png'
+path = 'OMR-API/app/data/firstPart.png'
 widthImg = int(515 / 1)
 highImg = int(1529 / 1)
 ############################################################################################################
 
 
 img = cv2.imread(path)
+img = utils.resizeAndCropImage(img)
 
 # Preprocessing
-img = cv2.resize(img, (widthImg, highImg))
+# img = cv2.resize(img, (widthImg, highImg))
 imgCountours = img.copy()
 imgBiggestCountours = img.copy()
 imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -35,11 +36,14 @@ if biggestContour.size != 0:
 
 
 
-# imageArray = ([img, imgGray, imgBlur, imgCanny],
-#               [imgCountours, np.zeros_like(img),np.zeros_like(img),np.zeros_like(img)])
-imageArray = ([imgCountours, imgBiggestCountours,np.zeros_like(img),np.zeros_like(img)])
+imageArray = ([img, imgGray, imgBlur, imgCanny],
+              [imgCountours, imgBiggestCountours,np.zeros_like(img),np.zeros_like(img)])
 
-imgStacked = utils.stackImages(imageArray, 0.5)
+# imageArray = ([img, imgGray, imgBlur, imgCanny, imgCountours, imgBiggestCountours])
+
+# imageArray = ([imgCountours, imgBiggestCountours,np.zeros_like(img),np.zeros_like(img)])
+
+imgStacked = utils.stackImages(imageArray, 0.2)
 
 cv2.imshow('Stacked Images', imgStacked)
 cv2.waitKey(0)
