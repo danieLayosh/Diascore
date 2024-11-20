@@ -3,17 +3,17 @@ import numpy as np
 import app.services.Utlis as utils
 
 ############################################################################################################
-path = 'OMR-API/app/data/first_circles_marked.png'
-widthImg = 389
-hightImg = 1524
+path = 'OMR-API/app/data/newModel/newSecondPage.jpg'
+widthImg = int(2480 / 2)
+hightImg = int(3508 / 2)
 ############################################################################################################
 
 
 img = cv2.imread(path)
-img = utils.resizeAndCropImage(img)
+# img = utils.resizeAndCropImage(img)
 
 # Preprocessing
-# img = cv2.resize(img, (widthImg, hightImg))
+img = cv2.resize(img, (widthImg, hightImg))
 imgCountours = img.copy()
 imgBiggestCountours = img.copy()
 imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -42,21 +42,21 @@ if biggestContour.size != 0:
     imgWarpGray = cv2.cvtColor(imgWarpColored, cv2.COLOR_BGR2GRAY)
     imgThresh = cv2.threshold(imgWarpGray, 170, 255, cv2.THRESH_BINARY_INV)[1]
 
-    boxes  = utils.splitBoxes(imgThresh, 22, 3, 10) # Splitting the boxes
-    # for i, box in enumerate(boxes):
-    #     cv2.imshow(f'Box {i}', box)
-    #     cv2.waitKey(0)
-    #     cv2.destroyAllWindows() 
-    cv2.imshow('Test', boxes[1])
-    cv2.imshow('Test2', boxes[2])
-    print(cv2.countNonZero(boxes[1]), cv2.countNonZero(boxes[2]))
+    boxes  = utils.splitBoxes(imgThresh, 41, 3, 10) # Splitting the boxes
+    for i, box in enumerate(boxes):
+        cv2.imshow(f'Box {i}', box)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows() 
+    # cv2.imshow('Test', boxes[1])
+    # cv2.imshow('Test2', boxes[2])
+    # print(cv2.countNonZero(boxes[1]), cv2.countNonZero(boxes[2]))
 
 # imageArray = ([img, imgGray, imgBlur, imgCanny],
 #               [imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
-imageArray = ([img, imgGray, imgBlur, imgCanny, imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
+# imageArray = ([img, imgGray, imgBlur, imgCanny, imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
-# imageArray = ([imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
+imageArray = ([imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
 imgStacked = utils.stackImages(imageArray, 0.5)
 
