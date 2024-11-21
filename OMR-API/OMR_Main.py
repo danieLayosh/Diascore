@@ -3,7 +3,7 @@ import numpy as np
 import app.services.Utlis as utils
 
 ############################################################################################################
-path = 'OMR-API/app/data/newModel/newSecondPage.jpg'
+path = 'OMR-API/app/data/testing_markes_and_angels/IMG_1018.JPG'
 widthImg = int(2480 / 2)
 hightImg = int(3508 / 2)
 ############################################################################################################
@@ -42,14 +42,18 @@ if biggestContour.size != 0:
     imgWarpGray = cv2.cvtColor(imgWarpColored, cv2.COLOR_BGR2GRAY)
     imgThresh = cv2.threshold(imgWarpGray, 170, 255, cv2.THRESH_BINARY_INV)[1]
 
-    boxes  = utils.splitBoxes(imgThresh, 41, 3, 10) # Splitting the boxes
-    for i, box in enumerate(boxes):
-        cv2.imshow(f'Box {i}', box)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows() 
-    # cv2.imshow('Test', boxes[1])
-    # cv2.imshow('Test2', boxes[2])
-    # print(cv2.countNonZero(boxes[1]), cv2.countNonZero(boxes[2]))
+    boxes  = utils.splitBoxes(imgThresh, 22, 3, 10) # Splitting the boxes
+    # for i, box in enumerate(boxes):
+    #     cv2.imshow(f'Box {i}', box)
+    #     cv2.waitKey(0)
+    #     cv2.destroyAllWindows() 
+    # for i in range(0, len(boxes), 3):
+    #     print(cv2.countNonZero(boxes[i]), cv2.countNonZero(boxes[i+1]), cv2.countNonZero(boxes[i+2]))
+    #     cv2.imshow('Test', boxes[i])
+    #     cv2.imshow('Test2', boxes[i+1])
+    #     cv2.imshow('Test3', boxes[i+2])
+    #     cv2.waitKey(0)
+    #     cv2.destroyAllWindows() 
 
 # imageArray = ([img, imgGray, imgBlur, imgCanny],
 #               [imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
