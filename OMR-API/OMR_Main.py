@@ -42,7 +42,7 @@ if biggestContour.size != 0:
     imgWarpGray = cv2.cvtColor(imgWarpColored, cv2.COLOR_BGR2GRAY)
     imgThresh = cv2.threshold(imgWarpGray, 170, 255, cv2.THRESH_BINARY_INV)[1]
 
-    boxes  = utils.splitBoxes(imgThresh, 22, 3, 10) # Splitting the boxes
+    boxes  = utils.splitBoxes(imgThresh, 22) # Splitting the boxes
     # for i, box in enumerate(boxes):
     #     cv2.imshow(f'Box {i}', box)
     #     cv2.waitKey(0)
@@ -54,6 +54,27 @@ if biggestContour.size != 0:
     #     cv2.imshow('Test3', boxes[i+2])
     #     cv2.waitKey(0)
     #     cv2.destroyAllWindows() 
+
+    # CHECK ANSWERS BY DIFF
+    answers = []
+    for i in range(0, len(boxes), 3):
+        counts = [
+            cv2.countNonZero(boxes[i]),
+            cv2.countNonZero(boxes[i+1]),
+            cv2.countNonZero(boxes[i+2]),
+        ]
+        counts_sorted = sorted(counts, reverse=True)  # Sort in descending order
+        if counts_sorted[0] - counts_sorted[1] > 2000:  # Check if the difference is > 2000
+            # Reverse the box mapping: 1 -> 3, 2 -> 2, 3 -> 1
+            selected_box = counts.index(counts_sorted[0]) + 1
+            reversed_box = 4 - selected_box  # Reverse the mapping
+            answers.append(reversed_box)
+        else:
+            answers.append(0)  # Flag it as 0 for uncertainty
+
+         
+        
+    print(answers)  
 
 # imageArray = ([img, imgGray, imgBlur, imgCanny],
 #               [imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
