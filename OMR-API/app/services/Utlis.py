@@ -142,23 +142,22 @@ def reorder(myPoints):
     
     return myPointsNew
 
-def splitBoxes(img, num_rows, num_cols, row_padding=5):
+def splitBoxes(img, num_rows, row_padding=5):
     """
     Splits the image into equally sized boxes, with optional row padding for better coverage.
     
     :param img: The input image (grayscale or binary).
     :param num_rows: Number of rows to split into.
-    :param num_cols: Number of columns to split into.
     :param row_padding: Extra pixels added to each row split to extend downward.
     :return: List of cropped image boxes.
     """
     h, w = img.shape
     row_height = h / num_rows  # Compute row height as float
-    col_width = w / num_cols  # Compute column width as float
+    col_width = w / 3  # Compute column width as float
 
     boxes = []
     for row in range(num_rows):
-        for col in range(num_cols):
+        for col in range(3):
             # Compute coordinates for each box
             y1 = round(row * row_height)
             y2 = round((row + 1) * row_height) + row_padding  # Add padding to the bottom
