@@ -10,7 +10,6 @@ hightImg = int(3508 / 2)
 
 
 img = cv2.imread(path)
-# img = utils.resizeAndCropImage(img)
 
 # Preprocessing
 img = cv2.resize(img, (widthImg, hightImg))
@@ -76,14 +75,14 @@ if biggestContour.size != 0:
         
     print(answers)  
 
-# imageArray = ([img, imgGray, imgBlur, imgCanny],
-#               [imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
+imageArray = ([img, imgGray, imgBlur, imgCanny],
+              [imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
 # imageArray = ([img, imgGray, imgBlur, imgCanny, imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
-imageArray = ([imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
+# imageArray = ([imgCountours, imgBiggestCountours,imgWarpColored,imgThresh])
 
-imgStacked = utils.stackImages(imageArray, 0.5)
+imgStacked = utils.stackImages(imageArray, 0.3)
 
 cv2.imshow('Stacked Images', imgStacked)
 cv2.waitKey(0)
