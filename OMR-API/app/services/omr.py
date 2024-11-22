@@ -1,4 +1,4 @@
-from app.services.omr import preprocess_image, find_contours, find_biggest_contour, warp_perspective, apply_threshold, process_boxes, stack_images
+from app.services.omrServices import preprocess_image, find_contours, find_biggest_contour, warp_perspective, apply_threshold, process_boxes, stack_images
 import cv2
 
 def do_omr(path):
