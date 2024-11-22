@@ -1,24 +1,6 @@
 import cv2
 import numpy as np
  
-def resizeAndCropImage(img):
-    """
-    Resizes an image to A4 size and crops it according to specified constants.
-    """
-    
-    # A4 dimensions in pixels at 300 dpi
-    A4_WIDTH = 2480 
-    A4_HEIGHT = 3508 
-    
-    if img is None:
-        return ValueError("Image is None")
-    
-    resized_img = cv2.resize(img, (A4_WIDTH, A4_HEIGHT), interpolation=cv2.INTER_AREA)
-    
-    x, y, width, height = 105, 1700, 389, 1524
-    cropped_image = resized_img[y:y+height, x:x+width]
-    return cropped_image
- 
 ## TO STACK ALL THE IMAGES IN ONE WINDOW
 def stackImages(imgArray,scale,lables=[]):
     rows = len(imgArray)
@@ -70,7 +52,6 @@ def reorder(myPoints):
  
     return myPointsNew
  
- 
 def biggestContour(contours):
     biggest = np.array([])
     max_area = 0
@@ -83,6 +64,7 @@ def biggestContour(contours):
                 biggest = approx
                 max_area = area
     return biggest,max_area
+
 def drawRectangle(img,biggest,thickness):
     cv2.line(img, (biggest[0][0][0], biggest[0][0][1]), (biggest[1][0][0], biggest[1][0][1]), (0, 255, 0), thickness)
     cv2.line(img, (biggest[0][0][0], biggest[0][0][1]), (biggest[2][0][0], biggest[2][0][1]), (0, 255, 0), thickness)
@@ -100,24 +82,20 @@ def initializeTrackbars(intialTracbarVals=0):
     cv2.createTrackbar("Threshold1", "Trackbars", 200,255, nothing)
     cv2.createTrackbar("Threshold2", "Trackbars", 200, 255, nothing)
  
- 
 def valTrackbars():
     Threshold1 = cv2.getTrackbarPos("Threshold1", "Trackbars")
     Threshold2 = cv2.getTrackbarPos("Threshold2", "Trackbars")
     src = Threshold1,Threshold2
     return src
 
-
 def rectCounter(contours):
     
     rectCon = []
     for i in contours:
         area = cv2.contourArea(i)
-        # print("Area", area)
         if area > 50:
             peri = cv2.arcLength(i, True)
             approx = cv2.approxPolyDP(i, 0.02 * peri, True)
-            # print("Corner Points", len(approx))
             if len(approx) == 4:
                 rectCon.append(i)
                 
