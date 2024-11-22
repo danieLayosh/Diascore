@@ -10,4 +10,4 @@ def read_root():
 
 if __name__ == '__main__':
     # uvicorn.run(app, host="127.0.0.1", port=8000)
-    omr.do_omr("OMR-API/app/data/testing_markes_and_angels/IMG_1018.JPG")
+    omr.do_omr("OMR-API/app/data/testing_markes_and_angels/IMG_1020.JPG")
