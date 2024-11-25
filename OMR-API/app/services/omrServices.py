@@ -9,7 +9,7 @@ def preprocess_image_path(path, width, height):
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
     imgCanny = cv2.Canny(imgBlur, 10, 50)
-    return img, imgGray, imgBlur, imgCanny
+    return img, imgCanny
 
 def preprocess_image(img, width, height):
     """Loads and preprocesses the image."""
@@ -17,7 +17,7 @@ def preprocess_image(img, width, height):
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
     imgCanny = cv2.Canny(imgBlur, 10, 50)
-    return img, imgGray, imgBlur, imgCanny
+    return img, imgCanny
 
 def find_contours(imgCanny):
     """Finds contours from a preprocessed Canny image."""
