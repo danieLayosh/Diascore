@@ -24,6 +24,23 @@ def find_contours(imgCanny):
     contours, _ = cv2.findContours(imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     return contours
 
+def calculate_rectangle_height(biggest_contour):
+    """Calculates the height of the rectangle contour."""
+
+    if biggest_contour is None or len(biggest_contour) != 4:
+        return None  # Invalid contour data
+    
+    # Calculate the vertical distance between two points representing height
+    # Assuming points are ordered correctly: top-left, top-right, bottom-right, bottom-left
+    point1 = biggest_contour[0]  # Top-left
+    point4 = biggest_contour[3]  # Bottom-left
+    
+    # Height is the vertical distance
+    height = np.linalg.norm(point1 - point4)  # Euclidean distance
+
+    return height
+    
+
 def find_biggest_contour(contours):
     """Finds and orders the biggest rectangle contour."""
     rectCon = utils.rectCounter(contours)
