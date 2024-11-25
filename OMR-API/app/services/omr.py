@@ -12,10 +12,10 @@ def do_omr_two_pages(arr):
         return "No images were uploaded"
     
     answers = {}
-    page_omr(arr[0], answers)
+    page_omr(arr[0], answers, False)
     
     if len(arr) > 1:
-        page_omr(arr[1], answers)
+        page_omr(arr[1], answers, False)
     
     return answers
     
@@ -46,8 +46,9 @@ def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
     biggestContours = omr.find_two_biggest_contours(contours)
     if len(biggestContours) < 1:
         return "No contours were detected"
-
-    print("Two contours were detected")
+    
+    if debug:
+        print("Two contours were detected")
     imgBiggestContours = img.copy()
     cv2.drawContours(imgBiggestContours, [biggestContours[0]], -1, (0, 255, 0), 20)
 
@@ -61,16 +62,19 @@ def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
     # Step 6: Determine the type of page and handle accordingly
     imgCanny2, imgBiggestContours2 = imgWarpColored, imgWarpColored
     if height > 800 and width < 0.5 * height:  # Narrow width relative to height
-        print("Type 2 page detected (tall and narrow)")
+        if debug:
+            print("Type 2 page detected (tall and narrow)")
         num_answers = 41
     elif height > 1000 and width > 0.5 * height:  # A4-like dimensions
-        print("A4 page detected")
+        if debug:
+            print("A4 page detected")
         imgWarpColored, imgCanny2, imgBiggestContours2 = process_second_contour(imgWarpColored, widthImg, heightImg)
         num_answers = 22
     elif height < 200:
         return "The maximum height of the rectangle is 200, which is too small"
     else:
-        print("Answer box detected")
+        if debug:
+            print("Answer box detected")
         num_answers = 22
 
     # Step 7: Apply threshold to warped image
