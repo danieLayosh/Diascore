@@ -7,7 +7,7 @@ def do_omr(path):
     heightImg = int(3508 / 2)
 
     # Preprocess the image
-    img, imgGray, imgBlur, imgCanny = preprocess_image_path(path, widthImg, heightImg)
+    img, imgCanny = preprocess_image_path(path, widthImg, heightImg)
 
     # Find contours
     contours = find_contours(imgCanny)
@@ -31,9 +31,11 @@ def do_omr(path):
     cv2.drawContours(imgBiggestContours, [biggestContour[0]], -1, (0, 255, 0), 20)
     imgWarpColored = warp_perspective(img, biggestContour[0], widthImg, heightImg)
     
+    imgCanny2 = imgCanny # Just to avoid errors
+    imgBiggestContours2 = imgBiggestContours
     if height > 1000 and height < 2000 :
         img2 = imgWarpColored
-        img2, imgGray2, imgBlur2, imgCanny2 = preprocess_image(img2, widthImg, heightImg)
+        img2, imgCanny2 = preprocess_image(img2, widthImg, heightImg)
     
         # Find contours
         contours2 = find_contours(imgCanny2)
@@ -41,8 +43,8 @@ def do_omr(path):
         cv2.drawContours(imgContours2, contours2, -1, (0, 255, 0), 10)
         biggestContour2 = find_biggest_contour(contours2)
         if biggestContour2 is not None and len(biggestContour2) >= 1:
-            imgBiggestContours = img2.copy()
-            cv2.drawContours(imgBiggestContours, [biggestContour2], -1, (0, 255, 0), 20)
+            imgBiggestContours2 = img2.copy()
+            cv2.drawContours(imgBiggestContours2, [biggestContour2], -1, (0, 255, 0), 20)
             imgWarpColored = warp_perspective(img2, biggestContour2, widthImg, heightImg)
 
     elif height < 200:
@@ -58,7 +60,7 @@ def do_omr(path):
     # Stack images for visualization
     imageArray = [
         [img, imgContours, imgCanny, imgBiggestContours],
-        [imgWarpColored, imgBiggestContours , imgWarpColored, imgThresh]
+        [imgWarpColored, imgBiggestContours2 , imgCanny2, imgThresh]
     ]
     
     imgStacked = stack_images(imageArray, 0.2)
