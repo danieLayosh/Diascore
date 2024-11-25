@@ -1,10 +1,38 @@
 import app.services.omrServices as omr
 import cv2
 
-def do_omr(path):
+def do_omr_two_pages(arr):
+    """
+    OMR for two pages. This function is called when the user uploads a file with two pages. Or when the user uploads two images.
+
+    Args:
+        arr (str[]): array of paths to the images
+    """
+    if arr is None:
+        return "No images were uploaded"
+    
+    answers = {}
+    page_omr(arr[0], answers)
+    
+    if len(arr) > 1:
+        page_omr(arr[1], answers)
+    
+    return answers
+    
+
+def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
+    """
+    Process a single OMR page, updating the answers dictionary.
+
+    Args:
+    - path: Path to the OMR image.
+    - answers: Dictionary to store extracted answers.
+    - debug: Whether to visualize intermediate steps.
+    """
+    
     # Constants for image dimensions
-    widthImg = int(2480 / 2)
-    heightImg = int(3508 / 2)
+    widthImg = 1240
+    heightImg = 1754
 
     # Step 1: Preprocess the image
     img, imgCanny = omr.preprocess_image_path(path, widthImg, heightImg)
@@ -28,38 +56,49 @@ def do_omr(path):
 
     # Step 5: Calculate the height of the biggest contour
     biggestContour = omr.find_biggest_contour(contours)
-    height = omr.calculate_rectangle_height(biggestContour)
-
-    # Step 6: Handle specific height cases
-    imgCanny2, imgBiggestContours2 = imgCanny, imgBiggestContours
-    if 1000 < height < 2000:
+    height, width = omr.calculate_rectangle_dimensions(biggestContour)
+    
+    # Step 6: Determine the type of page and handle accordingly
+    imgCanny2, imgBiggestContours2 = imgWarpColored, imgWarpColored
+    if height > 800 and width < 0.5 * height:  # Narrow width relative to height
+        print("Type 2 page detected (tall and narrow)")
+        num_answers = 41
+    elif height > 1000 and width > 0.5 * height:  # A4-like dimensions
+        print("A4 page detected")
         imgWarpColored, imgCanny2, imgBiggestContours2 = process_second_contour(imgWarpColored, widthImg, heightImg)
+        num_answers = 22
     elif height < 200:
         return "The maximum height of the rectangle is 200, which is too small"
+    else:
+        print("Answer box detected")
+        num_answers = 22
 
     # Step 7: Apply threshold to warped image
     imgThresh = omr.apply_threshold(imgWarpColored)
 
     # Step 8: Process boxes to extract answers
-    answers = omr.process_boxes(imgThresh, 22)
-    print("Answers:", answers)
+    omr.process_boxes(imgThresh, num_answers, (1 if num_answers == 22 else 2), answers)
+    # print("Answers:", answers)
 
     # Step 9: Stack images for visualization
     imageArray = [
         [img, imgContours, imgCanny, imgBiggestContours],
-        [imgWarpColored, imgBiggestContours2, imgCanny2, imgThresh]
+        [imgWarpColored, imgCanny2, imgBiggestContours2, imgThresh]
     ]
-    imgStacked = omr.stack_images(imageArray, 0.2)
+    imgStacked = omr.stack_images(imageArray, 0.25)
 
-    # Step 10: Display stacked images
-    cv2.imshow('Stacked Images', imgStacked)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # Step 10: Debug Visualization
+    if debug:
+        cv2.imshow('Stacked Images', imgStacked)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+    
+    return answers
 
 
 def process_second_contour(imgWarpColored, widthImg, heightImg):
     """
-    Processes the second contour when the height is within a specific range.
+    Processes the second contour when the rectangle dimensions suggest it is a Type 2 or A4 page.
     """
     img2, imgCanny2 = omr.preprocess_image(imgWarpColored, widthImg, heightImg)
     contours2 = omr.find_contours(imgCanny2)
