@@ -1,15 +1,32 @@
 import cv2
 import numpy as np
+from fastapi import HTTPException
 import app.services.Utlis as utils
 
-def preprocess_image_path(path, width, height):
-    """Loads and preprocesses the image."""
-    img = cv2.imread(path)
-    img = cv2.resize(img, (width, height))
-    imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
-    imgCanny = cv2.Canny(imgBlur, 10, 50)
-    return img, imgCanny
+def preprocess_image_path(path: str, width: int, height: int):
+    """
+    Loads an image from file path and preprocesses it.
+    Converts the image to grayscale, applies Gaussian blur, and Canny edge detection.
+    
+    Parameters:
+    - path: (str)Path to the image file.
+    - width: (int)Desired width of the image.
+    - height: (int)Desired height of the image.
+    
+    Returns:
+    - tuple: Resized original image and its Canny edge version. 
+    """
+    try:
+        img = cv2.imread(path)
+        if img is None:
+            raise FileNotFoundError(f"File not found at path: {path}")
+        img = cv2.resize(img, (width, height))
+        imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
+        imgCanny = cv2.Canny(imgBlur, 10, 50)
+        return img, imgCanny
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error preprocess_image_path: {e}")
 
 def preprocess_image(img, width, height):
     """Loads and preprocesses the image."""
