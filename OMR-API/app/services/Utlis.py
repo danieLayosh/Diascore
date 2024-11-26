@@ -191,10 +191,22 @@ def rectCounter(contours: list) -> list:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in rectCounter: {e}")
 
-def getConrnerPoints(cont):
-    peri = cv2.arcLength(cont, True)
-    approx = cv2.approxPolyDP(cont, 0.02 * peri, True)
-    return approx
+def getConrnerPoints(contour: np.ndarray) -> np.ndarray:
+    """
+    Extracts corner points from a contour.
+    
+    Parameters:
+    - contour (numpy.ndarray): Input contour.
+    
+    Returns:
+    - numpy.ndarray: Approximated corner points.
+    """
+    try:
+        peri = cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, 0.02 * peri, True)
+        return approx
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in getConrnerPoints: {e}")
 
 def reorder(myPoints):
     myPoints = myPoints.reshape((4, 2))
