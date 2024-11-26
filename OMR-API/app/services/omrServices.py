@@ -223,6 +223,18 @@ def process_boxes(imgThresh, num_boxes, which_page, answers_dict) -> dict:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in process_boxes: {e}")
 
-def stack_images(imageArray, scale):
-    """Stacks multiple images into a single window."""
-    return utils.stackImages(imageArray, scale)
+def stack_images(imageArray, scale) -> np.ndarray:
+    """
+    Stacks multiple images into a single window.
+    
+    Parameters:
+    - imageArray (list): List of images to stack.
+    - scale (float): Scale factor for resizing.
+    
+    Returns:
+    - np.ndarray: Stacked image.
+    """
+    try:
+        return utils.stackImages(imageArray, scale)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in stack_images: {e}")
