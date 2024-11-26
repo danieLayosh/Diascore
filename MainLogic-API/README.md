@@ -1,6 +1,6 @@
-# Diascore API Documentation
+# Diascore MAINLOGIC-API Documentation
 
-This document provides example API requests for the Diascore service. The examples show how to submit answers for clients in different contexts.
+This document provides example API requests for the Diascore MAINLOGIC-API service. The examples show how to submit answers for clients in different contexts.
 
 ---
 
