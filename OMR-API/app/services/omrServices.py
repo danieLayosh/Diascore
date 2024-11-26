@@ -66,24 +66,34 @@ def find_contours(imgCanny: np.ndarray):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in find_contours: {e}")
     
-def calculate_rectangle_dimensions(biggest_contour):
-    """Calculates the height and width of the rectangle contour."""
-    if biggest_contour is None or len(biggest_contour) != 4:
-        return None, None  # Invalid contour data
-
-    # Assuming points are ordered correctly: top-left, top-right, bottom-right, bottom-left
-    top_left = biggest_contour[0]
-    top_right = biggest_contour[1]
-    bottom_left = biggest_contour[3]
+def calculate_rectangle_dimensions(biggest_contour: np.ndarray):
+    """
+    Calculates the height and width of the rectangle contour.
     
-    # Calculate the width as the distance between top-left and top-right
-    width = np.linalg.norm(top_right - top_left)
-
-    # Calculate the height as the distance between top-left and bottom-left
-    height = np.linalg.norm(bottom_left - top_left)
-
-    return height, width
+    Parameters:
+    - biggest_contour: (np.ndarray)Biggest rectangle contour.
     
+    Returns:
+    - tuple: Height and width of the rectangle. or (None, None) if the contour is invalid.
+    """
+    try:
+        if biggest_contour is None or len(biggest_contour) != 4:
+            return None, None  # Invalid contour data
+
+        # Assuming points are ordered correctly: top-left, top-right, bottom-right, bottom-left
+        top_left = biggest_contour[0]
+        top_right = biggest_contour[1]
+        bottom_left = biggest_contour[3]
+
+        # Calculate the width as the distance between top-left and top-right
+        width = np.linalg.norm(top_right - top_left)
+
+        # Calculate the height as the distance between top-left and bottom-left
+        height = np.linalg.norm(bottom_left - top_left)
+
+        return height, width
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in calculate_rectangle_dimensions: {e}")
 
 def find_biggest_contour(contours):
     """Finds and orders the biggest rectangle contour."""
