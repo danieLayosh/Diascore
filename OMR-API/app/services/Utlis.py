@@ -166,7 +166,7 @@ def rectCounter(contours: list) -> list:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in rectCounter: {e}")
 
-def getConrnerPoints(contour: np.ndarray) -> np.ndarray:
+def getConrnerPoints(contour) -> np.ndarray:
     """
     Extracts corner points from a contour.
     
@@ -183,48 +183,28 @@ def getConrnerPoints(contour: np.ndarray) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in getConrnerPoints: {e}")
 
-def reorder(myPoints: np.ndarray) -> np.ndarray:
+def reorder(points):
     """
-    Reorders four points in a specific order: 
-    1. Top-left (0, 0)
-    2. Top-right (w, 0)
-    3. Bottom-left (0, h)
-    4. Bottom-right (w, h)
-    
-    The input `myPoints` should be a 4x2 array where each row represents a point (x, y).
+    Reorders points to a consistent top-left, top-right, bottom-right, bottom-left order.
     
     Parameters:
-        myPoints (np.ndarray): An array of shape (4, 2), representing four points in a 2D space.
-        
+    - points (np.ndarray): Input 4 points (e.g., contour corners).
+    
     Returns:
-        np.ndarray: A reordered array of shape (4, 1, 2), representing the points in the desired order.
+    - np.ndarray: Reordered points.
     """
     try:
-        # Ensure myPoints is a np array
-        myPoints = np.array(myPoints)
+        points = points.reshape((4, 2))
+        reordered = np.zeros((4, 1, 2), dtype=np.int32)
+        add = points.sum(1)
+        diff = np.diff(points, axis=1)
 
-        # Check if the input has the expected shape
-        if myPoints.shape != (4, 2):
-            raise HTTPException(status_code=400, detail="Input must be a 4x2 array representing four points.")
-        
-        # Reshape the points to a 4x2 array
-        myPoints = myPoints.reshape((4, 2))
-        
-        # Create a new array to hold the reordered points
-        myPointsNew = np.zeros((4, 1, 2), np.int32)
-        
-        # Calculate the sum of each point's coordinates to identify top-left and bottom-right
-        add = myPoints.sum(1)
-        myPointsNew[0] = myPoints[np.argmin(add)]  # Top-left (0, 0)
-        myPointsNew[3] = myPoints[np.argmax(add)]  # Bottom-right (w, h)
-        
-        # Calculate the difference between x and y to identify top-right and bottom-left
-        diff = np.diff(myPoints, axis=1)
-        myPointsNew[1] = myPoints[np.argmin(diff)]  # Top-right (w, 0)
-        myPointsNew[2] = myPoints[np.argmax(diff)]  # Bottom-left (0, h)
-        
-        return myPointsNew
+        reordered[0] = points[np.argmin(add)]  # Top-left
+        reordered[3] = points[np.argmax(add)]  # Bottom-right
+        reordered[1] = points[np.argmin(diff)]  # Top-right
+        reordered[2] = points[np.argmax(diff)]  # Bottom-left
 
+        return reordered
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in reorder: {e}")
 
