@@ -63,19 +63,30 @@ def stackImages(imgArray: list, scale: float, labels=[]) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in stackImages: {e}")
  
-def reorder(myPoints):
- 
-    myPoints = myPoints.reshape((4, 2))
-    myPointsNew = np.zeros((4, 1, 2), dtype=np.int32)
-    add = myPoints.sum(1)
- 
-    myPointsNew[0] = myPoints[np.argmin(add)]
-    myPointsNew[3] =myPoints[np.argmax(add)]
-    diff = np.diff(myPoints, axis=1)
-    myPointsNew[1] =myPoints[np.argmin(diff)]
-    myPointsNew[2] = myPoints[np.argmax(diff)]
- 
-    return myPointsNew
+def reorder(points: np.ndarray) -> np.ndarray:
+    """
+    Reorders points to a consistent top-left, top-right, bottom-right, bottom-left order.
+    
+    Parameters:
+    - points (numpy.ndarray): Input 4 points (e.g., contour corners).
+    
+    Returns:
+    - numpy.ndarray: Reordered points.
+    """
+    try:
+        points = points.reshape((4, 2))
+        reordered = np.zeros((4, 1, 2), dtype=np.int32)
+        add = points.sum(1)
+        diff = np.diff(points, axis=1)
+
+        reordered[0] = points[np.argmin(add)]  # Top-left
+        reordered[3] = points[np.argmax(add)]  # Bottom-right
+        reordered[1] = points[np.argmin(diff)]  # Top-right
+        reordered[2] = points[np.argmax(diff)]  # Bottom-left
+
+        return reordered
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in reorder: {e}")
  
 def biggestContour(contours):
     biggest = np.array([])
