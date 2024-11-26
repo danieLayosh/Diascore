@@ -115,18 +115,28 @@ def find_biggest_contour(contours: list) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in find_biggest_contour: {e}")
 
-def find_two_biggest_contours(contours):
-    """Finds and returns the two biggest rectangle-like contours."""
-    rectCon = utils.rectCounter(contours)  # Get rectangle-like contours sorted by area
-    biggest_contours = []
+def find_two_biggest_contours(contours) -> list:
+    """
+    Finds and returns the two biggest rectangle-like contours.
+    
+    Parameters:
+    - contours (list): List of contours.
+    
+    Returns:
+    - list: Two largest rectangle-like contours, ordered.
+    """
+    try:
+        rectCon = utils.rectCounter(contours)  # Get rectangle-like contours sorted by area
+        biggest_contours = []
 
-    for i in range(min(2, len(rectCon))):  # Process only up to 2 biggest contours
-        contour = utils.getConrnerPoints(rectCon[i])
-        if contour.size != 0:
-            biggest_contours.append(utils.reorder(contour))
-
-    return biggest_contours
-
+        for i in range(min(2, len(rectCon))):  # Process only up to 2 biggest contours
+            contour = utils.getConrnerPoints(rectCon[i])
+            if contour.size != 0:
+                biggest_contours.append(utils.reorder(contour))
+    
+        return biggest_contours
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in find_two_biggest_contours: {e}")
 
 def warp_perspective(img, biggestContour, width, height):
     """Applies a perspective warp to the image."""
