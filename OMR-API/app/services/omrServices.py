@@ -95,14 +95,25 @@ def calculate_rectangle_dimensions(biggest_contour: np.ndarray):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in calculate_rectangle_dimensions: {e}")
 
-def find_biggest_contour(contours):
-    """Finds and orders the biggest rectangle contour."""
-    rectCon = utils.rectCounter(contours)
-    if rectCon:
-        biggestContour = utils.getConrnerPoints(rectCon[0])
-        if biggestContour.size != 0:
-            return utils.reorder(biggestContour)
-    return None
+def find_biggest_contour(contours: list):
+    """
+    Finds and orders the biggest rectangle contour.
+    
+    Parameters:
+    - contours: (list)List of contours.
+    
+    Returns:
+    - np.ndarray: Points of the biggest rectangle contour, or None if not valid contour is found.
+    """
+    try:
+        rectCon = utils.rectCounter(contours)
+        if rectCon:
+            biggestContour = utils.getConrnerPoints(rectCon[0])
+            if biggestContour.size != 0:
+                return utils.reorder(biggestContour)
+        return None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in find_biggest_contour: {e}")
 
 def find_two_biggest_contours(contours):
     """Finds and returns the two biggest rectangle-like contours."""
