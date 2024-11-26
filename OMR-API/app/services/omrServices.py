@@ -138,12 +138,26 @@ def find_two_biggest_contours(contours) -> list:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in find_two_biggest_contours: {e}")
 
-def warp_perspective(img, biggestContour, width, height):
-    """Applies a perspective warp to the image."""
-    pt1 = np.float32(biggestContour)
-    pt2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
-    matrix = cv2.getPerspectiveTransform(pt1, pt2)
-    return cv2.warpPerspective(img, matrix, (width, height))
+def warp_perspective(img, biggestContour, width, height) -> np.ndarray:
+    """
+    Applies a perspective warp to the image.
+    
+    Parameters:
+    - img (np.ndarray): Input image to warp.
+    - biggestContour (np.ndarray): Points of the biggest rectangle contour.
+    - width (int): Desired width of the warped image.
+    - height (int): Desired height of the warped image.
+    
+    Returns:
+    - np.ndarray: Warped image.
+    """
+    try:
+        pt1 = np.float32(biggestContour)
+        pt2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
+        matrix = cv2.getPerspectiveTransform(pt1, pt2)
+        return cv2.warpPerspective(img, matrix, (width, height))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in warp_perspective: {e}")
 
 def apply_threshold(imgWarpColored):
     """Applies a threshold to the warped image."""
