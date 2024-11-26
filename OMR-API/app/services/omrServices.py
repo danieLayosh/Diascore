@@ -50,11 +50,22 @@ def preprocess_image(img: np.ndarray, width: int, height: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in preprocess_image: {e}")
     
-def find_contours(imgCanny):
-    """Finds contours from a preprocessed Canny image."""
-    contours, _ = cv2.findContours(imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    return contours
-
+def find_contours(imgCanny: np.ndarray):
+    """
+    Finds contours from a preprocessed Canny image.
+    
+    Parameters:
+    - imgCanny: (np.ndarray)Canny edge image.
+    
+    Returns:
+    - list: List of contours.
+    """
+    try:
+        contours, _ = cv2.findContours(imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        return contours
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in find_contours: {e}")
+    
 def calculate_rectangle_dimensions(biggest_contour):
     """Calculates the height and width of the rectangle contour."""
     if biggest_contour is None or len(biggest_contour) != 4:
