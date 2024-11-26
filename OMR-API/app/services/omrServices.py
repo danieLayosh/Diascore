@@ -175,47 +175,53 @@ def apply_threshold(imgWarpColored) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in apply_threshold: {e}")
 
-def process_boxes(imgThresh, num_boxes, which_page, answers_dict):
+def process_boxes(imgThresh, num_boxes, which_page, answers_dict) -> dict:
     """
-    Splits the thresholded image into boxes and checks answers.
+    Processes boxes in a thresholded image to extract answers.
 
     Parameters:
-    - imgThresh: Thresholded image to process.
-    - num_boxes: Number of boxes to process.
-    - which_page: Indicates which page is being processed (1 or 2).
-    - answers_dict: Dictionary to store the answers.
+    - imgThresh (numpy.ndarray): Thresholded image.
+    - num_boxes (int): Number of boxes in the grid.
+    - which_page (int): Page identifier (1 or 2).
+    - answers_dict (dict): Dictionary to store the results.
+
+    Returns:
+    - dict: Updated answers dictionary.
     """
-    # Determine the starting key based on the page number
-    start_key = 1 if which_page == 1 else 23
+    
+    try:
+        # Determine the starting key based on the page number
+        start_key = 1 if which_page == 1 else 23
 
-    # Split the thresholded image into boxes
-    boxes = utils.splitBoxes(imgThresh, num_boxes)
+        # Split the thresholded image into boxes
+        boxes = utils.splitBoxes(imgThresh, num_boxes)
 
-    # Process each group of 3 boxes
-    for i in range(0, len(boxes), 3):
-        # Calculate non-zero pixel counts for the current group of boxes
-        counts = [
-            cv2.countNonZero(boxes[i]),
-            cv2.countNonZero(boxes[i + 1]),
-            cv2.countNonZero(boxes[i + 2]),
-        ]
+        # Process each group of 3 boxes
+        for i in range(0, len(boxes), 3):
+            # Calculate non-zero pixel counts for the current group of boxes
+            counts = [
+                cv2.countNonZero(boxes[i]),
+                cv2.countNonZero(boxes[i + 1]),
+                cv2.countNonZero(boxes[i + 2]),
+            ]
 
-        # Sort counts in descending order
-        counts_sorted = sorted(counts, reverse=True)
+            # Sort counts in descending order
+            counts_sorted = sorted(counts, reverse=True)
 
-        # Determine the selected answer
-        if counts_sorted[0] - counts_sorted[1] > 200:  # Valid answer threshold
-            selected_box = counts.index(counts_sorted[0]) + 1
-            reversed_box = 4 - selected_box  # Reverse the mapping (1->3, 2->2, 3->1)
-            answers_dict[start_key] = reversed_box
-        else:
-            answers_dict[start_key] = 0  # Uncertain or invalid answer
+            # Determine the selected answer
+            if counts_sorted[0] - counts_sorted[1] > 200:  # Valid answer threshold
+                selected_box = counts.index(counts_sorted[0]) + 1
+                reversed_box = 4 - selected_box  # Reverse the mapping (1->3, 2->2, 3->1)
+                answers_dict[start_key] = reversed_box
+            else:
+                answers_dict[start_key] = 0  # Uncertain or invalid answer
 
-        # Increment the key for the next answer
-        start_key += 1
+            # Increment the key for the next answer
+            start_key += 1
 
-    return answers_dict
-
+        return answers_dict
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in process_boxes: {e}")
 
 def stack_images(imageArray, scale):
     """Stacks multiple images into a single window."""
