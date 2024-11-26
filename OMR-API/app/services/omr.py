@@ -1,4 +1,4 @@
-import app.services.omrServices as omr
+import services.omrServices as omr
 import cv2
 
 def do_omr_two_pages(arr):
