@@ -12,10 +12,10 @@ def do_omr_two_pages(arr):
         return "No images were uploaded"
     
     answers = {}
-    page_omr(arr[0], answers, False)
+    page_omr(arr[0], answers, debug=False)
     
     if len(arr) > 1:
-        page_omr(arr[1], answers, False)
+        page_omr(arr[1], answers, debug=False)
     
     return answers
     
@@ -40,7 +40,10 @@ def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
     # Step 2: Find contours
     contours = omr.find_contours(imgCanny)
     imgContours = img.copy()
-    cv2.drawContours(imgContours, contours, -1, (0, 255, 0), 10)
+    
+    # Only draw contours if debug is True
+    if debug:
+        cv2.drawContours(imgContours, contours, -1, (0, 255, 0), 10)
 
     # Step 3: Find the two biggest contours
     biggestContours = omr.find_two_biggest_contours(contours)
@@ -50,7 +53,10 @@ def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
     if debug:
         print("Two contours were detected")
     imgBiggestContours = img.copy()
-    cv2.drawContours(imgBiggestContours, [biggestContours[0]], -1, (0, 255, 0), 20)
+    
+    # Only draw the biggest contours if debug is True
+    if debug:
+        cv2.drawContours(imgBiggestContours, [biggestContours[0]], -1, (0, 255, 0), 20)
 
     # Step 4: Warp perspective for the first contour
     imgWarpColored = omr.warp_perspective(img, biggestContours[0], widthImg, heightImg)
@@ -68,7 +74,7 @@ def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
     elif height > 1000 and width > 0.5 * height:  # A4-like dimensions
         if debug:
             print("A4 page detected")
-        imgWarpColored, imgCanny2, imgBiggestContours2 = process_second_contour(imgWarpColored, widthImg, heightImg)
+        imgWarpColored, imgCanny2, imgBiggestContours2 = process_second_contour(imgWarpColored, widthImg, heightImg, debug)
         num_answers = 22
     elif height < 200:
         return "The maximum height of the rectangle is 200, which is too small"
@@ -100,7 +106,7 @@ def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
     return answers
 
 
-def process_second_contour(imgWarpColored, widthImg, heightImg):
+def process_second_contour(imgWarpColored, widthImg, heightImg, debug=False):
     """
     Processes the second contour when the rectangle dimensions suggest it is a Type 2 or A4 page.
     """
@@ -108,12 +114,18 @@ def process_second_contour(imgWarpColored, widthImg, heightImg):
     contours2 = omr.find_contours(imgCanny2)
 
     imgContours2 = img2.copy()
-    cv2.drawContours(imgContours2, contours2, -1, (0, 255, 0), 10)
+    
+    # Only draw contours if debug is True
+    if debug:
+        cv2.drawContours(imgContours2, contours2, -1, (0, 255, 0), 10)
 
     biggestContour2 = omr.find_biggest_contour(contours2)
     if biggestContour2 is not None and len(biggestContour2) >= 1:
         imgBiggestContours2 = img2.copy()
-        cv2.drawContours(imgBiggestContours2, [biggestContour2], -1, (0, 255, 0), 20)
+        
+        # Only draw the biggest contour if debug is True
+        if debug:
+            cv2.drawContours(imgBiggestContours2, [biggestContour2], -1, (0, 255, 0), 20)
         imgWarpColored = omr.warp_perspective(img2, biggestContour2, widthImg, heightImg)
         return imgWarpColored, imgCanny2, imgBiggestContours2
 
