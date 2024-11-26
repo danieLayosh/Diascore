@@ -171,10 +171,10 @@ def getConrnerPoints(contour: np.ndarray) -> np.ndarray:
     Extracts corner points from a contour.
     
     Parameters:
-    - contour (numpy.ndarray): Input contour.
+    - contour (np.ndarray): Input contour.
     
     Returns:
-    - numpy.ndarray: Approximated corner points.
+    - np.ndarray: Approximated corner points.
     """
     try:
         peri = cv2.arcLength(contour, True)
@@ -194,13 +194,13 @@ def reorder(myPoints: np.ndarray) -> np.ndarray:
     The input `myPoints` should be a 4x2 array where each row represents a point (x, y).
     
     Parameters:
-        myPoints (numpy.ndarray): An array of shape (4, 2), representing four points in a 2D space.
+        myPoints (np.ndarray): An array of shape (4, 2), representing four points in a 2D space.
         
     Returns:
-        numpy.ndarray: A reordered array of shape (4, 1, 2), representing the points in the desired order.
+        np.ndarray: A reordered array of shape (4, 1, 2), representing the points in the desired order.
     """
     try:
-        # Ensure myPoints is a numpy array
+        # Ensure myPoints is a np array
         myPoints = np.array(myPoints)
 
         # Check if the input has the expected shape
@@ -228,36 +228,38 @@ def reorder(myPoints: np.ndarray) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in reorder: {e}")
 
-def splitBoxes(img, num_rows, row_padding=5):
+def splitBoxes(img: np.ndarray, num_rows: int, row_padding=5) -> list:
     """
-    Splits the image into equally sized boxes, with optional row padding for better coverage.
+    Splits the image into equally sized boxes with optional padding.
     
-    :param img: The input image (grayscale or binary).
-    :param num_rows: Number of rows to split into.
-    :param row_padding: Extra pixels added to each row split to extend downward.
-    :return: List of cropped image boxes.
+    Parameters:
+    - img (np.ndarray): Input image.
+    - num_rows (int): Number of rows to split into.
+    - row_padding (int): Extra pixels added to each row split.
+    
+    Returns:
+    - list: List of cropped image boxes.
     """
-    h, w = img.shape
-    row_height = h / num_rows  # Compute row height as float
-    col_width = w / 3  # Compute column width as float
+    try:
+        h, w = img.shape
+        row_height = h / num_rows
+        col_width = w / 3
 
-    boxes = []
-    for row in range(num_rows):
-        for col in range(3):
-            # Compute coordinates for each box
-            y1 = round(row * row_height)
-            y2 = round((row + 1) * row_height) + row_padding  # Add padding to the bottom
-            x1 = round(col * col_width)
-            x2 = round((col + 1) * col_width)
+        boxes = []
+        for row in range(num_rows):
+            for col in range(3):
+                y1 = round(row * row_height)
+                y2 = round((row + 1) * row_height) + row_padding
+                x1 = round(col * col_width)
+                x2 = round((col + 1) * col_width)
 
-            # Ensure the coordinates are within image bounds
-            y1 = max(0, min(h, y1))
-            y2 = max(0, min(h, y2))
-            x1 = max(0, min(w, x1))
-            x2 = max(0, min(w, x2))
+                # Ensure coordinates are within bounds
+                y1, y2 = max(0, min(h, y1)), max(0, min(h, y2))
+                x1, x2 = max(0, min(w, x1)), max(0, min(w, x2))
 
-            # Crop the box from the image
-            box = img[y1:y2, x1:x2]
-            boxes.append(box)
+                box = img[y1:y2, x1:x2]
+                boxes.append(box)
 
-    return boxes
+        return boxes
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in splitBoxes: {e}")
