@@ -13,7 +13,7 @@ def stackImages(imgArray: list, scale: float, labels=[]) -> np.ndarray:
     - labels (list): Labels for rows of images (optional).
     
     Returns:
-    - numpy.ndarray: Stacked image.
+    - np.ndarray: Stacked image.
     """
     try:
         rows = len(imgArray)
@@ -68,10 +68,10 @@ def reorder(points: np.ndarray) -> np.ndarray:
     Reorders points to a consistent top-left, top-right, bottom-right, bottom-left order.
     
     Parameters:
-    - points (numpy.ndarray): Input 4 points (e.g., contour corners).
+    - points (np.ndarray): Input 4 points (e.g., contour corners).
     
     Returns:
-    - numpy.ndarray: Reordered points.
+    - np.ndarray: Reordered points.
     """
     try:
         points = points.reshape((4, 2))
@@ -96,7 +96,7 @@ def biggestContour(contours: list) -> np.ndarray:
     - contours (list): List of contours.
     
     Returns:
-    - tuple: The biggest contour (numpy.ndarray) and its area.
+    - tuple: The biggest contour (np.ndarray) and its area.
     """
     try:
         biggest = np.array([])
@@ -113,13 +113,26 @@ def biggestContour(contours: list) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in biggestContour: {e}")
     
-def drawRectangle(img,biggest,thickness):
-    cv2.line(img, (biggest[0][0][0], biggest[0][0][1]), (biggest[1][0][0], biggest[1][0][1]), (0, 255, 0), thickness)
-    cv2.line(img, (biggest[0][0][0], biggest[0][0][1]), (biggest[2][0][0], biggest[2][0][1]), (0, 255, 0), thickness)
-    cv2.line(img, (biggest[3][0][0], biggest[3][0][1]), (biggest[2][0][0], biggest[2][0][1]), (0, 255, 0), thickness)
-    cv2.line(img, (biggest[3][0][0], biggest[3][0][1]), (biggest[1][0][0], biggest[1][0][1]), (0, 255, 0), thickness)
- 
-    return img
+def drawRectangle(img: np.ndarray, points: np.ndarray, thickness: int) -> np.ndarray:
+    """
+    Draws a rectangle around the given points on an image.
+    
+    Parameters:
+    - img (np.ndarray): Input image.
+    - points (np.ndarray): Points of the rectangle (4 points).
+    - thickness (int): Thickness of the rectangle lines.
+    
+    Returns:
+    - np.ndarray: Image with the rectangle drawn.
+    """
+    try:
+        cv2.line(img, tuple(points[0][0]), tuple(points[1][0]), (0, 255, 0), thickness)
+        cv2.line(img, tuple(points[0][0]), tuple(points[2][0]), (0, 255, 0), thickness)
+        cv2.line(img, tuple(points[3][0]), tuple(points[2][0]), (0, 255, 0), thickness)
+        cv2.line(img, tuple(points[3][0]), tuple(points[1][0]), (0, 255, 0), thickness)
+        return img
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in drawRectangle: {e}")
  
 def nothing(x):
     pass
