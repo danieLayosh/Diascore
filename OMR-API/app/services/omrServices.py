@@ -115,7 +115,7 @@ def find_biggest_contour(contours: list) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in find_biggest_contour: {e}")
 
-def find_two_biggest_contours(contours) -> list:
+def find_two_biggest_contours(contours: list) -> list:
     """
     Finds and returns the two biggest rectangle-like contours.
     
@@ -138,7 +138,7 @@ def find_two_biggest_contours(contours) -> list:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in find_two_biggest_contours: {e}")
 
-def warp_perspective(img, biggestContour, width, height) -> np.ndarray:
+def warp_perspective(img: np.ndarray, biggestContour: np.ndarray, width: int, height: int) -> np.ndarray:
     """
     Applies a perspective warp to the image.
     
@@ -159,7 +159,7 @@ def warp_perspective(img, biggestContour, width, height) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in warp_perspective: {e}")
 
-def apply_threshold(imgWarpColored) -> np.ndarray:
+def apply_threshold(imgWarpColored: np.ndarray) -> np.ndarray:
     """
     Applies a binary inverse threshold to a warped image.
 
@@ -175,12 +175,12 @@ def apply_threshold(imgWarpColored) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in apply_threshold: {e}")
 
-def process_boxes(imgThresh, num_boxes, which_page, answers_dict) -> dict:
+def process_boxes(imgThresh: np.ndarray, num_boxes: int, which_page: int, answers_dict: dict) -> dict:
     """
     Processes boxes in a thresholded image to extract answers.
 
     Parameters:
-    - imgThresh (numpy.ndarray): Thresholded image.
+    - imgThresh (np.ndarray): Thresholded image.
     - num_boxes (int): Number of boxes in the grid.
     - which_page (int): Page identifier (1 or 2).
     - answers_dict (dict): Dictionary to store the results.
@@ -223,7 +223,7 @@ def process_boxes(imgThresh, num_boxes, which_page, answers_dict) -> dict:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in process_boxes: {e}")
 
-def stack_images(imageArray, scale) -> np.ndarray:
+def stack_images(imageArray: list, scale: float) -> np.ndarray:
     """
     Stacks multiple images into a single window.
     
