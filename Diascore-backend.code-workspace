@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"settings": {
+				"python.pythonPath": "./MainLogic-API/venv/Scripts/python.exe"  // Interpreter for MainLogic-API
+			}
+		},
+		{
+			"path": "MainLogic-API",
+			"settings": {
+				"python.pythonPath": "./MainLogic-API/venv/Scripts/python.exe"  // Interpreter for MainLogic-API
+			}
+		},
+		{
+			"path": "OMR-API",
+			"settings": {
+				"python.pythonPath": "./OMR-API/venv/Scripts/python.exe"  // Interpreter for OMR-API
+			}
+		}
+	]
+}
