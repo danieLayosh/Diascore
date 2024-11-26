@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from fastapi import HTTPException
  
 ## TO STACK ALL THE IMAGES IN ONE WINDOW
 def stackImages(imgArray: list, scale: float, labels=[]) -> np.ndarray:
@@ -14,50 +15,53 @@ def stackImages(imgArray: list, scale: float, labels=[]) -> np.ndarray:
     Returns:
     - numpy.ndarray: Stacked image.
     """
-    rows = len(imgArray)
-    cols = len(imgArray[0])
-    rowsAvailable = isinstance(imgArray[0], list)
-    width = imgArray[0][0].shape[1]
-    height = imgArray[0][0].shape[0]
+    try:
+        rows = len(imgArray)
+        cols = len(imgArray[0])
+        rowsAvailable = isinstance(imgArray[0], list)
+        width = imgArray[0][0].shape[1]
+        height = imgArray[0][0].shape[0]
 
-    if rowsAvailable:
-        for x in range(rows):
-            for y in range(cols):
-                imgArray[x][y] = cv2.resize(imgArray[x][y], (0, 0), None, scale, scale)
-                if len(imgArray[x][y].shape) == 2:  # If grayscale, convert to BGR
-                    imgArray[x][y] = cv2.cvtColor(imgArray[x][y], cv2.COLOR_GRAY2BGR)
+        if rowsAvailable:
+            for x in range(rows):
+                for y in range(cols):
+                    imgArray[x][y] = cv2.resize(imgArray[x][y], (0, 0), None, scale, scale)
+                    if len(imgArray[x][y].shape) == 2:  # If grayscale, convert to BGR
+                        imgArray[x][y] = cv2.cvtColor(imgArray[x][y], cv2.COLOR_GRAY2BGR)
 
-        imageBlank = np.zeros((height, width, 3), np.uint8)
-        hor = [imageBlank] * rows
-        for x in range(rows):
-            hor[x] = np.hstack(imgArray[x])
-        ver = np.vstack(hor)
-    else:
-        for x in range(rows):
-            imgArray[x] = cv2.resize(imgArray[x], (0, 0), None, scale, scale)
-            if len(imgArray[x].shape) == 2:  # If grayscale, convert to BGR
-                imgArray[x] = cv2.cvtColor(imgArray[x], cv2.COLOR_GRAY2BGR)
-        ver = np.hstack(imgArray)
+            imageBlank = np.zeros((height, width, 3), np.uint8)
+            hor = [imageBlank] * rows
+            for x in range(rows):
+                hor[x] = np.hstack(imgArray[x])
+            ver = np.vstack(hor)
+        else:
+            for x in range(rows):
+                imgArray[x] = cv2.resize(imgArray[x], (0, 0), None, scale, scale)
+                if len(imgArray[x].shape) == 2:  # If grayscale, convert to BGR
+                    imgArray[x] = cv2.cvtColor(imgArray[x], cv2.COLOR_GRAY2BGR)
+            ver = np.hstack(imgArray)
 
-    # Add labels if provided
-    if labels:
-        eachImgWidth = ver.shape[1] // cols
-        eachImgHeight = ver.shape[0] // rows
-        for d in range(rows):
-            for c in range(cols):
-                cv2.rectangle(
-                    ver, 
-                    (c * eachImgWidth, d * eachImgHeight), 
-                    (c * eachImgWidth + len(labels[d]) * 13 + 27, d * eachImgHeight + 30), 
-                    (255, 255, 255), cv2.FILLED
-                )
-                cv2.putText(
-                    ver, labels[d], 
-                    (eachImgWidth * c + 10, eachImgHeight * d + 20), 
-                    cv2.FONT_HERSHEY_COMPLEX, 0.7, (255, 0, 255), 2
-                )
+        # Add labels if provided
+        if labels:
+            eachImgWidth = ver.shape[1] // cols
+            eachImgHeight = ver.shape[0] // rows
+            for d in range(rows):
+                for c in range(cols):
+                    cv2.rectangle(
+                        ver,
+                        (c * eachImgWidth, d * eachImgHeight),
+                        (c * eachImgWidth + len(labels[d]) * 13 + 27, d * eachImgHeight + 30),
+                        (255, 255, 255), cv2.FILLED
+                    )
+                    cv2.putText(
+                        ver, labels[d],
+                        (eachImgWidth * c + 10, eachImgHeight * d + 20),
+                        cv2.FONT_HERSHEY_COMPLEX, 0.7, (255, 0, 255), 2
+                    )
 
-    return ver
+        return ver
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in stackImages: {e}")
  
 def reorder(myPoints):
  
