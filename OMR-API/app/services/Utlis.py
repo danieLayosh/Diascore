@@ -166,20 +166,30 @@ def valTrackbars():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in valTrackbars: {e}")
 
-def rectCounter(contours):
+def rectCounter(contours: list) -> list:
+    """
+    Filters contours to find rectangle-like shapes.
     
-    rectCon = []
-    for i in contours:
-        area = cv2.contourArea(i)
-        if area > 50:
-            peri = cv2.arcLength(i, True)
-            approx = cv2.approxPolyDP(i, 0.02 * peri, True)
-            if len(approx) == 4:
-                rectCon.append(i)
-                
-    rectCon = sorted(rectCon, key=cv2.contourArea, reverse=True)
+    Parameters:
+    - contours (list): List of contours.
     
-    return rectCon
+    Returns:
+    - list: Rectangle-like contours sorted by area (descending).
+    """
+    try:
+        rectCon = []
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            if area > 50:
+                peri = cv2.arcLength(contour, True)
+                approx = cv2.approxPolyDP(contour, 0.02 * peri, True)
+                if len(approx) == 4:  # Rectangle
+                    rectCon.append(contour)
+
+        rectCon = sorted(rectCon, key=cv2.contourArea, reverse=True)
+        return rectCon
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in rectCounter: {e}")
 
 def getConrnerPoints(cont):
     peri = cv2.arcLength(cont, True)
