@@ -137,17 +137,34 @@ def drawRectangle(img: np.ndarray, points: np.ndarray, thickness: int) -> np.nda
 def nothing(x):
     pass
  
-def initializeTrackbars(intialTracbarVals=0):
-    cv2.namedWindow("Trackbars")
-    cv2.resizeWindow("Trackbars", 360, 240)
-    cv2.createTrackbar("Threshold1", "Trackbars", 200,255, nothing)
-    cv2.createTrackbar("Threshold2", "Trackbars", 200, 255, nothing)
- 
+def initializeTrackbars(initial_values=0) -> None:
+    """
+    Initializes trackbars for threshold adjustment.
+    
+    Parameters:
+    - initial_values (int): Initial value for trackbars.
+    """
+    try:
+        cv2.namedWindow("Trackbars")
+        cv2.resizeWindow("Trackbars", 360, 240)
+        cv2.createTrackbar("Threshold1", "Trackbars", 200,255, nothing)
+        cv2.createTrackbar("Threshold2", "Trackbars", 200, 255, nothing)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in initializeTrackbars: {e}")
+    
 def valTrackbars():
-    Threshold1 = cv2.getTrackbarPos("Threshold1", "Trackbars")
-    Threshold2 = cv2.getTrackbarPos("Threshold2", "Trackbars")
-    src = Threshold1,Threshold2
-    return src
+    """
+    Reads the current positions of the trackbars.
+    
+    Returns:
+    - tuple: Threshold1 and Threshold2 values.
+    """
+    try:
+        threshold1 = cv2.getTrackbarPos("Threshold1", "Trackbars")
+        threshold2 = cv2.getTrackbarPos("Threshold2", "Trackbars")
+        return threshold1, threshold2
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in valTrackbars: {e}")
 
 def rectCounter(contours):
     
