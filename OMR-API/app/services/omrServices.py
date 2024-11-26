@@ -159,10 +159,21 @@ def warp_perspective(img, biggestContour, width, height) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in warp_perspective: {e}")
 
-def apply_threshold(imgWarpColored):
-    """Applies a threshold to the warped image."""
-    imgWarpGray = cv2.cvtColor(imgWarpColored, cv2.COLOR_BGR2GRAY)
-    return cv2.threshold(imgWarpGray, 170, 255, cv2.THRESH_BINARY_INV)[1]
+def apply_threshold(imgWarpColored) -> np.ndarray:
+    """
+    Applies a binary inverse threshold to a warped image.
+
+    Parameters:
+    - imgWarpColored (np.ndarray): Warped input image.
+    
+    Returns:
+    - np.ndarray: Thresholded image.    
+    """
+    try:
+        imgWarpGray = cv2.cvtColor(imgWarpColored, cv2.COLOR_BGR2GRAY)
+        return cv2.threshold(imgWarpGray, 170, 255, cv2.THRESH_BINARY_INV)[1]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in apply_threshold: {e}")
 
 def process_boxes(imgThresh, num_boxes, which_page, answers_dict):
     """
