@@ -3,15 +3,15 @@ import numpy as np
 from fastapi import HTTPException
 import app.services.Utlis as utils
 
-def preprocess_image_path(path: str, width: int, height: int):
+def preprocess_image_path(path: str, width: int, height: int) -> tuple:
     """
     Loads an image from file path and preprocesses it.
     Converts the image to grayscale, applies Gaussian blur, and Canny edge detection.
     
     Parameters:
-    - path: (str)Path to the image file.
-    - width: (int)Desired width of the image.
-    - height: (int)Desired height of the image.
+    - path (str): Path to the image file.
+    - width (int): Desired width of the image.
+    - height(int): Desired height of the image.
     
     Returns:
     - tuple: Resized original image and its Canny edge version. 
@@ -28,15 +28,15 @@ def preprocess_image_path(path: str, width: int, height: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error preprocess_image_path: {e}")
 
-def preprocess_image(img: np.ndarray, width: int, height: int):
+def preprocess_image(img: np.ndarray, width: int, height: int) -> tuple:
     """
     Preprocesses an input image.
     Converts the image to grayscale, applies Gaussian blur, and Canny edge detection.
     
     Parameters:
-    - img: (np.ndarray)Input image to preprocess.
-    - width: (int)Desired width of the image.
-    - height: (int)Desired height of the image.
+    - img (np.ndarray): Input image to preprocess.
+    - width (int): Desired width of the image.
+    - height (int): Desired height of the image.
     
     Returns:
     - tuple: Resized original image and its Canny edge version.
@@ -50,12 +50,12 @@ def preprocess_image(img: np.ndarray, width: int, height: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in preprocess_image: {e}")
     
-def find_contours(imgCanny: np.ndarray):
+def find_contours(imgCanny: np.ndarray) -> list:
     """
     Finds contours from a preprocessed Canny image.
     
     Parameters:
-    - imgCanny: (np.ndarray)Canny edge image.
+    - imgCanny (np.ndarray): Canny edge image.
     
     Returns:
     - list: List of contours.
@@ -66,12 +66,12 @@ def find_contours(imgCanny: np.ndarray):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in find_contours: {e}")
     
-def calculate_rectangle_dimensions(biggest_contour: np.ndarray):
+def calculate_rectangle_dimensions(biggest_contour: np.ndarray) -> tuple:
     """
     Calculates the height and width of the rectangle contour.
     
     Parameters:
-    - biggest_contour: (np.ndarray)Biggest rectangle contour.
+    - biggest_contour (np.ndarray): Biggest rectangle contour.
     
     Returns:
     - tuple: Height and width of the rectangle. or (None, None) if the contour is invalid.
@@ -95,12 +95,12 @@ def calculate_rectangle_dimensions(biggest_contour: np.ndarray):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in calculate_rectangle_dimensions: {e}")
 
-def find_biggest_contour(contours: list):
+def find_biggest_contour(contours: list) -> np.ndarray:
     """
     Finds and orders the biggest rectangle contour.
     
     Parameters:
-    - contours: (list)List of contours.
+    - contours (list): List of contours.
     
     Returns:
     - np.ndarray: Points of the biggest rectangle contour, or None if not valid contour is found.
