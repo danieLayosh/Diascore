@@ -28,14 +28,28 @@ def preprocess_image_path(path: str, width: int, height: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error preprocess_image_path: {e}")
 
-def preprocess_image(img, width, height):
-    """Loads and preprocesses the image."""
-    img = cv2.resize(img, (width, height))
-    imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
-    imgCanny = cv2.Canny(imgBlur, 10, 50)
-    return img, imgCanny
-
+def preprocess_image(img: np.ndarray, width: int, height: int):
+    """
+    Preprocesses an input image.
+    Converts the image to grayscale, applies Gaussian blur, and Canny edge detection.
+    
+    Parameters:
+    - img: (np.ndarray)Input image to preprocess.
+    - width: (int)Desired width of the image.
+    - height: (int)Desired height of the image.
+    
+    Returns:
+    - tuple: Resized original image and its Canny edge version.
+    """
+    try:
+        img = cv2.resize(img, (width, height))
+        imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
+        imgCanny = cv2.Canny(imgBlur, 10, 50)
+        return img, imgCanny
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in preprocess_image: {e}")
+    
 def find_contours(imgCanny):
     """Finds contours from a preprocessed Canny image."""
     contours, _ = cv2.findContours(imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
