@@ -243,3 +243,23 @@ def splitBoxes(img: np.ndarray, num_rows: int, row_padding=5) -> list:
         return boxes
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in splitBoxes: {e}")
+    
+def ensure_vertical_orientation(image: np.ndarray) -> np.ndarray:
+    """
+    Ensures that the image is vertical (portrait). If the image is in landscape orientation,
+    it rotates the image to make it vertical.
+
+    Parameters:
+        image (np.ndarray): The input image as a numpy array.
+
+    Returns:
+        np.ndarray: The rotated image (if necessary), otherwise the original image.
+    """
+    # Get the dimensions of the image (height, width)
+    height, width = image.shape[:2]
+    
+    if width > height:
+        # Rotate the image 90 degrees counterclockwise to make it vertical
+        image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+    
+    return image
