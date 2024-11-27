@@ -3,52 +3,40 @@ import numpy as np
 from fastapi import HTTPException
 import utils.Utils as utils
 
-def preprocess_image_path(path: str, width: int, height: int) -> tuple:
+def preprocess_image(img, width: int, height: int) -> tuple:
     """
-    Loads an image from file path and preprocesses it.
+    Loads an image from a file path or accepts an image as input, then preprocesses it.
     Converts the image to grayscale, applies Gaussian blur, and Canny edge detection.
     
     Parameters:
-    - path (str): Path to the image file.
-    - width (int): Desired width of the image.
-    - height(int): Desired height of the image.
-    
-    Returns:
-    - tuple: Resized original image and its Canny edge version. 
-    """
-    try:
-        img = cv2.imread(path)
-        if img is None:
-            raise FileNotFoundError(f"File not found at path: {path}")
-        img = cv2.resize(img, (width, height))
-        imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
-        imgCanny = cv2.Canny(imgBlur, 10, 50)
-        return img, imgCanny
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error preprocess_image_path: {e}")
-
-def preprocess_image(img: np.ndarray, width: int, height: int) -> tuple:
-    """
-    Preprocesses an input image.
-    Converts the image to grayscale, applies Gaussian blur, and Canny edge detection.
-    
-    Parameters:
-    - img (np.ndarray): Input image to preprocess.
+    - img (str or np.ndarray): Path to the image file or the image itself as a numpy array.
     - width (int): Desired width of the image.
     - height (int): Desired height of the image.
     
     Returns:
-    - tuple: Resized original image and its Canny edge version.
+    - tuple: Resized original image and its Canny edge version. 
     """
+    # Check if `img` is a file path (string)
+    if isinstance(img, str):
+        img = cv2.imread(img)
+        if img is None:
+            raise FileNotFoundError(f"File not found at path: {img}")
+
     try:
+        # Make sure the iamge is vertical
+        img = utils.ensure_vertical_orientation(img)
+        # Resize the image
         img = cv2.resize(img, (width, height))
+        # Convert to grayscale
         imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # Apply Gaussian blur
         imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1)
+        # Apply Canny edge detection
         imgCanny = cv2.Canny(imgBlur, 10, 50)
         return img, imgCanny
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error in preprocess_image: {e}")
+
     
 def find_contours(imgCanny: np.ndarray) -> list:
     """
