@@ -1,5 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import UploadFile, HTTPException
 from io import BytesIO
 from PIL import Image
 import cv2
@@ -22,33 +21,39 @@ def read_image(file: UploadFile) -> np.ndarray:
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid image file: {str(e)}")
 
-def do_omr_two_pages(arr):
+def do_omr_two_pages(images: list[np.ndarray]) -> dict[int, int]:
     """
     OMR for two pages. This function is called when the user uploads a file with two pages. Or when the user uploads two images.
 
-    Args:
-        arr (str[]): array of paths to the images
+    Parameters:
+        images (list[np.ndarray]): List of two images as numpy arrays.
+    
+    Returns:
+        dict[int, int]: Dictionary of extracted answers.
     """
-    if arr is None:
-        return "No images were uploaded"
+    if images is None:
+        raise HTTPException(status_code=400, detail="No images were uploaded")
     
     answers = {}
-    page_omr(arr[0], answers, debug=False)
+    page_omr(images[0], answers, debug=False)
     
-    if len(arr) > 1:
-        page_omr(arr[1], answers, debug=False)
+    if len(images) > 1:
+        page_omr(images[1], answers, debug=False)
     
     return answers
     
 
-def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
+def page_omr(image: np.ndarray, answers: dict[int, int], debug: bool = False):
     """
     Process a single OMR page, updating the answers dictionary.
 
-    Args:
-    - path: Path to the OMR image.
-    - answers: Dictionary to store extracted answers.
-    - debug: Whether to visualize intermediate steps.
+    Parameters:
+        image (np.ndarray): The image as a numpy array.
+        answers (dict[int, int]): Dictionary to store extracted answers.
+        debug (bool): Whether to visualize intermediate steps.
+    
+    Returns:
+        dict[int, int]: Dictionary of extracted answers.
     """
     
     # Constants for image dimensions
@@ -56,7 +61,7 @@ def page_omr(path, answers: dict[int, int], debug: bool = False) -> str:
     heightImg = 1754
 
     # Step 1: Preprocess the image
-    img, imgCanny = omr.preprocess_image_path(path, widthImg, heightImg)
+    img, imgCanny = omr.preprocess_image(image, widthImg, heightImg)
 
     # Step 2: Find contours
     contours = omr.find_contours(imgCanny)
