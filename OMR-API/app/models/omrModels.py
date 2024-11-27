@@ -1,10 +1,9 @@
-from fastapi import UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi import UploadFile
 from pydantic import BaseModel
-from typing import Annotated
+from typing import Dict
 
 class OMRRequest(BaseModel):
-    pass
+    image: list[UploadFile]
 
 class OMRResponse(BaseModel):
     answers: dict[int, int]
