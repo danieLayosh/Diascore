@@ -197,7 +197,7 @@ def process_boxes(imgThresh: np.ndarray, num_boxes: int, which_page: int, answer
             counts_sorted = sorted(counts, reverse=True)
 
             # Determine the selected answer
-            if counts_sorted[0] - counts_sorted[1] > 200:  # Valid answer threshold
+            if counts_sorted[0] - counts_sorted[1] > 300:  # Valid answer threshold
                 selected_box = counts.index(counts_sorted[0]) + 1
                 reversed_box = 4 - selected_box  # Reverse the mapping (1->3, 2->2, 3->1)
                 answers_dict[start_key] = reversed_box
