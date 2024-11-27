@@ -7,7 +7,7 @@ This document provides detailed information about using the **Diascore OMR-API**
 ## Endpoint Details
 
 **URL:**  
-`POST http://127.0.0.1:8000/api/v1/omr/process-omr`
+`POST http://127.0.0.1:8001/api/v1/omr/process-omr`
 
 **Description:**  
 Processes Optical Mark Recognition (OMR) sheets from uploaded images. This endpoint supports form-data requests containing multiple images and form fields.
@@ -37,11 +37,11 @@ Processes Optical Mark Recognition (OMR) sheets from uploaded images. This endpo
 This example demonstrates a request for processing two OMR sheet images of a kindergarten parent test.
 
 **Request URL:**  
-`http://127.0.0.1:8000/api/v1/omr/process-omr`
+`http://127.0.0.1:8001/api/v1/omr/process-omr`
 
 **cURL Request:**
 ```bash
-curl --location 'http://127.0.0.1:8000/api/v1/omr/process-omr' \
+curl --location 'http://127.0.0.1:8001/api/v1/omr/process-omr' \
 --form 'files=@"path/to/briefP_Second_Page.JPG"' \
 --form 'files=@"path/to/briefP_First_Page.JPG"' \
 --form 'pORt="p"' \
@@ -54,11 +54,11 @@ This example demonstrates a request for processing OMR sheet images of a school 
 
 
 **Request URL:**
-`http://127.0.0.1:8000/api/v1/omr/process-omr`
+`http://127.0.0.1:8001/api/v1/omr/process-omr`
 
 **cURL Request:**
 ```bash
-curl --location 'http://127.0.0.1:8000/api/v1/omr/process-omr' \
+curl --location 'http://127.0.0.1:8001/api/v1/omr/process-omr' \
 --form 'files=@"path/to/school_test_Page_1.JPG"' \
 --form 'files=@"path/to/school_test_Page_2.JPG"' \
 --form 'pORt="t"' \
