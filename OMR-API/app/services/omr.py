@@ -1,5 +1,26 @@
-import services.omrServices as omr
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.responses import JSONResponse
+from io import BytesIO
+from PIL import Image
 import cv2
+import numpy as np
+import services.omrServices as omr
+
+def read_image(file: UploadFile) -> np.ndarray:
+    """
+    Convert an uploaded image to a numpy array.
+
+    Parameters:
+        file (UploadFile): The uploaded image file.
+
+    Returns:
+        np.ndarray: The image as a numpy array.
+    """
+    try:
+        image = Image.open(BytesIO(file.file.read()))
+        return cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid image file: {str(e)}")
 
 def do_omr_two_pages(arr):
     """
