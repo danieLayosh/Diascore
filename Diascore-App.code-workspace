@@ -1,6 +1,9 @@
 {
 	"folders": [
 		{
+			"path": "App-UI"
+		},
+		{
 			"path": "MainLogic-API",
 			"settings": {
 				"python.pythonPath": "./MainLogic-API/venv/Scripts/python.exe"  // Interpreter for MainLogic-API
