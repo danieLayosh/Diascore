@@ -3,12 +3,14 @@ import { auth } from './firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider,  } from 'firebase/auth';
 
 // Sign Up
-export const doCreateUserWithEmailAndPassword = (email, password) =>
-  auth.createUserWithEmailAndPassword(email, password);
+export const doCreateUserWithEmailAndPassword = async (email, password) => {
+  return createUserWithEmailAndPassword(auth, email, password);
+};
 
 // Sign In
-export const doSignInWithEmailAndPassword = (email, password) =>
-  auth.signInWithEmailAndPassword(email, password);
+export const doSignInWithEmailAndPassword = async (email, password) => {
+  return signInWithEmailAndPassword(auth, email, password);
+};
 
 // Sign In With Google
 export const doSignInWithGoogle = async () => {
@@ -18,11 +20,12 @@ export const doSignInWithGoogle = async () => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     // result.user
     return result;
-}
+};
 
 // Sign Out
-export const doSignOut = () =>
-  auth.signOut();
+export const doSignOut = () => {
+  return auth.signOut();
+}
 
 // // Password Reset
 // export const doPasswordReset = email =>
