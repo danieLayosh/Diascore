@@ -1,19 +1,53 @@
 {
 	"folders": [
 		{
-			"path": "App-UI"
+			"path": "App-UI",
+			"name": "App UI",
+			"settings": {
+				"javascript.validate.enable": true, // Enable JavaScript validation
+				"eslint.workingDirectories": ["App-UI/Diascore-App"] // Enable ESLint for App-UI
+			}
 		},
 		{
 			"path": "MainLogic-API",
+			"name": "MainLogic API",
 			"settings": {
 				"python.pythonPath": "./MainLogic-API/venv/Scripts/python.exe"  // Interpreter for MainLogic-API
 			}
 		},
 		{
 			"path": "OMR-API",
+			"name": "OMR API",
 			"settings": {
 				"python.pythonPath": "./OMR-API/venv/Scripts/python.exe"  // Interpreter for OMR-API
 			}
 		}
-	]
+	],
+	"settings": {
+	  // Common workspace settings
+	  "files.exclude": {
+		"**/node_modules": true,
+		"**/__pycache__": true,
+		"**/.venv": true
+	  },
+	  "eslint.workingDirectories": [
+		{ "mode": "auto" }
+	  ],
+	  "editor.formatOnSave": true,
+	  "python.linting.enabled": true,
+	  "python.linting.pylintEnabled": true,
+	  "python.testing.unittestEnabled": false,
+	  "python.testing.pytestEnabled": true
+	},
+	"extensions": {
+	  // Recommended extensions
+	  "recommendations": [
+		"dbaeumer.vscode-eslint", // Linting for JS/TS
+		"ms-python.python", // Python support
+		"ms-toolsai.jupyter", // Jupyter Notebook support
+		"esbenp.prettier-vscode", // Code formatting
+		"GraphQL.vscode-graphql", // GraphQL support, if applicable
+		"Vinceoregnou.vscode-react-snippets" // React snippets for JavaScript
+	  ]
+	}
 }
