@@ -28,7 +28,7 @@
 	  "files.exclude": {
 		"**/node_modules": true,
 		"**/__pycache__": true,
-		"**/.venv": true
+		"**/venv": true
 	  },
 	  "eslint.workingDirectories": [
 		{ "mode": "auto" }
