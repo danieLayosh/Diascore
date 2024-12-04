@@ -7,7 +7,6 @@ import {
     onAuthStateChanged,
     signInWithPopup,
     fetchSignInMethodsForEmail,
-    linkWithPopup,
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,19 +37,23 @@ const Auth = () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
-
+    
+            // Check existing sign-in methods for this email
             const existingMethods = await fetchSignInMethodsForEmail(auth, user.email);
-            if (existingMethods.includes('password')) {
-                await linkWithPopup(user, googleProvider);
-                alert('Google account linked successfully with your existing email account!');
+    
+            if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
+                // Email/password account exists but is not linked with Google
+                alert(
+                    'An account already exists with this email using a different method. Please sign in with your email and password, then link your Google account from the settings.'
+                );
             } else {
+                // Successful Google sign-in or account already linked
                 alert('Signed in successfully with Google!');
+                navigate('/home');
             }
-
-            navigate('/home');
         } catch (error) {
             console.error('Error during Google login:', error.message);
-
+    
             switch (error.code) {
                 case 'auth/popup-closed-by-user':
                     alert('Google login was canceled. Please try again.');
@@ -71,7 +74,7 @@ const Auth = () => {
             setAuthLoading(false);
         }
     };
-
+    
     const handleAuth = async () => {
         setAuthLoading(true);
         try {
