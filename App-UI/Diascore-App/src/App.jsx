@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { auth } from './firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import Auth from './components/Auth';
-import Home from './components/Home';
+import Auth from './pages/Auth';
+import Home from './pages/Home';
+
 
 const App = () => {
   const [user, setUser] = useState(null);
