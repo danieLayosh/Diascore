@@ -1,24 +1,25 @@
 import { useState, useEffect } from 'react';
-import { auth } from '../firebase/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase/firebase';
+import {
+    onAuthStateChanged,
+    signInWithPopup,
+    fetchSignInMethodsForEmail,
+    linkWithPopup,
+} from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
 
 const Auth = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isLogin, setIsLogin] = useState(true);
+    const [loading, setLoading] = useState(true); // Initial loading state for auth check
+    const [authLoading, setAuthLoading] = useState(false); // Loading state for Google login
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         // Check if user is already logged in
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            // If user is logged in, redirect to home page
             if (currentUser) {
                 navigate('/home');
-            }else {
-                setLoading(false); // Once done checking, Set loading state to false
+            } else {
+                setLoading(false); // Once done checking, set loading state to false
             }
         });
 
@@ -26,46 +27,64 @@ const Auth = () => {
         return () => unsubscribe();
     }, [navigate]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleGoogleLogin = async () => {
+        setAuthLoading(true);
         try {
-            if (isLogin) {
-                await signInWithEmailAndPassword(auth, email, password);
-            }else {
-                await createUserWithEmailAndPassword(auth, email, password);
+            // Step 1: Sign in with Google popup
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+
+            // Step 2: Check if account needs linking
+            const existingMethods = await fetchSignInMethodsForEmail(auth, user.email);
+            console.log('Sign-in methods for this email:', existingMethods);
+
+            if (existingMethods.includes('password')) {
+                // If email/password account exists, link with Google
+                await linkWithPopup(user, googleProvider);
+                alert('Google account linked successfully with your existing email account!');
+            } else {
+                console.log('User signed in with Google:', user);
+                alert('Signed in successfully with Google!');
             }
-            console.log('Success');
+
+            // Navigate to home after successful login
             navigate('/home');
         } catch (error) {
-            alert(error.message);
+            console.error('Error during Google login:', error.message);
+
+            // Handle error cases with proper alerts
+            switch (error.code) {
+                case 'auth/popup-closed-by-user':
+                    alert('Google login was canceled. Please try again.');
+                    break;
+                case 'auth/credential-already-in-use':
+                    alert(
+                        'This Google account is already linked with another account. Please use the correct provider to log in.'
+                    );
+                    break;
+                case 'auth/network-request-failed':
+                    alert('Network error. Please check your internet connection and try again.');
+                    break;
+                default:
+                    alert(`An unexpected error occurred: ${error.message}`);
+                    break;
+            }
+        } finally {
+            setAuthLoading(false);
         }
     };
 
     if (loading) {
-        return <div>Loading...</div> // display loading state until the auth state is checked
+        return <div>Loading...</div>; // Display loading state until the auth state is checked
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type='email'
-                placeholder='Email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-            <input
-                type='password'
-                placeholder='Password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-            <button type='submit'>{isLogin ? 'Login': 'Signup'}</button>
-            <button type='button' onClick={() => setIsLogin(!isLogin)}>
-                Switch to {isLogin ? 'Signup': 'Login'}
+        <div>
+            {/* Google Login button */}
+            <button onClick={handleGoogleLogin} disabled={authLoading}>
+                {authLoading ? 'Processing Google Login...' : 'Sign in with Google'}
             </button>
-        </form>
+        </div>
     );
 };
 
