@@ -1,9 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import Auth from './components/Auth';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute'; 
-import PageNotFound from './components/404Page';
 import appRoutes from './data/routes';
+import Auth from './pages/Auth';
+import PageNotFound from './pages/404Page';
 
 const router = createBrowserRouter([
   {
