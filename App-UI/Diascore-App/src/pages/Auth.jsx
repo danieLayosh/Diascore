@@ -7,59 +7,50 @@ import {
     onAuthStateChanged,
     signInWithPopup,
     fetchSignInMethodsForEmail,
-
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
-    const [loading, setLoading] = useState(true); // Initial loading state for auth check
-    const [authLoading, setAuthLoading] = useState(false); // Loading state for Google login
-    const [email, setEmail] = useState(''); // User email for sign up/in
-    const [password, setPassword] = useState(''); // User password for sign up/in
-    const [isSignUp, setIsSignUp] = useState(false); // Toggle between Sign In and Sign Up
+    const [loading, setLoading] = useState(true);
+    const [authLoading, setAuthLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSignUp, setIsSignUp] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
-                // Avoid unnecessary navigation if already on /home
                 if (window.location.pathname !== '/home') {
                     navigate('/home');
                 }
             } else {
-                setLoading(false); // Ensure loading state is only set once
+                setLoading(false);
             }
         });
-    
+
         return () => unsubscribe();
     }, [navigate]);
-    
 
     const handleGoogleLogin = async () => {
         setAuthLoading(true);
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
-    
-            // Check existing sign-in methods for this email
+
             const existingMethods = await fetchSignInMethodsForEmail(auth, user.email);
-    
+
             if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
-                // Email/password account exists but is not linked with Google
                 alert(
                     'An account already exists with this email using a different method. Please sign in with your email and password, then link your Google account from the settings.'
                 );
             } else {
-                // Successful Google sign-in or account already linked
                 alert('Signed in successfully with Google!');
-                navigate('/home');
-            }
-            if (window.location.pathname !== '/home') {
                 navigate('/home');
             }
         } catch (error) {
             console.error('Error during Google login:', error.message);
-    
+
             switch (error.code) {
                 case 'auth/popup-closed-by-user':
                     alert('Google login was canceled. Please try again.');
@@ -80,17 +71,15 @@ const Auth = () => {
             setAuthLoading(false);
         }
     };
-    
+
     const handleAuth = async () => {
         setAuthLoading(true);
         try {
             if (isSignUp) {
-                // Sign up user
                 const result = await createUserWithEmailAndPassword(auth, email, password);
-                await sendEmailVerification(result.user); // Send email verification
+                await sendEmailVerification(result.user);
                 alert('Verification email sent! Please check your inbox.');
             } else {
-                // Sign in user
                 await signInWithEmailAndPassword(auth, email, password);
                 alert('Signed in successfully!');
                 navigate('/home');
@@ -124,40 +113,59 @@ const Auth = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>; // Display loading state until the auth state is checked
+        return <div className="flex justify-center items-center h-screen text-xl text-white">Loading...</div>;
     }
 
     return (
-        <div>
-            {/* Toggle Sign In/Sign Up */}
-            <h1>{isSignUp ? 'Sign Up' : 'Sign In'}</h1>
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleAuth} disabled={authLoading}>
-                {authLoading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Sign In'}
-            </button>
-            <button onClick={() => setIsSignUp((prev) => !prev)}>
-                {isSignUp ? 'Switch to Sign In' : 'Switch to Sign Up'}
-            </button>
-
-            <hr />
-
-            {/* Google Login button */}
-            <button onClick={handleGoogleLogin} disabled={authLoading}>
-                {authLoading ? 'Processing Google Login...' : 'Sign in with Google'}
-            </button>
+        <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+            <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-96 transform transition-all duration-300 hover:scale-105 my-6">
+                <h1 className="text-3xl font-bold text-center text-white mb-6">
+                    {isSignUp ? 'Sign Up' : 'Sign In'}
+                </h1>
+                <div className="flex flex-col space-y-4">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="p-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="p-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <hr className="my-6 border-gray-600" />
+                    <div className="flex justify-center items-center">
+                        <button
+                            onClick={handleAuth}
+                            disabled={authLoading}
+                            className="bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transform transition-all duration-300 disabled:bg-gray-500"
+                        >
+                            {authLoading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Sign In'}
+                        </button>
+                        <button
+                            onClick={() => setIsSignUp((prev) => !prev)}
+                            className="text-blue-400 hover:text-blue-500 text-sm transition-all duration-200"
+                        >
+                            {isSignUp ? 'Switch to Sign In' : 'Switch to Sign Up'}
+                        </button>
+                    </div>
+                </div>
+                <hr className="my-6 border-gray-600" />
+                <button
+                    onClick={handleGoogleLogin}
+                    disabled={authLoading}
+                    className="bg-red-600 text-white font-semibold py-2 rounded-lg hover:bg-red-700 transform transition-all duration-300 disabled:bg-gray-500"
+                >
+                    {authLoading ? 'Processing Google Login...' : 'Sign in with Google'}
+                </button>
+            </div>
         </div>
     );
+    
 };
 
 export default Auth;
