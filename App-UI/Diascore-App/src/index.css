@@ -30,7 +30,7 @@ body {
   justify-content: center;
   align-items: center;   
   min-height: 100vh;     
-  background-color: var(--background-color); 
+  background: linear-gradient(45deg, #382efc, #feb47b); /* Colorful gradient */
 }
 
 a {
