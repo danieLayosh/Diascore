@@ -1,9 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.6;
   font-weight: 400;
 
-  /* Dark mode by default */
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.9);
   background-color: #1e1e2f;
@@ -13,7 +16,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Accent Colors */
   --primary-color: #646cff;
   --primary-hover: #535bf2;
   --background-color: #1e1e2f;
@@ -25,10 +27,10 @@
 body {
   margin: 0;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center;    /* Center vertically */
-  min-height: 100vh;      /* Full-screen height */
-  background-color: var(--background-color); /* Background color */
+  justify-content: center;
+  align-items: center;   
+  min-height: 100vh;     
+  background-color: var(--background-color); 
 }
 
 a {
@@ -85,7 +87,7 @@ button:focus-visible {
   text-align: center;
 }
 
-/* Light Mode */
+
 @media (prefers-color-scheme: light) {
   :root {
     --primary-color: #213547;
