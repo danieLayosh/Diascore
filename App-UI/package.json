@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@nextui-org/button": "^2.2.4",
+    "styled-components": "^6.1.13"
+  }
+}
