@@ -30,6 +30,7 @@ export default {
       },
       boxShadow: {
         card: "0 8px 20px rgba(0, 0, 0, 0.2)",
+        text: "0 2px 4px rgba(0, 0, 0, 0.3)",
       },
       borderRadius: {
         lg: "12px",
