@@ -1,14 +1,14 @@
-.home-cover {
+/* .home-cover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0rem 2rem; /* Reduced padding to give more space */
+    padding: 0rem 2rem;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
-    box-sizing: border-box; /* Include padding in the element's total height */
+    box-sizing: border-box; 
 }
 
 .button-group {
@@ -19,15 +19,15 @@
 
 h3 {
     font-family: 'Island Moments', sans-serif;
-    font-size: 5rem;  /* Reduced font size */
+    font-size: 5rem;  
     color: #333;
-    margin: 0; /* No margin */
-}
+    margin: 0; 
+} */
 
-h2 {
+/* h2 {
   font-family: 'Amaranth', sans-serif;
   font-size: 5rem;
-  color: #333; /* Adjust this t your color scheme */
+  color: #333; 
   margin: 20px 0;
   line-height: 1.4;
   text-align: left;
@@ -36,14 +36,14 @@ h2 {
 
 p {
   font-size: large;
-  color: #333; /* Adjust this to your color scheme */
+  color: #333; 
   margin: 20px 0;
   line-height: 1.4;
   text-align: left;
   width: 100%;
-}
+} */
 
-.learn-more-btn {
+/* .learn-more-btn {
     display: inline-block;
     padding: 10px 20px;
     background-color: #66ff66;
@@ -56,6 +56,6 @@ p {
 }
 
 .learn-more-btn:hover {
-  background-color: #53cc53; /* Darken on hover */
-}
+  background-color: #53cc53; 
+} */
   
