@@ -2,6 +2,16 @@ import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import LearnMoreBt from "../components/buttons/LearnMoreBt";
 
 const Home = () => {
+  const handleLoginClick = () => {
+    // Your login logic here
+    console.log("Login clicked");
+  };
+
+  const handleSignupClick = () => {
+    // Your signup logic here
+    console.log("Signup clicked");
+  };
+
   return (
     <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
       {/* Header Section */}
@@ -9,8 +19,8 @@ const Home = () => {
         <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
         {/* Login and Signup buttons Section */}
         <div className="flex gap-4">
-          <GreenCoverButton text="Log in" defaultColor="black" />
-          <GreenCoverButton text="Sign up" defaultColor="white" />
+          <GreenCoverButton text="Log in" defaultColor="black" onClick={handleLoginClick} />
+          <GreenCoverButton text="Sign up" defaultColor="white" onClick={handleSignupClick} />
         </div>
       </div>
 
