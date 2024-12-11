@@ -34,6 +34,15 @@ h2 {
   width: 100%;
 }
 
+p {
+  font-size: large;
+  color: #333; /* Adjust this to your color scheme */
+  margin: 20px 0;
+  line-height: 1.4;
+  text-align: left;
+  width: 100%;
+}
+
 .learn-more-btn {
     display: inline-block;
     padding: 10px 20px;
