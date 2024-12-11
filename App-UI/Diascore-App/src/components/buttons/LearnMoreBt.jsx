@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const LearnMoreBt = () => {
+const LearnMoreBt = ({ mode = 'light' }) => {
   return (
-    <StyledWrapper>
+    <StyledWrapper mode={mode}>
       <button className="learn-more">
         <span className="circle" aria-hidden="true">
           <span className="icon arrow" />
@@ -40,7 +41,7 @@ const StyledWrapper = styled.div`
     margin: 0;
     width: 3rem;
     height: 3rem;
-    background: #282936;
+    background: ${({ mode }) => (mode === 'dark' ? '#282936' : '#f0f0f0')}; /* Dynamic background */
     border-radius: 1.625rem;
   }
 
@@ -50,7 +51,7 @@ const StyledWrapper = styled.div`
     top: 0;
     bottom: 0;
     margin: auto;
-    background: #fff;
+    background: ${({ mode }) => (mode === 'dark' ? '#f0f0f0' : '#282936')}; /* Dynamic icon color */
   }
 
   button.learn-more .circle .icon.arrow {
@@ -68,8 +69,8 @@ const StyledWrapper = styled.div`
     right: 0.0625rem;
     width: 0.625rem;
     height: 0.625rem;
-    border-top: 0.125rem solid #fff;
-    border-right: 0.125rem solid #fff;
+    border-top: 0.125rem solid ${({ mode }) => (mode === 'dark' ? '#f0f0f0' : '#282936')}; /* Dynamic arrow color */
+    border-right: 0.125rem solid ${({ mode }) => (mode === 'dark' ? '#f0f0f0' : '#282936')};
     transform: rotate(45deg);
   }
 
@@ -82,7 +83,7 @@ const StyledWrapper = styled.div`
     bottom: 0;
     padding: 0.75rem 0;
     margin: 0 0 0 1.85rem;
-    color: #282936;
+    color: ${({ mode }) => (mode === 'dark' ? '#f0f0f0' : '#282936')}; /* Dynamic text color */
     font-weight: 700;
     line-height: 1.6;
     text-align: center;
@@ -94,13 +95,16 @@ const StyledWrapper = styled.div`
   }
 
   button:hover .circle .icon.arrow {
-    background: #fff;
+    background: ${({ mode }) => (mode === 'dark' ? '#f0f0f0' : '#282936')};
     transform: translate(1rem, 0);
   }
 
   button:hover .button-text {
-    color: #fff;
+    color: ${({ mode }) => (mode === 'dark' ? '#f0f0f0' : '#282936')}; /* Flip text color on hover */
   }
 `;
+LearnMoreBt.propTypes = {
+  mode: PropTypes.string,
+};
 
 export default LearnMoreBt;
