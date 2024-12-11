@@ -3,10 +3,11 @@ import LearnMoreBt from "../components/buttons/LearnMoreBt";
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center bg-gradient-bg text-text-light min-h-screen px-4 sm:px-8">
+    <div className="flex flex-col items-center bg-gradient-bg text-text-light min-h-screen ">
       {/* Header Section */}
-      <div className="flex justify-between items-center w-full px-4 sm:px-8 lg:px-12 py-4 bg-card-bg bg-opacity-70 rounded-lg shadow-lg">
-        <h3 className="text-4xl sm:text-5xl font-island-moments text-primary-color">Diascore</h3>
+      <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg  shadow-lg">
+        <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
+        {/* Login and Signup buttons Section */}
         <div className="flex gap-4">
           <GreenCoverButton text="Log in" defaultColor="black" />
           <GreenCoverButton text="Sign up" defaultColor="white" />
@@ -31,7 +32,7 @@ const Home = () => {
         </p>
       </div>
 
-      {/* Learn More Section */}
+      {/* Learn More Section Button */}
       <div className="mt-12">
         <LearnMoreBt />
       </div>
