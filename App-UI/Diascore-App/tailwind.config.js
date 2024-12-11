@@ -14,7 +14,7 @@ export default {
         "primary-color": "#646cff",
         "primary-hover": "#535bf2",
         "background-color": "#1e1e2f",
-        "card-bg": "rgba(43, 43, 64, 0.7)",
+        "card-bg": "#2b2b40",
         "button-bg": "#3c3c5c",
         "text-light": "rgba(255, 255, 255, 0.9)",
         "light-primary": "#213547",
