@@ -3,9 +3,9 @@ import LearnMoreBt from "../components/buttons/LearnMoreBt";
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center bg-gradient-bg text-text-light min-h-screen ">
+    <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
       {/* Header Section */}
-      <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg  shadow-lg">
+      <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg shadow-lg">
         <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
         {/* Login and Signup buttons Section */}
         <div className="flex gap-4">
@@ -15,15 +15,14 @@ const Home = () => {
       </div>
 
       {/* Intro Section */}
-      <div className="mt-16 sm:mt-24 text-center">
-        <h2 className="text-4xl sm:text-5xl font-amaranth font-bold leading-tight">
-          The platform <br /> <span className="text-primary-color">that will make your life easier</span>
+      <div className="mt-16 sm:mt-24 text-left mx-auto sm:mx-auto lg:mx-auto ">
+        <h2 className="text-2xl lg:text-6xl sm:text-4xl font-amaranth font-bold leading-tight">
+          The platform <br /> <span className="text-light-primary pl-12 sm:pl-4 lg:pl-48">that will make your life easier!</span>
         </h2>
       </div>
 
-      {/* Description Section */}
-      <div className="mt-10 sm:mt-16 max-w-3xl text-lg sm:text-xl text-center px-6">
-        <p>
+      <div className="mt-10 sm:mt-16 text-xl sm:text-2xl lg:text-3xl text-left p-5 sm:p-6 lg:p-8 bg-card-bg shadow-lg max-w-5xl  mx-4 sm:mx-8 lg:mx-auto  rounded-3xl">
+        <p className="font-amaranth">
           Diascore revolutionizes the way you handle diagnostic tests, saving you up to half the time by automating test checks for parents and teachers and calculating scores effortlessly.
           <br /><br />
           You can use Diascore in two convenient ways: send the test online or simply upload a picture of the completed test to the platform.
@@ -32,9 +31,10 @@ const Home = () => {
         </p>
       </div>
 
+
       {/* Learn More Section Button */}
-      <div className="mt-12">
-        <LearnMoreBt />
+      <div className="mt-12 mx-auto">
+        <LearnMoreBt mode="dark"/>
       </div>
     </div>
   );
