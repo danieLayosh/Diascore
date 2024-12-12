@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const LearnMoreBt = ({ mode = 'light' }) => {
+const LearnMoreBt = ({ mode = 'light', onClick }) => {
   return (
     <StyledWrapper mode={mode}>
-      <button className="learn-more">
+      <button className="learn-more" onClick={onClick}>
         <span className="circle" aria-hidden="true">
           <span className="icon arrow" />
         </span>
@@ -105,6 +105,7 @@ const StyledWrapper = styled.div`
 `;
 LearnMoreBt.propTypes = {
   mode: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default LearnMoreBt;
