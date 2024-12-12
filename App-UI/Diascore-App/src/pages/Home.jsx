@@ -12,6 +12,11 @@ const Home = () => {
     console.log("Signup clicked");
   };
 
+  const handleLearnMoreClick = () => {
+    // Your learn more logic here
+    console.log("Learn more clicked");
+  };
+
   return (
     <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
       {/* Header Section */}
@@ -44,7 +49,7 @@ const Home = () => {
 
       {/* Learn More Section Button */}
       <div className="mt-12 mx-auto">
-        <LearnMoreBt mode="dark"/>
+        <LearnMoreBt mode="dark" onClick={handleLearnMoreClick}/>
       </div>
     </div>
   );
