@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const GreenCoverButton = ({ text, defaultColor = 'black' }) => {
+const GreenCoverButton = ({ text, defaultColor = 'black', onClick }) => {
   return (
     <StyledWrapper defaultColor={defaultColor}>
-      <button>
+      <button onClick={onClick}> {/* Attach onClick here */}
         <span>{text}</span>
       </button>
     </StyledWrapper>
@@ -71,9 +71,11 @@ const StyledWrapper = styled.div`
     color: #fff;
   }
 `;
+
 GreenCoverButton.propTypes = {
   text: PropTypes.string.isRequired,
   defaultColor: PropTypes.string,
+  onClick: PropTypes.func, // Define the onClick prop
 };
 
 export default GreenCoverButton;
