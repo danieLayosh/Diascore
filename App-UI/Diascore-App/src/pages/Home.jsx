@@ -1,21 +1,28 @@
+import { useState } from "react"
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import LearnMoreBt from "../components/buttons/LearnMoreBt";
+import { SignIn } from "../components/auth/SignIn"
 
 const Home = () => {
+  const [currentView, setCurrentView] = useState("home");
+
   const handleLoginClick = () => {
-    // Your login logic here
     console.log("Login clicked");
+    setCurrentView("login");
   };
 
   const handleSignupClick = () => {
-    // Your signup logic here
     console.log("Signup clicked");
+    setCurrentView("signup"); // You can add a Signup component if needed
   };
 
   const handleLearnMoreClick = () => {
-    // Your learn more logic here
     console.log("Learn more clicked");
   };
+
+  if (currentView === "login") {
+    return <SignIn />;
+  }
 
   return (
     <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
