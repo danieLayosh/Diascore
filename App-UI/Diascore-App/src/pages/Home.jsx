@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useState } from "react";
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import LearnMoreBt from "../components/buttons/LearnMoreBt";
-import { SignIn } from "../components/auth/SignIn"
+import { SignIn } from "../components/auth/SignIn";
 import { Dialog } from "@mui/material";
 
 const Home = () => {
@@ -55,7 +55,6 @@ const Home = () => {
         </p>
       </div>
 
-
       {/* Learn More Section Button */}
       <div className="mt-12 mx-auto">
         <LearnMoreBt mode="dark" onClick={handleLearnMoreClick}/>
@@ -68,7 +67,7 @@ const Home = () => {
         className="backdrop-blur-sm" // Optional: adds a subtle blur effect behind the modal
       >
         <div className="bg-transparent p-4 rounded-2xl">
-          <SignIn />
+          <SignIn onClose={closeLoginModal} />
         </div>
       </Dialog>
     </div>
