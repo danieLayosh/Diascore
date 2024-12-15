@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { auth, googleProvider } from '../../firebase/firebase';
 import {
@@ -7,6 +7,7 @@ import {
     sendEmailVerification,
     signInWithPopup,
     fetchSignInMethodsForEmail,
+    onAuthStateChanged,
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +17,18 @@ export const SignIn = ({ onClose }) => {
     const [password, setPassword] = useState('');
     const [isSignUp, setIsSignUp] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                navigate('/UserPage');
+            } else {
+                navigate('/home');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [navigate]);
 
     const handleGoogleLogin = async () => {
         setAuthLoading(true);
@@ -31,7 +44,7 @@ export const SignIn = ({ onClose }) => {
                 );
             } else {
                 alert('Signed in successfully with Google!');
-                navigate('/home');
+                navigate('/UserPage');
                 onClose(); // Close the popup after successful login
             }
         } catch (error) {
@@ -68,7 +81,7 @@ export const SignIn = ({ onClose }) => {
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
                 alert('Signed in successfully!');
-                navigate('/home');
+                navigate('/UserPage');
                 onClose(); // Close the popup after successful login
             }
         } catch (error) {
