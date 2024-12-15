@@ -9,7 +9,7 @@ const PublicRoute = () => {
   }
 
   // If user is logged in, redirect to /home
-  return user ? <Navigate to="/home" /> : <Outlet />;
+  return user ? <Navigate to="/UserPage" /> : <Outlet />;
 };
 
 export default PublicRoute;
