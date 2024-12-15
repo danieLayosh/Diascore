@@ -1,9 +1,9 @@
-import Home from "../pages/Home";
+import UserPage from "../pages/UserPage";
 
 const appRoutes = [
     {
-        path: '/home',
-        element: <Home />
+        path: '/UserPage',
+        element: <UserPage />
     }
 ]
 
