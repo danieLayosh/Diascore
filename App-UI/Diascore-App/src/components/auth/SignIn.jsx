@@ -39,14 +39,18 @@ export const SignIn = ({ onClose }) => {
             const existingMethods = await fetchSignInMethodsForEmail(auth, user.email);
 
             if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
-                alert(
-                    'An account already exists with this email using a different method. Please sign in with your email and password, then link your Google account from the settings.'
-                );
+                // Sign in with the existing method
+                await signInWithEmailAndPassword(auth, user.email, password);
+
+                // Link the Google credential to the existing user
+                await user.linkWithPopup(googleProvider);
+
+                alert('Google account linked successfully!');
             } else {
                 alert('Signed in successfully with Google!');
-                navigate('/UserPage');
-                onClose(); // Close the popup after successful login
             }
+
+            navigate('/home');
         } catch (error) {
             console.error('Error during Google login:', error.message);
 
