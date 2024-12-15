@@ -2,27 +2,29 @@ import { useState } from "react"
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import LearnMoreBt from "../components/buttons/LearnMoreBt";
 import { SignIn } from "../components/auth/SignIn"
+import { Dialog } from "@mui/material";
 
 const Home = () => {
-  const [currentView, setCurrentView] = useState("home");
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleLoginClick = () => {
     console.log("Login clicked");
-    setCurrentView("login");
+    setIsLoginModalOpen(true); // Open the login modal
   };
 
   const handleSignupClick = () => {
     console.log("Signup clicked");
-    setCurrentView("signup"); // You can add a Signup component if needed
+    // Implement signup logic or modal here if needed
   };
 
   const handleLearnMoreClick = () => {
     console.log("Learn more clicked");
+    // Implement Learn More functionality
   };
 
-  if (currentView === "login") {
-    return <SignIn />;
-  }
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false); // Close the login modal
+  };
 
   return (
     <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
@@ -58,6 +60,17 @@ const Home = () => {
       <div className="mt-12 mx-auto">
         <LearnMoreBt mode="dark" onClick={handleLearnMoreClick}/>
       </div>
+
+      {/* Login Modal */}
+      <Dialog
+        open={isLoginModalOpen}
+        onClose={closeLoginModal}
+        className="backdrop-blur-sm" // Optional: adds a subtle blur effect behind the modal
+      >
+        <div className="bg-transparent p-4 rounded-2xl">
+          <SignIn />
+        </div>
+      </Dialog>
     </div>
   );
 };
