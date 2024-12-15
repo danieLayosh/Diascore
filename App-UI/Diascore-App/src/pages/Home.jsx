@@ -6,15 +6,18 @@ import { Dialog } from "@mui/material";
 
 const Home = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const handleLoginClick = () => {
     console.log("Login clicked");
+    setIsSignUp(false); // Set the modal to show Log In
     setIsLoginModalOpen(true); // Open the login modal
   };
 
   const handleSignupClick = () => {
     console.log("Signup clicked");
-    // Implement signup logic or modal here if needed
+    setIsLoginModalOpen(true); // Open the login modal
+    setIsSignUp(true); // Set the modal to show Sign Up
   };
 
   const handleLearnMoreClick = () => {
@@ -67,7 +70,7 @@ const Home = () => {
         className="backdrop-blur-sm" // Optional: adds a subtle blur effect behind the modal
       >
         <div className="bg-transparent p-4 rounded-2xl">
-          <SignIn onClose={closeLoginModal} />
+          <SignIn onClose={closeLoginModal} isSignUp={isSignUp} />
         </div>
       </Dialog>
     </div>
