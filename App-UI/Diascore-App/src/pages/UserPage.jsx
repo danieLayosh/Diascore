@@ -2,6 +2,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import GreenCoverButton from "../components/buttons/GreenCoverButton";
 
 const UserPage = () => {
     const { user, loading } = useAuth(); // State to store user data
@@ -21,18 +22,30 @@ const UserPage = () => {
     }
 
     return (
-        <div>
-            <h1>Welcome to the Diascore Home Page!</h1>
-            {user ? (
-                <div>
-                    <p>You are successfully logged in as:</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Display Name:</strong> {user.displayName || 'N/A'}</p> {/* Display name may not always be available */}
+        <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
+            {/* Header Section */}
+            <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg shadow-lg">
+              <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
+              {/* Login and Signup buttons Section */}
+              <div className="flex gap-4">
+                <button >profile</button>
+              </div>
+            </div>
+
+            <div className="mt-20 text-left mx-auto">
+                {user ? (
+                    <div className="text-4xl">
+                        <p>You are successfully logged in as:</p>
+                        <p><strong>Email:</strong> {user.email}</p>
+                        <p><strong>Display Name:</strong> {user.displayName || 'N/A'}</p> {/* Display name may not always be available */}
+                    </div>
+                ) : (
+                    <p>Loading user data...</p> // Show loading state if user data is not yet fetched
+                )}
+                <div className="flex gap-4 mt-40 mx-44">
+                <GreenCoverButton text="Log in" defaultColor="black" onClick={handleSignOut} />            
                 </div>
-            ) : (
-                <p>Loading user data...</p> // Show loading state if user data is not yet fetched
-            )}
-            <button onClick={handleSignOut}>Logout</button> {/* Logout button */}
+            </div>
         </div>
     );
 };
