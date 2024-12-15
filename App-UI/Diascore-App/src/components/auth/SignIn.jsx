@@ -11,11 +11,10 @@ import {
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
-export const SignIn = ({ onClose }) => {
+export const SignIn = ({ onClose, isSignUp }) => {
     const [authLoading, setAuthLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isSignUp, setIsSignUp] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -184,4 +183,5 @@ export const SignIn = ({ onClose }) => {
 
 SignIn.propTypes = {
     onClose: PropTypes.func.isRequired,
+    isSignUp: PropTypes.bool.isRequired, // added PropType for isSignUp
 };
