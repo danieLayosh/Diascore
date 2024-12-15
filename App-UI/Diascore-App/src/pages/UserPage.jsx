@@ -43,7 +43,7 @@ const UserPage = () => {
                     <p>Loading user data...</p> // Show loading state if user data is not yet fetched
                 )}
                 <div className="flex gap-4 mt-40 mx-44">
-                <GreenCoverButton text="Log in" defaultColor="black" onClick={handleSignOut} />            
+                <GreenCoverButton text="Log Out" defaultColor="black" onClick={handleSignOut} />            
                 </div>
             </div>
         </div>
