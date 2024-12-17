@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const GreenCoverButton = ({ text, defaultColor = 'black', onClick }) => {
   return (
     <StyledWrapper defaultColor={defaultColor}>
-      <button onClick={onClick}> {/* Attach onClick here */}
+      <button onClick={onClick}> 
         <span>{text}</span>
       </button>
     </StyledWrapper>
@@ -69,6 +69,20 @@ const StyledWrapper = styled.div`
   button:hover {
     background: #66ff66;
     color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 15px;  
+    }
+  }
+
+  @media (max-width: 480px) {
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 13px;  
+    }
   }
 `;
 
