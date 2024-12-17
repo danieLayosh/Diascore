@@ -11,11 +11,12 @@ import {
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
-export const SignIn = ({ onClose, isSignUp }) => {
+export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
     const [authLoading, setAuthLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const [isSignUp, setIsSignUp] = useState(initialIsSignUp);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -38,12 +39,8 @@ export const SignIn = ({ onClose, isSignUp }) => {
             const existingMethods = await fetchSignInMethodsForEmail(auth, user.email);
 
             if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
-                // Sign in with the existing method
                 await signInWithEmailAndPassword(auth, user.email, password);
-
-                // Link the Google credential to the existing user
                 await user.linkWithPopup(googleProvider);
-
                 alert('Google account linked successfully!');
             } else {
                 alert('Signed in successfully with Google!');
@@ -58,9 +55,7 @@ export const SignIn = ({ onClose, isSignUp }) => {
                     alert('Google login was canceled. Please try again.');
                     break;
                 case 'auth/credential-already-in-use':
-                    alert(
-                        'This Google account is already linked with another account. Please use the correct provider to log in.'
-                    );
+                    alert('This Google account is already linked with another account. Please use the correct provider to log in.');
                     break;
                 case 'auth/network-request-failed':
                     alert('Network error. Please check your internet connection and try again.');
@@ -85,7 +80,7 @@ export const SignIn = ({ onClose, isSignUp }) => {
                 await signInWithEmailAndPassword(auth, email, password);
                 alert('Signed in successfully!');
                 navigate('/UserPage');
-                onClose(); // Close the popup after successful login
+                onClose();
             }
         } catch (error) {
             console.error('Error during email/password auth:', error.message);
@@ -116,7 +111,7 @@ export const SignIn = ({ onClose, isSignUp }) => {
     };
 
     return (
-        <div className="max-w-sm bg-gradient-to-t from-white to-[#f4f7fb] rounded-3xl p-8 border-4 border-white shadow-xl mx-0">
+        <div className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg bg-gradient-to-t from-white to-[#f4f7fb] rounded-3xl p-8 border-4 border-white shadow-xl mx-0">
             <div className="text-center text-3xl font-extrabold text-[#1089d3]">{isSignUp ? 'Sign Up' : 'Sign In'}</div>
             <form className="mt-5" onSubmit={(e) => { e.preventDefault(); handleAuth(); }}>
                 <input
@@ -136,7 +131,7 @@ export const SignIn = ({ onClose, isSignUp }) => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-white border-none p-4 rounded-3xl mt-4 shadow-[0px_10px_10px_-5px_#cff0ff] focus:outline-none focus:border-[#12b1d1] border-transparent"
+                    className="w-full bg-white border-none p-4 rounded-3xl mt-4 shadow-[0px_10px_10px_-5px_#cff0ff] transition-all ease-in-out hover:scale-105 active:scale-95 disabled:bg-gray-500 sm:py-3 md:py-4 lg:py-5"
                     required
                 />
                 <span className="block mt-3 ml-2">
@@ -156,7 +151,7 @@ export const SignIn = ({ onClose, isSignUp }) => {
                     <button
                         onClick={handleGoogleLogin}
                         disabled={authLoading}
-                        className="bg-gradient-to-br from-black to-[#707070] border-4 border-white p-1 rounded-full w-10 h-10 grid place-content-center shadow-[0px_12px_10px_-8px_rgba(133,189,215,0.8784313725)] transition-all ease-in-out hover:scale-110 active:scale-95 disabled:bg-gray-500"
+                        className="bg-gradient-to-br from-black to-[#707070] border-4 border-white p-1 rounded-full w-10 h-10 grid place-content-center shadow-[0px_12px_10px_-8px_rgba(133,189,215,0.8784313725)] transition-all ease-in-out hover:scale-110 active:scale-95 disabled:bg-gray-500 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
                     >
                         <svg
                             viewBox="0 0 488 512"
@@ -183,5 +178,5 @@ export const SignIn = ({ onClose, isSignUp }) => {
 
 SignIn.propTypes = {
     onClose: PropTypes.func.isRequired,
-    isSignUp: PropTypes.bool.isRequired, // added PropType for isSignUp
+    isSignUp: PropTypes.bool.isRequired,
 };
