@@ -65,9 +65,9 @@ const Home = () => {
       <Dialog
         open={isLoginModalOpen}
         onClose={closeLoginModal}
-        className="backdrop-blur-sm" // Optional: adds a subtle blur effect behind the modal
+        className="backdrop-blur-sm fixed inset-0 flex items-center justify-center z-50"
       >
-        <div className="bg-transparent p-4 rounded-2xl">
+        <div className="bg-white p-4 rounded-2xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
           <SignIn onClose={closeLoginModal} isSignUp={isSignUp} />
         </div>
       </Dialog>
