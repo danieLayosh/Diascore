@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
-import PublicRoute from './components/PublicRoute'; 
+import ProtectedRoute from './components/routes/ProtectedRoute';
+import PublicRoute from './components/routes/PublicRoute'; 
 import appRoutes from './data/routes';
 import Home from './pages/Home';
 import PageNotFound from './pages/404Page';
