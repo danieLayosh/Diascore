@@ -29,13 +29,11 @@ const UserPage = () => {
                 <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
                 {/* Profile Button Section */}
                 <div className="flex gap-4">
-                    <button>
                         {/* Profile Button with Icon */}
                         <ProfileButton 
                             fill="currentColor" 
                             size={24}     
                             className="transition-all duration-300 ease-in-out transform hover:scale-110 hover:text-primary-color"                         />
-                    </button>
                 </div>
             </div>
 
