@@ -1,38 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useAlert from "../context/useAlert"; 
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import LearnMoreBt from "../components/buttons/LearnMoreBt";
-import { SignIn } from "../components/auth/SignIn";
+import SignIn from "../components/auth/SignIn";
 import { Dialog } from "@mui/material";
 
 const Home = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const { alertDetails, showAlert } = useAlert(); 
 
   const handleLoginClick = () => {
-    setIsSignUp(false); // Set the modal to show Log In
-    setIsLoginModalOpen(true); // Open the login modal
+    setIsSignUp(false);
+    setIsLoginModalOpen(true);
+    // showAlert("Login modal opened", "success");
   };
 
   const handleSignupClick = () => {
-    setIsLoginModalOpen(true); // Open the login modal
-    setIsSignUp(true); // Set the modal to show Sign Up
+    setIsLoginModalOpen(true);
+    setIsSignUp(true);
+    // showAlert("Signup modal opened", "success");
   };
 
   const handleLearnMoreClick = () => {
     console.log("Learn more clicked");
-    // Implement Learn More functionality
   };
 
   const closeLoginModal = () => {
-    setIsLoginModalOpen(false); // Close the login modal
+    setIsLoginModalOpen(false);
   };
+
+  // Auto-dismiss alert after 5 seconds
+  useEffect(() => {
+    if (alertDetails.message) {
+      const timer = setTimeout(() => {
+        showAlert("", ""); // Reset alert after 5 seconds
+      }, 5000);
+      return () => clearTimeout(timer); 
+    }
+  }, [alertDetails, showAlert]);
 
   return (
     <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
       {/* Header Section */}
       <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg shadow-lg">
         <h3 className="text-4xl sm:text-5xl lg:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
-        {/* Login and Signup buttons Section */}
         <div className="flex gap-4">
           <GreenCoverButton text="Log in" defaultColor="black" onClick={handleLoginClick} />
           <GreenCoverButton text="Sign up" defaultColor="white" onClick={handleSignupClick} />
@@ -60,6 +72,13 @@ const Home = () => {
       <div className="mt-12 sm:mt-xl lg:mt-2xl mx-auto">
         <LearnMoreBt mode="dark" onClick={handleLearnMoreClick}/>
       </div>
+
+      {/* Alert Section */}
+      {alertDetails.message && (
+        <div className={`alert ${alertDetails.type === "success" ? "bg-green-500" : "bg-red-500"} text-white p-4 mt-4 rounded`}>
+          {alertDetails.message}
+        </div>
+      )}
 
       {/* Login Modal */}
       <Dialog
