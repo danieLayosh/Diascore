@@ -11,7 +11,8 @@ const GreenCoverButton = ({ text, defaultColor = 'black', onClick }) => {
   );
 }
 
-const StyledWrapper = styled.div`
+// eslint-disable-next-line no-unused-vars
+const StyledWrapper = styled(({ defaultColor, ...props }) => <div {...props} />)`
   button {
     outline: none;
     cursor: pointer;
@@ -27,8 +28,8 @@ const StyledWrapper = styled.div`
     font-size: 17px;
     border-radius: 500px;
     overflow: hidden;
-    background: ${props => (props.defaultColor === 'black' ? '#000' : '#fff')};
-    color: ${props => (props.defaultColor === 'black' ? '#fff' : '#000')};
+    background: ${({ defaultColor }) => (defaultColor === 'black' ? '#000' : '#fff')};
+    color: ${({ defaultColor }) => (defaultColor === 'black' ? '#fff' : '#000')};
     transition: background 0.3s ease, color 0.3s ease;
   }
 
@@ -39,7 +40,7 @@ const StyledWrapper = styled.div`
   }
 
   button:hover span {
-    color: ${props => (props.defaultColor === 'black' ? '#000' : '#000')};
+    color: ${({ defaultColor }) => (defaultColor === 'black' ? '#000' : '#000')};
   }
 
   button::before,
@@ -54,7 +55,7 @@ const StyledWrapper = styled.div`
 
   button::before {
     content: "";
-    background: ${props => (props.defaultColor === 'black' ? '#000' : '#fff')};
+    background: ${({ defaultColor }) => (defaultColor === 'black' ? '#000' : '#fff')};
     width: 120%;
     left: -10%;
     transform: skew(30deg);
@@ -65,7 +66,6 @@ const StyledWrapper = styled.div`
     transform: translate3d(100%, 0, 0);
   }
 
-  /* Hover effect to change the background color to the opposite color */
   button:hover {
     background: #66ff66;
     color: #fff;
@@ -89,7 +89,7 @@ const StyledWrapper = styled.div`
 GreenCoverButton.propTypes = {
   text: PropTypes.string.isRequired,
   defaultColor: PropTypes.string,
-  onClick: PropTypes.func, // Define the onClick prop
+  onClick: PropTypes.func,
 };
 
 export default GreenCoverButton;
