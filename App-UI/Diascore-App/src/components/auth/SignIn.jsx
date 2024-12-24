@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
 import EmailInput from './EmailInput';
 
-export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
+export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
     const [authLoading, setAuthLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -180,11 +180,6 @@ export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
 SignIn.propTypes = {
     onClose: PropTypes.func,
     isSignUp: PropTypes.bool,
-};
-
-SignIn.defaultProps = {
-    onClose: () => {},
-    isSignUp: false,
 };
 
 export default SignIn;
