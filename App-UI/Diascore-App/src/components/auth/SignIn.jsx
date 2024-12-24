@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from '../../firebase/firebase';
 import {
     createUserWithEmailAndPassword,
@@ -9,14 +9,26 @@ import {
     fetchSignInMethodsForEmail,
     onAuthStateChanged,
 } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import PasswordInput from './PasswordInput';
+import EmailInput from './EmailInput';
 
 export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
     const [authLoading, setAuthLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    
     const navigate = useNavigate();
     const [isSignUp, setIsSignUp] = useState(initialIsSignUp);
+
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -78,7 +90,6 @@ export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
                 alert('Verification email sent! Please check your inbox.');
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
-                alert('Signed in successfully!');
                 navigate('/UserPage');
                 onClose();
             }
@@ -114,29 +125,19 @@ export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
         <div className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg bg-gradient-to-t from-white to-[#f4f7fb] rounded-3xl p-8 border-4 border-white shadow-xl mx-0">
             <div className="text-center text-3xl font-extrabold text-[#1089d3]">{isSignUp ? 'Sign Up' : 'Sign In'}</div>
             <form className="mt-5" onSubmit={(e) => { e.preventDefault(); handleAuth(); }}>
-                <input
-                    placeholder="E-mail"
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-white border-none p-4 rounded-3xl mt-4 shadow-[0px_10px_10px_-5px_#cff0ff] focus:outline-none focus:border-[#12b1d1] border-transparent"
-                    required
-                />
-                <input
-                    placeholder="Password"
-                    id="password"
-                    name="password"
-                    type="password"
+                <EmailInput value={email} onChange={(e) => setEmail(e.target.value)} />
+
+                <PasswordInput
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-white border-none p-4 rounded-3xl mt-4 shadow-[0px_10px_10px_-5px_#cff0ff] transition-all ease-in-out hover:scale-105 active:scale-95 disabled:bg-gray-500 sm:py-3 md:py-4 lg:py-5"
-                    required
+                    onChange={handlePasswordChange}
+                    showPassword={showPassword}
+                    onToggleVisibility={handlePasswordVisibility}
                 />
+
                 <span className="block mt-3 ml-2">
                     <a href="#" className="text-[#0099ff] text-xs">Forgot Password ?</a>
                 </span>
+
                 <button
                     type="submit"
                     disabled={authLoading}
@@ -168,7 +169,7 @@ export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
                         onClick={() => setIsSignUp((prev) => !prev)}
                         className="text-blue-400 hover:text-blue-500 text-sm transition-all duration-200"
                     >
-                        {isSignUp ? 'Switch to Sign In' : 'Switch to Sign Up'}
+                        {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
                     </button>
                 </div>
             </div>
@@ -177,6 +178,13 @@ export const SignIn = ({ onClose, isSignUp: initialIsSignUp }) => {
 };
 
 SignIn.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    isSignUp: PropTypes.bool.isRequired,
+    onClose: PropTypes.func,
+    isSignUp: PropTypes.bool,
 };
+
+SignIn.defaultProps = {
+    onClose: () => {},
+    isSignUp: false,
+};
+
+export default SignIn;
