@@ -12,6 +12,7 @@ const EmailInput = ({ value, onChange }) => {
                 onChange={onChange}
                 className="w-full bg-white border-none p-4 pr-12 rounded-3xl shadow-[0px_10px_10px_-5px_#cff0ff] focus:outline-none focus:border-[#12b1d1] border-transparent"
                 required
+                autoComplete="email"
             />
             <button
                 type="button"
