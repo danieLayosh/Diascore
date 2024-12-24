@@ -12,14 +12,16 @@ import {
 import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
 import EmailInput from './EmailInput';
+import useAlert from '../../context/useAlert'; // Import useAlert
 
-export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
+const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
     const [authLoading, setAuthLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     
     const navigate = useNavigate();
+    const { showAlert } = useAlert(); // Use showAlert from context
     const [isSignUp, setIsSignUp] = useState(initialIsSignUp);
 
     const handlePasswordVisibility = () => {
@@ -29,7 +31,7 @@ export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
-
+    
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
@@ -53,27 +55,26 @@ export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }
             if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
                 await signInWithEmailAndPassword(auth, user.email, password);
                 await user.linkWithPopup(googleProvider);
-                alert('Google account linked successfully!');
+                showAlert('Google account linked successfully!', 'success'); // Use global alert
             } else {
-                alert('Signed in successfully with Google!');
+                showAlert('Signed in successfully with Google!', 'success'); // Use global alert
             }
 
             navigate('/home');
         } catch (error) {
             console.error('Error during Google login:', error.message);
-
             switch (error.code) {
                 case 'auth/popup-closed-by-user':
-                    alert('Google login was canceled. Please try again.');
+                    showAlert('Google login was canceled. Please try again.', 'warning'); // Use global alert
                     break;
                 case 'auth/credential-already-in-use':
-                    alert('This Google account is already linked with another account. Please use the correct provider to log in.');
+                    showAlert('This Google account is already linked with another account. Please use the correct provider to log in.', 'danger'); // Use global alert
                     break;
                 case 'auth/network-request-failed':
-                    alert('Network error. Please check your internet connection and try again.');
+                    showAlert('Network error. Please check your internet connection and try again.', 'danger'); // Use global alert
                     break;
                 default:
-                    alert(`An unexpected error occurred: ${error.message}`);
+                    showAlert(`An unexpected error occurred: ${error.message}`, 'default'); // Use global alert
                     break;
             }
         } finally {
@@ -87,9 +88,10 @@ export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }
             if (isSignUp) {
                 const result = await createUserWithEmailAndPassword(auth, email, password);
                 await sendEmailVerification(result.user);
-                alert('Verification email sent! Please check your inbox.');
+                showAlert('Verification email sent! Please check your inbox.', 'success'); // Use global alert
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
+                showAlert('Signed in successfully!', 'success'); // Use global alert
                 navigate('/UserPage');
                 onClose();
             }
@@ -98,22 +100,22 @@ export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }
 
             switch (error.code) {
                 case 'auth/email-already-in-use':
-                    alert('This email is already in use. Please use another email.');
+                    showAlert('This email is already in use. Please use another email.', 'danger'); // Use global alert
                     break;
                 case 'auth/invalid-email':
-                    alert('Invalid email format. Please try again.');
+                    showAlert('Invalid email format. Please try again.', 'warning'); // Use global alert
                     break;
                 case 'auth/wrong-password':
-                    alert('Incorrect password. Please try again.');
+                    showAlert('Incorrect password. Please try again.', 'danger'); // Use global alert
                     break;
                 case 'auth/user-not-found':
-                    alert('No user found with this email. Please sign up first.');
+                    showAlert('No user found with this email. Please sign up first.', 'warning'); // Use global alert
                     break;
                 case 'auth/weak-password':
-                    alert('Password is too weak. Please choose a stronger password.');
+                    showAlert('Password is too weak. Please choose a stronger one.', 'warning'); // Use global alert
                     break;
                 default:
-                    alert(`An unexpected error occurred: ${error.message}`);
+                    showAlert(`An unexpected error occurred: ${error.message}`, 'default'); // Use global alert
                     break;
             }
         } finally {
@@ -123,21 +125,27 @@ export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }
 
     return (
         <div className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg bg-gradient-to-t from-white to-[#f4f7fb] rounded-3xl p-8 border-4 border-white shadow-xl mx-0">
+            {/* {alertDetails && (
+                <Alert
+                    color={alertDetails.color}
+                    title={alertDetails.title}
+                    description={alertDetails.description}
+                    variant="faded"
+                    onClose={() => setAlertDetails(null)}
+                />
+            )} */}
             <div className="text-center text-3xl font-extrabold text-[#1089d3]">{isSignUp ? 'Sign Up' : 'Sign In'}</div>
             <form className="mt-5" onSubmit={(e) => { e.preventDefault(); handleAuth(); }}>
                 <EmailInput value={email} onChange={(e) => setEmail(e.target.value)} />
-
                 <PasswordInput
                     value={password}
                     onChange={handlePasswordChange}
                     showPassword={showPassword}
                     onToggleVisibility={handlePasswordVisibility}
                 />
-
                 <span className="block mt-3 ml-2">
                     <a href="#" className="text-[#0099ff] text-xs">Forgot Password ?</a>
                 </span>
-
                 <button
                     type="submit"
                     disabled={authLoading}
@@ -160,7 +168,7 @@ export const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }
                             xmlns="http://www.w3.org/2000/svg"
                             className="fill-white m-auto"
                         >
-                            <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
+                            <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.8 135-70.8 0 15.2-13.4 33.2-30.3 33.2-25.2 0-41.5-33.5-60.9-33.5-30.6 0-60.6 22.4-60.6 62.2 0 33.4 29.4 60.5 66.3 60.5 33.4 0 62.6-13.5 89.2-36.5-30.9 52.2-87.5 77.6-147.1 77.6-13.4 0-26.3-3-39-8-41.6 46.4-98.9 60.9-155.4 56.3 47.1-59.1 121.2-97.9 218.1-98.3 12.3 0 32.5 10 32.5 33.5z"></path>
                         </svg>
                     </button>
                 </div>
