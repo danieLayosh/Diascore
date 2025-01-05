@@ -1,18 +1,18 @@
 import { firestore } from "../firebase"; // Corrected import path
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDoc, getDocs, setDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { auth } from "../firebase"; // Corrected import path
 
 // Collection reference
 const usersCollection = collection(firestore, 'Users');
 
 // Add a user
-export const addUser = async (user) => {
+export const addUser = async (user, uid) => {
     try {
-        const docRef = await addDoc(usersCollection, user);
-        console.log("Document written with ID: ", docRef.id);
-        return docRef.id;
+        const userDocRef = doc(firestore, 'Users', uid);
+        await setDoc(userDocRef, user);
+        console.log("User doc created successfully for UIS:", uid);
     } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error("Error creating user document: ", e);
         throw e;
     }
 }
@@ -60,17 +60,40 @@ export const getAuthenticatedUserData = async () => {
             return;
         }
 
-        const usersCollection = collection(firestore, "Users");
-        const q = query(usersCollection, where("uid", "==", user.uid)); // Query where uid matches
-        const querySnapshot = await getDocs(q);
+        // Access the specific user's document
+        const userDoc = doc(firestore, "Users", user.uid);
+        const docSnapshot = await getDoc(userDoc);
 
-        querySnapshot.forEach((doc) => {
-            console.log(`Document ID: ${doc.id}, Data:`, doc.data());
-        });
+        if (docSnapshot.exists()) {
+            return { id: docSnapshot.id, ...docSnapshot.data() };
+        } else {
+            console.error("No user data found for the authenticated user");
+            return null;
+        }
 
-        return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
         console.error("Error fetching authenticated user's data: ", error);
         throw error;
     }
 };
+
+export const getDiagnosesForUser = async (userId) => {
+    try {
+        // Reference the Diagnoses collection for the specific user
+        const diagnosesCollection = collection(firestore, `Users/${userId}/Diagnoses`);
+        
+        // Fetch through the doc and return the data
+        const querySnapshot = await getDocs(diagnosesCollection);
+
+        // Map through the query snapshot and return the data
+        const diagnoses = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+        return diagnoses;
+    } catch (error) {
+        console.error("Error getting the diagnoses sub collection:", error);
+        throw error;
+    }
+}
