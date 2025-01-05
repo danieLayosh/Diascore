@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth, firestore } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import ProfileButton from "../components/buttons/ProfileButton"; 
 import { getAuthenticatedUserData, getDiagnosesForUser } from "../firebase/firestore/users";
+import { doc, onSnapshot, unsubscribe } from "firebase/firestore";
 
 const UserPage = () => {
     const { user, loading } = useAuth(); // State to store user data
@@ -30,8 +31,15 @@ const UserPage = () => {
                 setUserData(user);
 
                 if (user) {
-                    const diagnosesData = await getDiagnosesForUser(user.id); // Fetch the Diagnoses sub-collection
-                    setDiagnoses(diagnosesData);
+                    const diagnosesCollectionRef = doc(firestore, 'Users', user.id);
+
+                    // Listen for real-time updates to the user's document
+                    onSnapshot(diagnosesCollectionRef, async () => {
+                        const diagnosesData = await getDiagnosesForUser(user.id); // Fetch the Diagnoses sub-collection
+                        setDiagnoses(diagnosesData);
+                    });
+                    
+                    return () => unsubscribe();
                 }
             } catch (error) {
                 console.error("Error fetching user data or diagnoses:", error);
@@ -39,7 +47,7 @@ const UserPage = () => {
         };
 
         fetchUserData();
-    }, []);
+    }, [user]);
 
     if (loading) {
         return <div>Loading user data...</div>;
