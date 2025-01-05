@@ -12,7 +12,8 @@ import {
 import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
 import EmailInput from './EmailInput';
-import useAlert from '../../context/useAlert'; // Import useAlert
+import useAlert from '../../context/useAlert';
+import { addUserDoc } from '../../firebase/firestore/users';
 
 const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
     const [authLoading, setAuthLoading] = useState(false);
@@ -88,10 +89,13 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
             if (isSignUp) {
                 const result = await createUserWithEmailAndPassword(auth, email, password);
                 await sendEmailVerification(result.user);
-                showAlert('Verification email sent! Please check your inbox.', 'success'); // Use global alert
+                
+                await addUserDoc(result.user);
+
+                showAlert('Verification email sent! Please check your inbox.', 'success', 10000); 
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
-                showAlert('Signed in successfully!', 'success'); // Use global alert
+                showAlert('Signed in successfully!', 'success'); 
                 navigate('/UserPage');
                 onClose();
             }
@@ -100,22 +104,22 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
 
             switch (error.code) {
                 case 'auth/email-already-in-use':
-                    showAlert('This email is already in use. Please use another email.', 'danger'); // Use global alert
+                    showAlert('This email is already in use. Please use another email.', 'danger'); 
                     break;
                 case 'auth/invalid-email':
-                    showAlert('Invalid email format. Please try again.', 'warning'); // Use global alert
+                    showAlert('Invalid email format. Please try again.', 'warning'); 
                     break;
                 case 'auth/wrong-password':
-                    showAlert('Incorrect password. Please try again.', 'danger'); // Use global alert
+                    showAlert('Incorrect password. Please try again.', 'danger'); 
                     break;
                 case 'auth/user-not-found':
-                    showAlert('No user found with this email. Please sign up first.', 'warning'); // Use global alert
+                    showAlert('No user found with this email. Please sign up first.', 'warning'); 
                     break;
                 case 'auth/weak-password':
-                    showAlert('Password is too weak. Please choose a stronger one.', 'warning'); // Use global alert
+                    showAlert('Password is too weak. Please choose a stronger one.', 'warning'); 
                     break;
                 default:
-                    showAlert(`An unexpected error occurred: ${error.message}`, 'default'); // Use global alert
+                    showAlert(`An unexpected error occurred: ${error.message}`, 'default'); 
                     break;
             }
         } finally {
