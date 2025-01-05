@@ -14,11 +14,11 @@ export const AlertProvider = ({ children }) => {
     type: "",
   });
 
-  const showAlert = (message, type = ALERT_TYPES.INFO) => {
+  const showAlert = (message, type = ALERT_TYPES.INFO, duration=5000) => {
     setAlertDetails({ message, type });
     setTimeout(() => {
       setAlertDetails({ message: "", type: "" });
-    }, 5000);
+    }, duration);
   };
 
   return (
