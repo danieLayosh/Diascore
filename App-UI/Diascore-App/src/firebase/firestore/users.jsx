@@ -6,11 +6,32 @@ import { auth } from "../firebase"; // Corrected import path
 const usersCollection = collection(firestore, 'Users');
 
 // Add a user
-export const addUser = async (user, uid) => {
+export const addUserDoc = async (user) => {
     try {
-        const userDocRef = doc(firestore, 'Users', uid);
-        await setDoc(userDocRef, user);
-        console.log("User doc created successfully for UIS:", uid);
+
+        // Define the user object
+        const newUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName || '',
+            createdAt: new Date(),
+            diagnoses_count: 0,
+        };
+
+        // Add the user to the Users collection
+        const userDocRef = doc(firestore, 'Users', user.uid);
+        await setDoc(userDocRef, newUser);
+
+        // create an empty Diagnoses subcollection for the user
+        const diagnosesCollectionRef = collection(userDocRef, 'Diagnoses');
+
+        await setDoc(doc(diagnosesCollectionRef, 'exampleDiagnosis'), {
+            title: 'Example Diagnosis',
+            description: 'This is a placeholder diagnosis.',
+            createdAt: new Date(),
+        });
+
+        console.log("User doc created successfully for UIS:", user.uid);
     } catch (e) {
         console.error("Error creating user document: ", e);
         throw e;
@@ -31,7 +52,7 @@ export const getUsers = async () => {
 // Update a user
 export const updateUser = async (id, data) => {
     try {
-        const userDoc = doc(firestore, "users", id);
+        const userDoc = doc(firestore, "Users", id);
         await updateDoc(userDoc, data);
         console.log("User updated successfully");
     } catch (error) {
@@ -43,7 +64,7 @@ export const updateUser = async (id, data) => {
 // Delete a user
 export const deleteUser = async (id) => {
     try {
-        const userDoc = doc(firestore, "users", id);
+        const userDoc = doc(firestore, "Users", id);
         await deleteDoc(userDoc);
         console.log("User deleted successfully");
     } catch (error) {
@@ -56,8 +77,7 @@ export const getAuthenticatedUserData = async () => {
     try {
         const user = auth.currentUser; // Get the currently authenticated user
         if (!user) {
-            console.error("No authenticated user found");
-            return;
+            throw new Error("No authenticated user found");
         }
 
         // Access the specific user's document
@@ -67,8 +87,7 @@ export const getAuthenticatedUserData = async () => {
         if (docSnapshot.exists()) {
             return { id: docSnapshot.id, ...docSnapshot.data() };
         } else {
-            console.error("No user data found for the authenticated user");
-            return null;
+            throw new Error("No user data found for the authenticated user");
         }
 
     } catch (error) {
@@ -86,14 +105,14 @@ export const getDiagnosesForUser = async (userId) => {
         const querySnapshot = await getDocs(diagnosesCollection);
 
         // Map through the query snapshot and return the data
-        const diagnoses = querySnapshot.docs.map((doc) => ({
+        const Diagnoses = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
         }));
 
-        return diagnoses;
+        return Diagnoses || [];
     } catch (error) {
-        console.error("Error getting the diagnoses sub collection:", error);
+        console.error("Error getting the Diagnoses sub collection:", error);
         throw error;
     }
 }
