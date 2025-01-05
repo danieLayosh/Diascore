@@ -1,6 +1,6 @@
-import { firestore } from "../firebase";
+import { firestore } from "../firebase"; // Corrected import path
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { auth } from "../firebase/firebase";
+import { auth } from "../firebase"; // Corrected import path
 
 // Collection reference
 const usersCollection = collection(firestore, 'Users');
