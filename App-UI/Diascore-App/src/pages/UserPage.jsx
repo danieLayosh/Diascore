@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
-import ProfileButton from "../components/buttons/ProfileButton"; // Import ProfileButton component
+import ProfileButton from "../components/buttons/ProfileButton"; 
+import { getAuthenticatedUserData } from "../firebase/firestore/users";
 
 const UserPage = () => {
     const { user, loading } = useAuth(); // State to store user data
@@ -17,6 +19,18 @@ const UserPage = () => {
             console.error('Error signing out:', error);
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            getAuthenticatedUserData()
+                .then((data) => {
+                    console.log("Authenticated user's data:", data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching authenticated user's data:", error);
+                });
+        }
+    }, [user]);
 
     if (loading) {
         return <div>Loading user data...</div>;
