@@ -1,15 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import ProfileButton from "../components/buttons/ProfileButton"; 
-import { getAuthenticatedUserData } from "../firebase/firestore/users";
+import { getAuthenticatedUserData, getDiagnosesForUser } from "../firebase/firestore/users";
 
 const UserPage = () => {
     const { user, loading } = useAuth(); // State to store user data
     const navigate = useNavigate();
+
+    const [userData, setUserData] = useState(null);
+    const [diagnoses, setDiagnoses] = useState([]);
 
     const handleSignOut = async () => {
         try {
@@ -21,19 +24,33 @@ const UserPage = () => {
     };
 
     useEffect(() => {
-        if (user) {
-            getAuthenticatedUserData()
-                .then((data) => {
-                    console.log("Authenticated user's data:", data);
-                })
-                .catch((error) => {
-                    console.error("Error fetching authenticated user's data:", error);
-                });
-        }
-    }, [user]);
+        const fetchUserData = async () => {
+            try {
+                const user = await getAuthenticatedUserData(); // Get the authenticated user's document
+                setUserData(user);
+
+                if (user) {
+                    const diagnosesData = await getDiagnosesForUser(user.id); // Fetch the Diagnoses sub-collection
+                    setDiagnoses(diagnosesData);
+                }
+            } catch (error) {
+                console.error("Error fetching user data or diagnoses:", error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     if (loading) {
         return <div>Loading user data...</div>;
+    }
+
+    if (userData) {
+        console.log("Authenticated user's data:", userData);
+    }
+
+    if (diagnoses.length > 0) {
+        console.log("Diagnoses data:", diagnoses);
     }
 
     return (
