@@ -7,7 +7,7 @@ const PageNotFound = () => {
       <h2 style={styles.subHeader}>Page Not Found</h2>
       <p style={styles.text}>
         Sorry, the page you are looking for does not exist. You can always go back to the 
-        <Link to="/" style={styles.link}> homepage</Link>.
+        <Link to="/welcome" style={styles.link}> homepage</Link>.
       </p>
     </div>
   );

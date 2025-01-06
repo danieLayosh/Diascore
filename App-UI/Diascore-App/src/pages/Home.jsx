@@ -8,7 +8,7 @@ import ProfileButton from "../components/buttons/ProfileButton";
 import { getAuthenticatedUserData, getDiagnosesForUser } from "../firebase/firestore/users";
 import { doc, onSnapshot } from "firebase/firestore";
 
-const UserPage = () => {
+const Home = () => {
     const { user, loading } = useAuth(); // State to store user data
     const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const UserPage = () => {
     const handleSignOut = async () => {
         try {
             await signOut(auth);
-            navigate('/welcome'); // Updated path
+            navigate('/welcome');
         } catch (error) {
             console.error('Error signing out:', error);
         }
@@ -96,4 +96,4 @@ const UserPage = () => {
     );
 };
 
-export default UserPage;
+export default Home;

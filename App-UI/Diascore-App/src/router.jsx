@@ -8,19 +8,19 @@ import Welcome from './pages/Welcome';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to='/welcome' replace />, // Updated path
+    element: <Navigate to='/welcome' replace />,
   },
   {
-    element: <PublicRoute />, // Use PublicRoute for /welcome
+    element: <PublicRoute />,
     children: [
       {
-        path: '/welcome', // Updated path
-        element: <Welcome />, // Updated component
+        path: '/welcome',
+        element: <Welcome />,
       },
     ],
   },
   {
-    element: <ProtectedRoute />, // Use ProtectedRoute for authenticated routes
+    element: <ProtectedRoute />,
     children: appRoutes,
   },
   {

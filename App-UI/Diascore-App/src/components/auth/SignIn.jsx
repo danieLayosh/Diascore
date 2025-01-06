@@ -36,7 +36,7 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
-                navigate('/UserPage');
+                navigate('/Home'); 
             } else {
                 navigate('/welcome'); 
             }
@@ -97,7 +97,7 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
                 showAlert('Signed in successfully!', 'success'); 
-                navigate('/UserPage');
+                navigate('/Home');
                 onClose();
             }
         } catch (error) {
