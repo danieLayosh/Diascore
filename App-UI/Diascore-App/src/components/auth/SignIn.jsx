@@ -56,9 +56,9 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
             if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
                 await signInWithEmailAndPassword(auth, user.email, password);
                 await user.linkWithPopup(googleProvider);
-                showAlert('Google account linked successfully!', 'success'); // Use global alert
+                showAlert('Google account linked successfully!', 'success'); 
             } else {
-                showAlert('Signed in successfully with Google!', 'success'); // Use global alert
+                showAlert('Signed in successfully with Google!', 'success'); 
             }
 
             navigate('/home');
@@ -66,16 +66,16 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
             console.error('Error during Google login:', error.message);
             switch (error.code) {
                 case 'auth/popup-closed-by-user':
-                    showAlert('Google login was canceled. Please try again.', 'warning'); // Use global alert
+                    showAlert('Google login was canceled. Please try again.', 'warning'); 
                     break;
                 case 'auth/credential-already-in-use':
-                    showAlert('This Google account is already linked with another account. Please use the correct provider to log in.', 'danger'); // Use global alert
+                    showAlert('This Google account is already linked with another account. Please use the correct provider to log in.', 'error'); 
                     break;
                 case 'auth/network-request-failed':
-                    showAlert('Network error. Please check your internet connection and try again.', 'danger'); // Use global alert
+                    showAlert('Network error. Please check your internet connection and try again.', 'error'); 
                     break;
                 default:
-                    showAlert(`An unexpected error occurred: ${error.message}`, 'default'); // Use global alert
+                    showAlert(`An unexpected error occurred: ${error.message}`, 'error'); 
                     break;
             }
         } finally {
@@ -105,22 +105,22 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
 
             switch (error.code) {
                 case 'auth/email-already-in-use':
-                    showAlert('This email is already in use. Please use another email.', 'danger'); 
+                    showAlert('This email is already in use. Please use another email.', 'error'); 
                     break;
                 case 'auth/invalid-email':
                     showAlert('Invalid email format. Please try again.', 'warning'); 
                     break;
                 case 'auth/wrong-password':
-                    showAlert('Incorrect password. Please try again.', 'danger'); 
+                    showAlert('Incorrect password. Please try again.', 'error'); 
                     break;
                 case 'auth/user-not-found':
-                    showAlert('No user found with this email. Please sign up first.', 'warning'); 
+                    showAlert('No user found with this email. Please sign up first.', 'error'); 
                     break;
                 case 'auth/weak-password':
-                    showAlert('Password is too weak. Please choose a stronger one.', 'warning'); 
+                    showAlert('Password is too weak. Please choose a stronger one.', 'error'); 
                     break;
                 default:
-                    showAlert(`An unexpected error occurred: ${error.message}`, 'default'); 
+                    showAlert(`An unexpected error occurred: ${error.message}`, 'error'); 
                     break;
             }
         } finally {
