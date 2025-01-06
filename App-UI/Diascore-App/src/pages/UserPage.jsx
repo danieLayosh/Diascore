@@ -6,7 +6,7 @@ import { useAuth } from "../context/useAuth";
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import ProfileButton from "../components/buttons/ProfileButton"; 
 import { getAuthenticatedUserData, getDiagnosesForUser } from "../firebase/firestore/users";
-import { doc, onSnapshot, unsubscribe } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const UserPage = () => {
     const { user, loading } = useAuth(); // State to store user data
@@ -34,11 +34,12 @@ const UserPage = () => {
                     const diagnosesCollectionRef = doc(firestore, 'Users', user.id);
 
                     // Listen for real-time updates to the user's document
-                    onSnapshot(diagnosesCollectionRef, async () => {
+                    const unsubscribe = onSnapshot(diagnosesCollectionRef, async () => {
                         const diagnosesData = await getDiagnosesForUser(user.id); // Fetch the Diagnoses sub-collection
                         setDiagnoses(diagnosesData);
                     });
                     
+                    // Unsubscribe from the listener when the component is unmounted
                     return () => unsubscribe();
                 }
             } catch (error) {
