@@ -89,6 +89,7 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
             if (isSignUp) {
                 const result = await createUserWithEmailAndPassword(auth, email, password);
                 await sendEmailVerification(result.user);
+                // TODO Make sure the user verifiy their email before signing up
                 
                 await addUserDoc(result.user);
 
