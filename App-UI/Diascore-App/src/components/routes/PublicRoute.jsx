@@ -8,7 +8,7 @@ const PublicRoute = () => {
     return <div>Loading...</div>; // Show a spinner or loading state
   }
 
-  // If user is logged in, redirect to /home
+  // If user is logged in, redirect to /welcome
   return user ? <Navigate to="/UserPage" /> : <Outlet />;
 };
 

@@ -2,20 +2,20 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import PublicRoute from './components/routes/PublicRoute'; 
 import appRoutes from './data/routes';
-import Home from './pages/Home';
 import PageNotFound from './pages/404Page';
+import Welcome from './pages/Welcome'; 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to='/home' replace />,
+    element: <Navigate to='/welcome' replace />, // Updated path
   },
   {
-    element: <PublicRoute />, // Use PublicRoute for /home
+    element: <PublicRoute />, // Use PublicRoute for /welcome
     children: [
       {
-        path: '/home',
-        element: <Home />,
+        path: '/welcome', // Updated path
+        element: <Welcome />, // Updated component
       },
     ],
   },

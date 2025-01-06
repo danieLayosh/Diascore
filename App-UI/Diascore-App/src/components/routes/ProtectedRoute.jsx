@@ -8,7 +8,7 @@ const ProtectedRoute = () => {
     return <div>Loading...</div>; // Show a spinner or loading state
   }
 
-  return user ? <Outlet /> : <Navigate to="/home" />;
+  return user ? <Outlet /> : <Navigate to="/welcome" />; // Updated path
 };
 
 export default ProtectedRoute;

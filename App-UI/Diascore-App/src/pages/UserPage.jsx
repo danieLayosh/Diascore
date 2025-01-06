@@ -18,7 +18,7 @@ const UserPage = () => {
     const handleSignOut = async () => {
         try {
             await signOut(auth);
-            navigate('/home'); // Redirect to the home page after sign out
+            navigate('/welcome'); // Updated path
         } catch (error) {
             console.error('Error signing out:', error);
         }

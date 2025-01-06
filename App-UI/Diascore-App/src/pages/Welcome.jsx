@@ -5,7 +5,7 @@ import LearnMoreBt from "../components/buttons/LearnMoreBt";
 import SignIn from "../components/auth/SignIn";
 import { Dialog } from "@mui/material";
 
-const Home = () => {
+const Welcome = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const { alertDetails, showAlert } = useAlert(); 
@@ -13,13 +13,11 @@ const Home = () => {
   const handleLoginClick = () => {
     setIsSignUp(false);
     setIsLoginModalOpen(true);
-    // showAlert("Login modal opened", "success");
   };
 
   const handleSignupClick = () => {
     setIsLoginModalOpen(true);
     setIsSignUp(true);
-    // showAlert("Signup modal opened", "success");
   };
 
   const handleLearnMoreClick = () => {
@@ -94,4 +92,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Welcome;

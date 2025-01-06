@@ -38,7 +38,7 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
             if (currentUser) {
                 navigate('/UserPage');
             } else {
-                navigate('/home');
+                navigate('/welcome'); 
             }
         });
 
@@ -61,7 +61,7 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
                 showAlert('Signed in successfully with Google!', 'success'); 
             }
 
-            navigate('/home');
+            navigate('/welcome');
         } catch (error) {
             console.error('Error during Google login:', error.message);
             switch (error.code) {
