@@ -1,4 +1,3 @@
-// context/AlertContext.js
 import { createContext, useState } from "react";
 import PropTypes from "prop-types";
 
@@ -7,6 +6,7 @@ import { ALERT_TYPES } from "./alertTypes";
 // Create Context
 const AlertContext = createContext();
 
+// TODO Modify the AlertProvider component for more flexibility and clean the mess with GlobalAlert and the context
 // Provider component to wrap your app
 export const AlertProvider = ({ children }) => {
   const [alertDetails, setAlertDetails] = useState({
