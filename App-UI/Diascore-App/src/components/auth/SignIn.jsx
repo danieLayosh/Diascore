@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
 import EmailInput from './EmailInput';
 import useAlert from '../../context/useAlert';
-import { addUserDoc, updateDisplayName } from '../../firebase/firestore/users';
+import { addOrUpdateUserDoc } from '../../firebase/firestore/users';
 
 const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
     const [authLoading, setAuthLoading] = useState(false);
@@ -53,7 +53,7 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
 
             const existingMethods = await fetchSignInMethodsForEmail(auth, user.email);
 
-            await updateDisplayName(user);
+            await addOrUpdateUserDoc(user); // Update user's display name
             console.log('User data updated successfully!');
 
             if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
@@ -94,10 +94,20 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
                 await sendEmailVerification(result.user);
                 // TODO Make sure the user verifiy their email before signing up
                 
-                await addUserDoc(result.user);
+                await addOrUpdateUserDoc(result.user);
 
                 showAlert('Verification email sent! Please check your inbox.', 'success', 10000); 
             } else {
+                try {
+                    const existingMethods = await fetchSignInMethodsForEmail(auth, email);
+                    if (existingMethods.includes('google.com') && !existingMethods.includes('password')) {
+                        showAlert('This user can sign in only with Google.', 'error'); 
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error fetching sign-in methods:', error.message);
+                }
+                
                 await signInWithEmailAndPassword(auth, email, password);
                 showAlert('Signed in successfully!', 'success'); 
                 navigate('/Home');
