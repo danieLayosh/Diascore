@@ -20,11 +20,11 @@ export const addUserDoc = async (user) => {
 
         // create an empty Diagnoses subcollection for the user
         const diagnosesCollectionRef = collection(userDocRef, 'Diagnoses');
-
         await setDoc(doc(diagnosesCollectionRef, 'exampleDiagnosis'), {
             title: 'Example Diagnosis',
             description: 'This is a placeholder diagnosis.',
             createdAt: new Date(),
+            answers: [],
         });
 
         console.log("User doc created successfully for UIS:", user.uid);
@@ -34,45 +34,50 @@ export const addUserDoc = async (user) => {
     }
 }
 
-// Update a user
-export const updateUser = async (user) => {
+// Add or update a user
+export const addOrUpdateUserDoc = async (user) => {
     try {
         const userDocRef = doc(firestore, 'Users', user.uid);
-        await updateDoc(userDocRef, user.data);
-        console.log("User updated successfully");
-    } catch (error) {
-        console.error("Error updating user: ", error);
-        throw error;
-    }
-};
 
-// Update user's display name
-export const updateDisplayName = async (user) => {
-    try {
+        // Check if the document exists
+        const userDocSnap = await getDoc(userDocRef);
 
-        // Reference the user document
-        const userDocRef = doc(firestore, 'Users', user.uid);
+        if (!userDocSnap.exists()) {
+            // If no document exists, create one
+            console.log("No user doc found. Creating a new one...");
+            await addUserDoc(user); // Call the addUserDoc function to create a new document
+        } else {
+            // If the document exists, compare properties and update if necessary
+            const userData = userDocSnap.data();
+            const updatedData = {};
 
-        // Get the current display name
-        const prevDiaplayName = (await getDoc(userDocRef)).data().displayName;
+            // Check for mismatched properties
+            if (userData.displayName !== user.displayName) {
+                updatedData.displayName = user.displayName || '';
+            }
+            if (userData.email !== user.email) {
+                updatedData.email = user.email;
+            }
 
-        if (prevDiaplayName === user.displayName) {
-            console.log("User display name is already up to date");
-            return;
+            // Calculate the size of the Diagnoses subcollection
+            const diagnosesCollectionRef = collection(userDocRef, 'Diagnoses');
+            const diagnosesSnap = await getDocs(diagnosesCollectionRef);
+            const diagnosesCount = diagnosesSnap.size;
+
+            if (userData.diagnoses_count !== diagnosesCount) {
+                updatedData.diagnoses_count = diagnosesCount;
+            }
+
+            // If there are updates, update the document
+            if (Object.keys(updatedData).length > 0) {
+                await updateDoc(userDocRef, updatedData);
+                console.log("User doc updated successfully:", updatedData);
+            } else {
+                console.log("User doc is already up-to-date.");
+            }
         }
-
-        // Update the display name
-        await updateDoc(userDocRef, { displayName: user.displayName });
-
-        // Get the updated display name
-        const currentDiaplayName = (await getDoc(userDocRef)).data().displayName;
-        
-        // Check if the display name was updated successfully
-        if (prevDiaplayName !== currentDiaplayName) {
-            console.log("User display name was chaneged and updated successfully");
-        }
     } catch (error) {
-        console.error("Error updating user display name: ", error);
+        console.error("Error syncing user document:", error);
         throw error;
     }
 };
