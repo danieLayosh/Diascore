@@ -7,6 +7,7 @@ import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import ProfileButton from "../components/buttons/ProfileButton"; 
 import { getAuthenticatedUserData, getDiagnosesForUser } from "../firebase/firestore/users";
 import { doc, onSnapshot } from "firebase/firestore";
+import useAlert from "../context/useAlert"; 
 
 const Home = () => {
     const { user, loading } = useAuth(); // State to store user data
@@ -15,11 +16,15 @@ const Home = () => {
     const [userData, setUserData] = useState(null);
     const [diagnoses, setDiagnoses] = useState([]);
 
+    const { showAlert } = useAlert();
+
     const handleSignOut = async () => {
         try {
             await signOut(auth);
             navigate('/welcome');
+            showAlert("You have been successfully Loged out", "success");
         } catch (error) {
+            showAlert("Error signing out", "error");
             console.error('Error signing out:', error);
         }
     };
@@ -38,7 +43,6 @@ const Home = () => {
                         const diagnosesData = await getDiagnosesForUser(user.id); // Fetch the Diagnoses sub-collection
                         setDiagnoses(diagnosesData);
                     });
-                    
                     // Unsubscribe from the listener when the component is unmounted
                     return () => unsubscribe();
                 }
