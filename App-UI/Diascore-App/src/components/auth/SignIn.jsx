@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import PasswordInput from './PasswordInput';
 import EmailInput from './EmailInput';
 import useAlert from '../../context/useAlert';
-import { addUserDoc } from '../../firebase/firestore/users';
+import { addUserDoc, updateDisplayName } from '../../firebase/firestore/users';
 
 const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
     const [authLoading, setAuthLoading] = useState(false);
@@ -52,6 +52,9 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
             const user = result.user;
 
             const existingMethods = await fetchSignInMethodsForEmail(auth, user.email);
+
+            await updateDisplayName(user);
+            console.log('User data updated successfully!');
 
             if (existingMethods.length > 0 && !existingMethods.includes('google.com')) {
                 await signInWithEmailAndPassword(auth, user.email, password);
@@ -130,15 +133,6 @@ const SignIn = ({ onClose = () => {}, isSignUp: initialIsSignUp = false }) => {
 
     return (
         <div className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg bg-gradient-to-t from-white to-[#f4f7fb] rounded-3xl p-8 border-4 border-white shadow-xl mx-0">
-            {/* {alertDetails && (
-                <Alert
-                    color={alertDetails.color}
-                    title={alertDetails.title}
-                    description={alertDetails.description}
-                    variant="faded"
-                    onClose={() => setAlertDetails(null)}
-                />
-            )} */}
             <div className="text-center text-3xl font-extrabold text-[#1089d3]">{isSignUp ? 'Sign Up' : 'Sign In'}</div>
             <form className="mt-5" onSubmit={(e) => { e.preventDefault(); handleAuth(); }}>
                 <EmailInput value={email} onChange={(e) => setEmail(e.target.value)} />
