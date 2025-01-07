@@ -1,6 +1,5 @@
-import { firestore } from "../firebase"; 
 import { collection, getDoc, getDocs, setDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { auth } from "../firebase"; 
+import { auth, firestore } from "../firebase"; 
 
 // Add a user
 export const addUserDoc = async (user) => {
@@ -90,46 +89,38 @@ export const deleteUser = async (id) => {
     }
 };
 
-export const getAuthenticatedUserData = async () => {
+export const getAuthenticatedUserDataWithDiagnoses = async () => {
     try {
-        const user = auth.currentUser; // Get the currently authenticated user
+        const user = auth.currentUser;
         if (!user) {
             throw new Error("No authenticated user found");
         }
+        // console.log("Fetching data for user UID:", user.uid);
 
         // Access the specific user's document
-        const userDoc = doc(firestore, "Users", user.uid);
-        const docSnapshot = await getDoc(userDoc);
+        const userDocRef = doc(firestore, "Users", user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-        if (docSnapshot.exists()) {
-            return { id: docSnapshot.id, ...docSnapshot.data() };
-        } else {
-            throw new Error("No user data found for the authenticated user");
+        if (!userDoc.exists()) {
+            throw new Error("No user data found for the authenticated user: ${user.uid}");
         }
 
-    } catch (error) {
-        console.error("Error fetching authenticated user's data: ", error);
-        throw error;
-    }
-};
+        const userData = userDoc.data();
+        // console.log("User data:", userData);
 
-export const getDiagnosesForUser = async (userId) => {
-    try {
-        // Reference the Diagnoses collection for the specific user
-        const diagnosesCollection = collection(firestore, `Users/${userId}/Diagnoses`);
-        
-        // Fetch through the doc and return the data
-        const querySnapshot = await getDocs(diagnosesCollection);
+        // Access the Diagnoses sub-collection for the specific user
+        const diagCollectionRef = collection(userDocRef, "Diagnoses");
+        const diagSnapshot = await getDocs(diagCollectionRef);
 
         // Map through the query snapshot and return the data
-        const Diagnoses = querySnapshot.docs.map((doc) => ({
+        const diagnoses = diagSnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
         }));
 
-        return Diagnoses || [];
+        return { userData, diagnoses };
     } catch (error) {
-        console.error("Error getting the Diagnoses sub collection:", error);
+        console.error("Error fetching authenticated user's data with diagnoses: ", error);
         throw error;
     }
-}
+};
