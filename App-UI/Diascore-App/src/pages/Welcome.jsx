@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useAlert from "../context/useAlert"; 
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import LearnMoreBt from "../components/buttons/LearnMoreBt";
@@ -8,7 +8,7 @@ import { Dialog } from "@mui/material";
 const Welcome = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const { alertDetails, showAlert } = useAlert(); 
+  const { showAlert } = useAlert(); 
 
   const handleLoginClick = () => {
     setIsSignUp(false);
@@ -28,16 +28,6 @@ const Welcome = () => {
   const closeLoginModal = () => {
     setIsLoginModalOpen(false);
   };
-
-  // Auto-dismiss alert after 5 seconds
-  // useEffect(() => {
-  //   if (alertDetails.message) {
-  //     const timer = setTimeout(() => {
-  //       showAlert("", ""); // Reset alert after 5 seconds
-  //     }, 5000);
-  //     return () => clearTimeout(timer); 
-  //   }
-  // }, [alertDetails, showAlert]);
 
   return (
     <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen ">
@@ -71,13 +61,6 @@ const Welcome = () => {
       <div className="mt-12 sm:mt-xl lg:mt-2xl mx-auto">
         <LearnMoreBt mode="dark" onClick={handleLearnMoreClick}/>
       </div>
-
-      {/* Alert Section
-      {alertDetails.message && (
-        <div className={`alert ${alertDetails.type === "success" ? "bg-green-500" : "bg-red-500"} text-white p-4 mt-4 rounded`}>
-          {alertDetails.message}
-        </div>
-      )} */}
 
       {/* Login Modal */}
       <Dialog
