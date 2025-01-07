@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { signOut } from "firebase/auth";
-import { auth, firestore } from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import ProfileButton from "../components/buttons/ProfileButton"; 
-import { getAuthenticatedUserData, getDiagnosesForUser } from "../firebase/firestore/users";
-import { doc, onSnapshot } from "firebase/firestore";
+import { getAuthenticatedUserDataWithDiagnoses } from "../firebase/firestore/users";
 import useAlert from "../context/useAlert"; 
 
 const Home = () => {
@@ -30,28 +29,25 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const fetchUserData = async () => {
+        const fetchUserDataWithDiagnoses = async () => {
+
+            if (!user) {
+                console.error("No authenticated user found");
+                return;
+            }
+
             try {
-                const user = await getAuthenticatedUserData(); // Get the authenticated user's document
-                setUserData(user);
-
-                if (user) {
-                    const diagnosesCollectionRef = doc(firestore, 'Users', user.id);
-
-                    // Listen for real-time updates to the user's document
-                    const unsubscribe = onSnapshot(diagnosesCollectionRef, async () => {
-                        const diagnosesData = await getDiagnosesForUser(user.id); // Fetch the Diagnoses sub-collection
-                        setDiagnoses(diagnosesData);
-                    });
-                    // Unsubscribe from the listener when the component is unmounted
-                    return () => unsubscribe();
-                }
+                const { userData, diagnoses } = await getAuthenticatedUserDataWithDiagnoses();
+                setUserData(userData);
+                setDiagnoses(diagnoses);
             } catch (error) {
-                console.error("Error fetching user data or diagnoses:", error);
+                console.error("Error fetching user data and diagnoses:", error);
             }
         };
-
-        fetchUserData();
+        
+        if (user) {
+            fetchUserDataWithDiagnoses();
+        }
     }, [user]);
 
     if (loading) {
@@ -65,6 +61,7 @@ const Home = () => {
     if (diagnoses.length > 0) {
         console.log("Diagnoses data:", diagnoses);
     }
+
 
     return (
         <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen">
@@ -86,7 +83,11 @@ const Home = () => {
                     <div className="text-4xl">
                         <p>You are successfully logged in as:</p>
                         <p><strong>Email:</strong> {user.email}</p>
-                        <p><strong>Display Name:</strong> {user.displayName || 'N/A'}</p> {/* Display name may not always be available */}
+                        {user.displayName ? (
+                            <p>
+                                <strong>Display Name:</strong> {user.displayName}
+                            </p>
+                        ) : null}
                     </div>
                 ) : (
                     <p>Loading user data...</p> // Show loading state if user data is not yet fetched
