@@ -1,9 +1,6 @@
-import { firestore } from "../firebase"; // Corrected import path
+import { firestore } from "../firebase"; 
 import { collection, getDoc, getDocs, setDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { auth } from "../firebase"; // Corrected import path
-
-// Collection reference
-const usersCollection = collection(firestore, 'Users');
+import { auth } from "../firebase"; 
 
 // Add a user
 export const addUserDoc = async (user) => {
@@ -38,25 +35,45 @@ export const addUserDoc = async (user) => {
     }
 }
 
-// Get all users
-export const getUsers = async () => {
+// Update a user
+export const updateUser = async (user) => {
     try {
-        const querySnapshot = await getDocs(usersCollection);
-        return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const userDocRef = doc(firestore, 'Users', user.uid);
+        await updateDoc(userDocRef, user.data);
+        console.log("User updated successfully");
     } catch (error) {
-        console.error("Error getting users: ", error);
+        console.error("Error updating user: ", error);
         throw error;
     }
 };
 
-// Update a user
-export const updateUser = async (id, data) => {
+// Update user's display name
+export const updateDisplayName = async (user) => {
     try {
-        const userDoc = doc(firestore, "Users", id);
-        await updateDoc(userDoc, data);
-        console.log("User updated successfully");
+
+        // Reference the user document
+        const userDocRef = doc(firestore, 'Users', user.uid);
+
+        // Get the current display name
+        const prevDiaplayName = (await getDoc(userDocRef)).data().displayName;
+
+        if (prevDiaplayName === user.displayName) {
+            console.log("User display name is already up to date");
+            return;
+        }
+
+        // Update the display name
+        await updateDoc(userDocRef, { displayName: user.displayName });
+
+        // Get the updated display name
+        const currentDiaplayName = (await getDoc(userDocRef)).data().displayName;
+        
+        // Check if the display name was updated successfully
+        if (prevDiaplayName !== currentDiaplayName) {
+            console.log("User display name was chaneged and updated successfully");
+        }
     } catch (error) {
-        console.error("Error updating user: ", error);
+        console.error("Error updating user display name: ", error);
         throw error;
     }
 };
