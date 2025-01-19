@@ -1,12 +1,7 @@
 {
 	"folders": [
 		{
-			"path": "App-UI",
-			"name": "App UI",
-			"settings": {
-				"javascript.validate.enable": true, // Enable JavaScript validation
-				"eslint.workingDirectories": ["App-UI/Diascore-App"] // Enable ESLint for App-UI
-			}
+			"path": "App-UI"
 		},
 		{
 			"path": "MainLogic-API",
