@@ -14,7 +14,7 @@ export const DiagList = ({ names }) => {
         <div>
             {currentNames.length > 0 ? (
                 currentNames.map((name, index) => (
-                    <h2 key={index}>{JSON.stringify(name[1].name)} {JSON.stringify(name[1].description)}</h2> // Assuming each name object has a 'name' property
+                    <h2 key={index}>{name.name} {name.description}</h2> // Assuming each name object has a 'name' property
                 ))
             ) : (
                 <p>No diagnoses available.</p> // Optional message if there are no diagnoses
