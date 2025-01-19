@@ -7,6 +7,7 @@ import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import ProfileButton from "../components/buttons/ProfileButton"; 
 import { getAuthenticatedUserDataWithDiagnoses } from "../firebase/firestore/users";
 import useAlert from "../context/useAlert"; 
+import { DiagList } from "../components/diagnosedList/DiagList";
 
 const Home = () => {
     const { user, loading } = useAuth(); // State to store user data
@@ -21,7 +22,7 @@ const Home = () => {
         try {
             await signOut(auth);
             navigate('/welcome');
-            showAlert("You have been successfully Loged out", "success");
+            showAlert("You have been successfully logged out", "success");
         } catch (error) {
             showAlert("Error signing out", "error");
             console.error('Error signing out:', error);
@@ -30,7 +31,6 @@ const Home = () => {
 
     useEffect(() => {
         const fetchUserDataWithDiagnoses = async () => {
-
             if (!user) {
                 console.error("No authenticated user found");
                 return;
@@ -54,15 +54,6 @@ const Home = () => {
         return <div>Loading user data...</div>;
     }
 
-    if (userData) {
-        console.log("Authenticated user's data:", userData);
-    }
-
-    if (diagnoses.length > 0) {
-        console.log("Diagnoses data:", diagnoses);
-    }
-
-
     return (
         <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen">
             {/* Header Section */}
@@ -70,11 +61,11 @@ const Home = () => {
                 <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
                 {/* Profile Button Section */}
                 <div className="flex gap-4">
-                        {/* Profile Button with Icon */}
-                        <ProfileButton 
-                            fill="currentColor" 
-                            size={24}     
-                            className="transition-all duration-300 ease-in-out transform hover:scale-110 hover:text-primary-color"                         />
+                    <ProfileButton 
+                        fill="currentColor" 
+                        size={24}     
+                        className="transition-all duration-300 ease-in-out transform hover:scale-110 hover:text-primary-color"                         
+                    />
                 </div>
             </div>
 
@@ -83,19 +74,19 @@ const Home = () => {
                     <div className="text-4xl">
                         <p>You are successfully logged in as:</p>
                         <p><strong>Email:</strong> {user.email}</p>
-                        {user.displayName ? (
-                            <p>
-                                <strong>Display Name:</strong> {user.displayName}
-                            </p>
-                        ) : null}
+                        {user.displayName && (
+                            <p><strong>Display Name:</strong> {user.displayName}</p>
+                        )}
                     </div>
                 ) : (
                     <p>Loading user data...</p> // Show loading state if user data is not yet fetched
                 )}
+
                 <div className="flex gap-4 mt-40 mx-44">
                     {/* Log Out Button */}
                     <GreenCoverButton text="Log Out" defaultColor="black" onClick={handleSignOut} />            
                 </div>
+                <DiagList names={(diagnoses)} />
             </div>
         </div>
     );
