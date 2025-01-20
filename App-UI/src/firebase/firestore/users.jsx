@@ -111,7 +111,6 @@ export const getAuthenticatedUserDataWithDiagnoses = async () => {
         }
 
         const userData = userDoc.data();
-        // console.log("User data:", userData);
 
         // Access the Diagnoses sub-collection for the specific user
         const diagCollectionRef = collection(userDocRef, "Diagnoses");
