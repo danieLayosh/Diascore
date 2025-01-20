@@ -70,12 +70,17 @@ const Home = () => {
             </div>
 
             <div className="mt-20 text-left mx-auto">
-                {user ? (
+                {userData ? (
                     <div className="text-4xl">
                         <p>You are successfully logged in as:</p>
-                        <p><strong>Email:</strong> {user.email}</p>
-                        {user.displayName && (
-                            <p><strong>Display Name:</strong> {user.displayName}</p>
+                        {userData.email && (
+                            <p><strong>Email:</strong> {userData.email}</p>
+                        )}
+                        {userData.displayName && (
+                            <p><strong>Display Name:</strong> {userData.displayName}</p>
+                        )}
+                        {userData.diagnoses_count && (
+                            <p><strong>Diagnoses Count:</strong> {userData.diagnoses_count}</p>
                         )}
                     </div>
                 ) : (
