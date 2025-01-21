@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import AlertContext from "../../context/AlertContext";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import AlertInstance from "./AlertInstance";
 
 const GlobalAlert = () => {
