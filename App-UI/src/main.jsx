@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { NextUIProvider } from '@nextui-org/react';
+import { HeroUIProvider } from "@heroui/react";
 import './styles/tailwind.css';
 import { RouterProvider } from 'react-router-dom';
 import router from './router.jsx';
@@ -10,13 +10,13 @@ import GlobalAlert from './components/alerts/GlobalAlert';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <NextUIProvider>
+    <HeroUIProvider>
       <AuthProvider>
         <AlertProvider>
           <GlobalAlert />
           <RouterProvider router={router} />
         </AlertProvider>
       </AuthProvider>
-    </NextUIProvider>
+    </HeroUIProvider>
   </StrictMode>
 );
