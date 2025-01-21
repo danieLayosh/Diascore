@@ -1,29 +1,55 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import {
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+    getKeyValue,
+  } from "@heroui/react";
+import { columns } from "./columns";
+/**
+ * @typedef {import('./types').AnswerSumRequest} AnswerSumRequest
+ */
 
-export const DiagList = ({ names }) => {
-    const [currentNames, setCurrentNames] = useState(names);
+
+/**
+ * DiagList component
+ * @param {{ Diagnoses: AnswerSumRequest[] }} props
+ */
+export const DiagList = ({ Diagnoses }) => {
+    const [DiagnosesArray, setCurrentDiagnoses] = useState(Diagnoses);
 
     useEffect(() => {
         // Ensure we set the state to an array
-        setCurrentNames(names);
-        console.log("Diagnosed items:", names);
-    }, [names]); // This effect runs when `names` prop changes
+        setCurrentDiagnoses(Diagnoses);
+        console.log("Diagnosed items:", Diagnoses);
+    }, [Diagnoses]); 
 
     return (
-        <div>
-            {currentNames.length > 0 ? (
-                currentNames.map((name, index) => (
-                    <h2 key={index}>{name.name} {name.description}</h2> // Assuming each name object has a 'name' property
-                ))
-            ) : (
-                <p>No diagnoses available.</p> // Optional message if there are no diagnoses
+        <Table aria-label="Example table with dynamic content">
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.key}>{column.label}</TableColumn>
             )}
-            <h1>currentNames length: {currentNames.length}</h1> {/* Display the length of the array */}
-        </div>
+          </TableHeader>
+          <TableBody items={DiagnosesArray} emptyContent={"No rows to display."} >
+            {(item) => (
+              <TableRow key={item.patient_id} className="w-full p-4 pr-12 rounded-2xl shadow-[0px_10px_10px_-5px_#cff0ff] border-spacing-20 focus:border-[#16205c]">
+                {(columnKey) => (
+                  <TableCell className="text-black">
+                    {getKeyValue(item, columnKey)}
+                  </TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
     );
 };
 
 DiagList.propTypes = {
-    names: PropTypes.array.isRequired, // Ensure it expects an array
+    Diagnoses: PropTypes.array.isRequired, // Ensure it expects an array
 };
