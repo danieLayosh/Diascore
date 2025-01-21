@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Alert } from "@nextui-org/react";
+import { Alert } from "@heroui/react";
 
 const AlertInstance = ({ color, title, description, duration, onClose, action, className }) => {
   const [visible, setVisible] = useState(true);
