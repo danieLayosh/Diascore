@@ -55,6 +55,7 @@ const Home = () => {
     }
 
     return (
+        
         <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen">
             {/* Header Section */}
             <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg shadow-lg">
@@ -69,8 +70,12 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="mt-20 text-left mx-auto">
-                {userData ? (
+            <div className="text-left mx-auto justify-center items-center mt-60">
+                <DiagList Diagnoses={(diagnoses)} />
+            </div>
+
+            <div className="text-left mx-auto justify-center items-center">
+                {/* {userData ? (
                     <div className="text-4xl">
                         <p>You are successfully logged in as:</p>
                         {userData.email && (
@@ -85,13 +90,13 @@ const Home = () => {
                     </div>
                 ) : (
                     <p>Loading user data...</p> // Show loading state if user data is not yet fetched
-                )}
+                )} */}
 
                 <div className="flex gap-4 mt-40 mx-44">
                     {/* Log Out Button */}
                     <GreenCoverButton text="Log Out" defaultColor="black" onClick={handleSignOut} />            
                 </div>
-                <DiagList names={(diagnoses)} />
+
             </div>
         </div>
     );
