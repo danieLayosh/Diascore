@@ -1,4 +1,4 @@
-import { nextui } from "@nextui-org/react"; 
+import { heroui } from "@heroui/react"; 
 import typography from "@tailwindcss/typography"; 
 import forms from "@tailwindcss/forms"; 
 
@@ -6,7 +6,7 @@ import forms from "@tailwindcss/forms";
 export default {
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -42,7 +42,7 @@ export default {
   },
   darkMode: "class",
   plugins: [
-    nextui(),
+    heroui(),
     typography(),
     forms(),
   ],
