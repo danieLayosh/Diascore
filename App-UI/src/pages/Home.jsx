@@ -8,6 +8,7 @@ import { getAuthenticatedUserDataWithDiagnoses } from "../firebase/firestore/use
 import useAlert from "../context/useAlert"; 
 import { DiagList } from "../components/diagnosedList/DiagList";
 import Loader from "../components/Loader"; 
+import Action from "../components/dropdown/Action";
 
 const Home = () => {
     const { user, loading } = useAuth();
@@ -61,8 +62,8 @@ const Home = () => {
             {/* Header Section */}
             <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg shadow-lg">
                 <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
-                {/* Profile Button Section */}
-                <div className="flex gap-4">
+                <div className="flex gap-6">
+                    <Action />
                     <ProfileButton 
                         fill="currentColor" 
                         size={24}     
