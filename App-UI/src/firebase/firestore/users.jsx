@@ -83,7 +83,7 @@ export const addOrUpdateUserDoc = async (user) => {
 };
 
 // Delete a user
-export const deleteUser = async (id) => {
+export const deleteUserData = async (id) => {
     try {
         const userDoc = doc(firestore, "Users", id);
         await deleteDoc(userDoc);
