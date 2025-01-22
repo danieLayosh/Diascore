@@ -82,6 +82,27 @@ export const addOrUpdateUserDoc = async (user) => {
     }
 };
 
+// Edit user data
+export const editUserData = async (id , updatedData) => {
+    if (!id) {
+        throw new Error("No user ID provided");
+    }
+
+    try {
+        const userDoc = doc(firestore, "Users", id);
+        if (!userDoc.exists()) {
+            throw new Error("No user data found for the provided ID: ${id}");
+        }
+
+        await updateDoc(userDoc, updatedData);
+        console.log("User data updated successfully");
+    } catch (error) {
+        console.error("Error updating user data: ", error);
+        throw error;
+    }
+
+}
+
 // Delete a user
 export const deleteUserData = async (id) => {
     try {
@@ -100,7 +121,6 @@ export const getAuthenticatedUserDataWithDiagnoses = async () => {
         if (!user) {
             throw new Error("No authenticated user found");
         }
-        // console.log("Fetching data for user UID:", user.uid);
 
         // Access the specific user's document
         const userDocRef = doc(firestore, "Users", user.uid);
