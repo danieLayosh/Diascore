@@ -3,16 +3,17 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
-import GreenCoverButton from "../components/buttons/GreenCoverButton";
 import ProfileButton from "../components/buttons/ProfileButton"; 
 import { getAuthenticatedUserDataWithDiagnoses } from "../firebase/firestore/users";
 import useAlert from "../context/useAlert"; 
 import { DiagList } from "../components/diagnosedList/DiagList";
+import Loader from "../components/Loader"; 
 
 const Home = () => {
-    const { user, loading } = useAuth(); // State to store user data
+    const { user, loading } = useAuth();
     const navigate = useNavigate();
 
+    // eslint-disable-next-line no-unused-vars
     const [userData, setUserData] = useState(null);
     const [diagnoses, setDiagnoses] = useState([]);
 
@@ -51,7 +52,7 @@ const Home = () => {
     }, [user]);
 
     if (loading) {
-        return <div>Loading user data...</div>;
+        return <div className="flex h-screen items-center justify-center size-max w-screen bg-slate-900"> <Loader/> </div>;
     }
 
     return (
@@ -65,38 +66,15 @@ const Home = () => {
                     <ProfileButton 
                         fill="currentColor" 
                         size={24}     
-                        className="transition-all duration-300 ease-in-out transform hover:scale-110 hover:text-primary-color"                         
+                        className="transition-all duration-300 ease-in-out transform hover:scale-110 hover:text-primary-color"    
+                        // TODO: Add onClick function to navigate to user profile page
+                        onClick={handleSignOut} // Temporary onClick function                
                     />
                 </div>
             </div>
 
             <div className="text-left mx-auto justify-center items-center mt-60">
                 <DiagList Diagnoses={(diagnoses)} />
-            </div>
-
-            <div className="text-left mx-auto justify-center items-center">
-                {/* {userData ? (
-                    <div className="text-4xl">
-                        <p>You are successfully logged in as:</p>
-                        {userData.email && (
-                            <p><strong>Email:</strong> {userData.email}</p>
-                        )}
-                        {userData.displayName && (
-                            <p><strong>Display Name:</strong> {userData.displayName}</p>
-                        )}
-                        {userData.diagnoses_count && (
-                            <p><strong>Diagnoses Count:</strong> {userData.diagnoses_count}</p>
-                        )}
-                    </div>
-                ) : (
-                    <p>Loading user data...</p> // Show loading state if user data is not yet fetched
-                )} */}
-
-                <div className="flex gap-4 mt-40 mx-44">
-                    {/* Log Out Button */}
-                    <GreenCoverButton text="Log Out" defaultColor="black" onClick={handleSignOut} />            
-                </div>
-
             </div>
         </div>
     );
