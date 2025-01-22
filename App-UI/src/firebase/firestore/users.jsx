@@ -103,10 +103,14 @@ export const editUserData = async (id , updatedData) => {
 
 }
 
-// Delete a user
-export const deleteUserData = async (id) => {
+// Delete current user data
+export const deleteCurrentUserData = async () => {
     try {
-        const userDoc = doc(firestore, "Users", id);
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("No authenticated user found");
+        }
+        const userDoc = doc(firestore, "Users", user.uid);
         await deleteDoc(userDoc);
         console.log("User deleted successfully");
     } catch (error) {
@@ -114,6 +118,33 @@ export const deleteUserData = async (id) => {
         throw error;
     }
 };
+
+// Delete current user account
+export const deleteCurrentUserAccount = async () => {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("No authenticated user found");
+        }
+        await user.delete();
+
+    } catch (error) {
+        console.error("Error deleting user account: ", error);
+        throw error;
+    }
+};
+
+// Delete current user account and data
+export const deleteAccountAndUserData = async () => {
+    try {
+        await deleteCurrentUserData();
+        await deleteCurrentUserAccount();
+        console.log("User account and data deleted successfully");
+    } catch (error) {
+        console.error("Error deleting user account and data: ", error);
+        throw error;
+    }
+}
 
 export const getAuthenticatedUserDataWithDiagnoses = async () => {
     try {
