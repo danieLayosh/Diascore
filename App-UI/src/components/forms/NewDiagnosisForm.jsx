@@ -10,7 +10,8 @@
  - kORs (kids or students - kids or school)
  - Diagnosis (link to Diagnosis Form || Dianosis Form Photo || Fill Manual)
 */}
-import { Form, Input, Button, CheckboxGroup, Checkbox} from '@heroui/react';
+import { Form, Input, Button, CheckboxGroup, Checkbox, DateInput} from '@heroui/react';
+import {CalendarDate, parseDate} from "@internationalized/date";
 import { useState } from 'react';
 
 const NewDiagnosisForm = () => {
@@ -67,21 +68,41 @@ const NewDiagnosisForm = () => {
                 }}
                 onClear={() => console.log("input cleared")}
             />
-            <div className="border-white border-2 p-2 rounded-3xl mt-5">
+            <div className="border-white border-2 p-2 rounded-xl mt-5">
                 <CheckboxGroup
+                    isRequired
                     size="lg"
                     label="gender"
+                    name='gender'
                     defaultValue={["boy"]}
                     orientation="horizontal"
                     value={selectedGender}
                     onChange={handleChange}
-                    classNames={{ label: "text-xl text-black" }}
+                    classNames={{ label: "text-lg text-black" }}
+                    className='flex flex-row'
                 >
                     <Checkbox value="boy">Boy</Checkbox>
                     <Checkbox value="girl">Girl</Checkbox>
                 </CheckboxGroup>
             </div>
-            
+            <div className="flex w-full flex-wrap mt-5">
+                <DateInput
+                    isRequired
+                    defaultValue={parseDate("2024-04-04")}
+                    className="max-w-[220px]"
+                    label="Birth date"
+                    name='birthDate'
+                    placeholderValue={new CalendarDate(1995, 11, 6)}
+                    variant='bordered'
+                    classNames={{ 
+                        label: "text-lg text-black",
+                        input: "text-lg mb-2 ",
+                        errorMessage: "text-red-500 text-lg",
+                    }}
+                 />
+            </div>
+
+
             <Button type="submit" variant="bordered">
                 Submit
             </Button>
