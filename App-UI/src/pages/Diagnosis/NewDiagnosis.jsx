@@ -7,6 +7,7 @@ import ProfileButton from "../../components/buttons/ProfileButton";
 import useAlert from "../../context/useAlert"; 
 import Loader from "../../components/Loader"; 
 import ActionNewDiagnosis from "../../components/dropdown/ActionNewDiagnosis";
+import NewDiagnosisForm from "../../components/forms/NewDiagnosisForm";
 
 const NewDiagnosis = () => {
     const { user, loading } = useAuth();
@@ -44,10 +45,8 @@ const NewDiagnosis = () => {
                 </div>
             </div>
 
-            {/* Content Section */}
-            <div className="text-left mx-auto justify-center items-center mt-60">
-                <h1 className="text-4xl font-semibold text-primary-color">New Diagnosis</h1>
-            </div>
+            <NewDiagnosisForm />
+            
         </div>
     );
 };
