@@ -7,6 +7,7 @@ import {
     Button,
     cn,
   } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
   
   export const AddNoteIcon = (props) => {
     return (
@@ -117,10 +118,18 @@ import {
       </svg>
     );
   };
+
   
   export default function Action() {
     const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
-  
+    
+    const navigate = useNavigate();
+
+    const handleNewDiagnosis = async () => {
+      console.log("Navigating to new diagnosis page");
+      navigate('/diagnosis/new');
+    };
+
     return (
       <Dropdown
         showArrow
@@ -144,6 +153,7 @@ import {
             <DropdownItem
               key="new"
               description="Create a new diagnosis"
+              onPress={handleNewDiagnosis}
               startContent={<AddNoteIcon className={iconClasses} />}
             >
               New diagnosis
