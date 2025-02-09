@@ -35,7 +35,7 @@ const NewDiagnosisForm = () => {
     return (
         <Form
         onSubmit={handleSubmit}
-        className="flex w-full flex-wrap md:flex-nowrap gap-2 lg:size-96 sm:size-72"
+        className="flex w-full flex-wrap md:flex-nowrap lg:size-96 sm:size-72"
         validationBehavior="native"
         >
             <Input
@@ -67,7 +67,7 @@ const NewDiagnosisForm = () => {
                 }}
                 onClear={() => console.log("input cleared")}
             />
-            <div className="border-white border-2 p-4 rounded-3xl">
+            <div className="border-white border-2 p-2 rounded-3xl mt-5">
                 <CheckboxGroup
                     size="lg"
                     label="gender"
@@ -81,6 +81,7 @@ const NewDiagnosisForm = () => {
                     <Checkbox value="girl">Girl</Checkbox>
                 </CheckboxGroup>
             </div>
+            
             <Button type="submit" variant="bordered">
                 Submit
             </Button>
