@@ -44,9 +44,9 @@ const NewDiagnosis = () => {
                     />
                 </div>
             </div>
-
-            <NewDiagnosisForm />
-            
+            <div className="mx-auto justify-center items-center mt-60"> 
+                <NewDiagnosisForm />
+            </div>
         </div>
     );
 };
