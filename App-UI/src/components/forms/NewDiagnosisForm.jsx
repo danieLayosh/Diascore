@@ -56,153 +56,155 @@ const NewDiagnosisForm = () => {
     };
 
     return (
-    <div className="flex flex-col items-center justify-center w-full shadow-card p-4 rounded-xl">
-        <Form
-        onSubmit={handleSubmit}
-        className="flex w-full flex-wrap"
-        validationBehavior="native"
-        id='new-diagnosis-form'
-        >
-            <Input
-                isRequired
-                className="max-w-[220px]"
-                label="Patient Name"
-                name="patientName"
-                labelPlacement='outside'
-                type="text"
-                variant="bordered" 
-                classNames={{ 
-                    label: "text-lg text-black",
-                    input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
-                }}
-                onClear={() => console.log("input cleared")}
-            />
-            <Input 
-                isRequired
-                className="max-w-[220px]"
-                label="Patient ID" 
-                labelPlacement='outside'
-                name='patientID'
-                type="text" 
-                variant="bordered" 
-                minLength={9}
-                maxLength={9}
-                classNames={{ 
-                    label: "text-lg text-black",
-                    input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
-                    errorMessage: "text-red-500 text-lg",
-                }}
-                onClear={() => console.log("input cleared")}
-            />
-            <div className="border-white border-2 p-2 rounded-xl mt-4">
-                <CheckboxGroup
-                    isRequired
-                    size="lg"
-                    label="gender"
-                    name='gender'
-                    defaultValue={["boy"]}
-                    orientation="horizontal"
-                    value={selectedGender}
-                    onChange={handleChange}
-                    classNames={{ label: "text-lg text-black" }}
-                    className='flex flex-row'
-                >
-                    <Checkbox value="boy">Boy</Checkbox>
-                    <Checkbox value="girl">Girl</Checkbox>
-                </CheckboxGroup>
-            </div>
-            <div className="flex w-full flex-wrap mt-4">
-                <DateInput
-                    isRequired
-                    defaultValue={parseDate("2020-04-04")}
-                    className="max-w-[220px]"
-                    label="Birth date"
-                    name='birthDate'
-                    placeholderValue={new CalendarDate(1995, 11, 6)}
-                    variant='bordered'
-                    classNames={{ 
-                        label: "text-lg text-black",
-                        input: "text-lg mb-2 ",
-                        errorMessage: "text-red-500 text-lg",
-                    }}
-                 />
-            </div>
-            <div className="flex w-full flex-wrap mt-4">
-                <DateInput
-                    isRequired
-                    defaultValue={parseDate(getTodayDate())}
-                    className="max-w-[220px]"
-                    label="diagnosis date"
-                    name='diagnosisDate'
-                    placeholderValue={new CalendarDate(1995, 11, 6)}
-                    variant='bordered'
-                    classNames={{ 
-                        label: "text-lg text-black",
-                        input: "text-lg mb-2 ",
-                        errorMessage: "text-red-500 text-lg",
-                    }}
-                 />
-            </div>
-            <Input
-                isRequired
-                className="max-w-[220px]"
-                label="Diagnosis filler Name"
-                name="DiagnosisFillerName"
-                labelPlacement='outside'
-                type="text"
-                variant="bordered" 
-                classNames={{ 
-                    label: "text-lg text-black",
-                    input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
-                }}
-                onClear={() => console.log("input cleared")}
-            />
-            <div className="border-white border-2 p-2 rounded-xl mt-4">
-                <CheckboxGroup
-                    isRequired
-                    size="lg"
-                    label="Type"
-                    name='type'
-                    defaultValue={["kids"]}
-                    orientation='horizontal'
-                    value={selectedType}
-                    onChange={handleTypeChange}
-                    classNames={{ label: "text-lg text-black" }}
-                    className='flex flex-row'
-                >
-                    <Checkbox value="kids">Kids</Checkbox>
-                    <Checkbox value="school">School</Checkbox>
-                </CheckboxGroup>
-            </div>
-            <div className="border-white border-2 p-2 rounded-xl mt-4">
-                <CheckboxGroup
-                    isRequired
-                    size="lg"
-                    label="Filler"
-                    name='filler'
-                    defaultValue={["Parent"]}
-                    orientation="horizontal"
-                    value={selectedFiller}
-                    onChange={handleFillerChange}
-                    classNames={{ label: "text-lg text-black" }}
-                    className='flex flex-row'
-                >
-                    <Checkbox value="p">Parent</Checkbox>
-                    <Checkbox value="t">Teacher</Checkbox>
-                </CheckboxGroup>
-            </div>
+        <div className="flex flex-col items-center justify-center w-full shadow-card p-4 rounded-xl">
+            <h3 className="text-2xl font-bold text-black">New Diagnosis</h3>
 
-            {submitted && (
-                <div className="text-small text-default-500">
-                    You submitted: <code>{JSON.stringify(submitted)}</code>
+            <Form
+            onSubmit={handleSubmit}
+            className="flex w-full flex-wrap"
+            validationBehavior="native"
+            id='new-diagnosis-form'
+            >
+                <Input
+                    isRequired
+                    className="max-w-[220px]"
+                    label="Patient Name"
+                    name="patientName"
+                    labelPlacement='outside'
+                    type="text"
+                    variant="bordered" 
+                    classNames={{ 
+                        label: "text-lg text-black",
+                        input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
+                    }}
+                    onClear={() => console.log("input cleared")}
+                />
+                <Input 
+                    isRequired
+                    className="max-w-[220px]"
+                    label="Patient ID" 
+                    labelPlacement='outside'
+                    name='patientID'
+                    type="text" 
+                    variant="bordered" 
+                    minLength={9}
+                    maxLength={9}
+                    classNames={{ 
+                        label: "text-lg text-black",
+                        input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
+                        errorMessage: "text-red-500 text-lg",
+                    }}
+                    onClear={() => console.log("input cleared")}
+                />
+                <div className="border-white border-2 p-2 rounded-xl mt-4">
+                    <CheckboxGroup
+                        isRequired
+                        size="lg"
+                        label="gender"
+                        name='gender'
+                        defaultValue={["boy"]}
+                        orientation="horizontal"
+                        value={selectedGender}
+                        onChange={handleChange}
+                        classNames={{ label: "text-lg text-black" }}
+                        className='flex flex-row'
+                    >
+                        <Checkbox value="boy">Boy</Checkbox>
+                        <Checkbox value="girl">Girl</Checkbox>
+                    </CheckboxGroup>
                 </div>
-            )}
-        </Form>
-
-        <Button type="submit" form='new-diagnosis-form' variant="bordered" className='mt-4' >
-            Submit
-        </Button>
-    </div>    
+                <div className="flex w-full flex-wrap mt-4">
+                    <DateInput
+                        isRequired
+                        defaultValue={parseDate("2020-04-04")}
+                        className="max-w-[220px]"
+                        label="Birth date"
+                        name='birthDate'
+                        placeholderValue={new CalendarDate(1995, 11, 6)}
+                        variant='bordered'
+                        classNames={{ 
+                            label: "text-lg text-black",
+                            input: "text-lg mb-2 ",
+                            errorMessage: "text-red-500 text-lg",
+                        }}
+                     />
+                </div>
+                <div className="flex w-full flex-wrap mt-4">
+                    <DateInput
+                        isRequired
+                        defaultValue={parseDate(getTodayDate())}
+                        className="max-w-[220px]"
+                        label="diagnosis date"
+                        name='diagnosisDate'
+                        placeholderValue={new CalendarDate(1995, 11, 6)}
+                        variant='bordered'
+                        classNames={{ 
+                            label: "text-lg text-black",
+                            input: "text-lg mb-2 ",
+                            errorMessage: "text-red-500 text-lg",
+                        }}
+                     />
+                </div>
+                <Input
+                    isRequired
+                    className="max-w-[220px]"
+                    label="Diagnosis filler Name"
+                    name="DiagnosisFillerName"
+                    labelPlacement='outside'
+                    type="text"
+                    variant="bordered" 
+                    classNames={{ 
+                        label: "text-lg text-black",
+                        input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
+                    }}
+                    onClear={() => console.log("input cleared")}
+                />
+                <div className="border-white border-2 p-2 rounded-xl mt-4">
+                    <CheckboxGroup
+                        isRequired
+                        size="lg"
+                        label="Type"
+                        name='type'
+                        defaultValue={["kids"]}
+                        orientation='horizontal'
+                        value={selectedType}
+                        onChange={handleTypeChange}
+                        classNames={{ label: "text-lg text-black" }}
+                        className='flex flex-row'
+                    >
+                        <Checkbox value="kids">Kids</Checkbox>
+                        <Checkbox value="school">School</Checkbox>
+                    </CheckboxGroup>
+                </div>
+                <div className="border-white border-2 p-2 rounded-xl mt-4">
+                    <CheckboxGroup
+                        isRequired
+                        size="lg"
+                        label="Filler"
+                        name='filler'
+                        defaultValue={["Parent"]}
+                        orientation="horizontal"
+                        value={selectedFiller}
+                        onChange={handleFillerChange}
+                        classNames={{ label: "text-lg text-black" }}
+                        className='flex flex-row'
+                    >
+                        <Checkbox value="p">Parent</Checkbox>
+                        <Checkbox value="t">Teacher</Checkbox>
+                    </CheckboxGroup>
+                </div>
+                
+                {submitted && (
+                    <div className="text-small text-default-500">
+                        You submitted: <code>{JSON.stringify(submitted)}</code>
+                    </div>
+                )}
+            </Form>
+            
+            <Button type="submit" form='new-diagnosis-form' variant="bordered" className='mt-4' >
+                Submit
+            </Button>
+        </div>    
 );
 };
 
