@@ -70,7 +70,7 @@ const NewDiagnosisForm = () => {
                     className="max-w-[220px]"
                     label="Patient Name"
                     name="patientName"
-                    labelPlacement='outside'
+                    // labelPlacement='outside'
                     type="text"
                     variant="bordered" 
                     classNames={{ 
@@ -80,10 +80,9 @@ const NewDiagnosisForm = () => {
                     onClear={() => console.log("input cleared")}
                 />
                 <Input 
-                    isRequired
                     className="max-w-[220px]"
                     label="Patient ID" 
-                    labelPlacement='outside'
+                    // labelPlacement='outside'
                     name='patientID'
                     type="text" 
                     variant="bordered" 
@@ -92,11 +91,10 @@ const NewDiagnosisForm = () => {
                     classNames={{ 
                         label: "text-lg text-black",
                         input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
-                        errorMessage: "text-red-500 text-lg",
                     }}
                     onClear={() => console.log("input cleared")}
                 />
-                <div className="border-white border-2 p-2 rounded-xl mt-4">
+                <div className="border-white border-2 p-2 rounded-xl">
                     <CheckboxGroup
                         isRequired
                         size="lg"
@@ -113,7 +111,7 @@ const NewDiagnosisForm = () => {
                         <Checkbox value="girl">Girl</Checkbox>
                     </CheckboxGroup>
                 </div>
-                <div className="flex w-full flex-wrap mt-4">
+                <div className="flex w-full flex-wrap">
                     <DateInput
                         isRequired
                         defaultValue={parseDate("2020-04-04")}
@@ -129,7 +127,7 @@ const NewDiagnosisForm = () => {
                         }}
                      />
                 </div>
-                <div className="flex w-full flex-wrap mt-4">
+                <div className="flex w-full flex-wrap">
                     <DateInput
                         isRequired
                         defaultValue={parseDate(getTodayDate())}
@@ -150,7 +148,7 @@ const NewDiagnosisForm = () => {
                     className="max-w-[220px]"
                     label="Diagnosis filler Name"
                     name="DiagnosisFillerName"
-                    labelPlacement='outside'
+                    // labelPlacement='outside'
                     type="text"
                     variant="bordered" 
                     classNames={{ 
@@ -159,7 +157,7 @@ const NewDiagnosisForm = () => {
                     }}
                     onClear={() => console.log("input cleared")}
                 />
-                <div className="border-white border-2 p-2 rounded-xl mt-4">
+                <div className="border-white border-2 p-2 rounded-xl">
                     <CheckboxGroup
                         isRequired
                         size="lg"
@@ -176,7 +174,7 @@ const NewDiagnosisForm = () => {
                         <Checkbox value="school">School</Checkbox>
                     </CheckboxGroup>
                 </div>
-                <div className="border-white border-2 p-2 rounded-xl mt-4">
+                <div className="border-white border-2 p-2 rounded-xl">
                     <CheckboxGroup
                         isRequired
                         size="lg"
