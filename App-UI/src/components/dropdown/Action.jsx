@@ -143,27 +143,17 @@ import {
           <DropdownSection title="Actions">
             <DropdownItem
               key="new"
-              description="Create a new file"
-              shortcut="⌘N"
+              description="Create a new diagnosis"
               startContent={<AddNoteIcon className={iconClasses} />}
             >
-              New file
-            </DropdownItem>
-            <DropdownItem
-              key="copy"
-              description="Copy the file link"
-              shortcut="⌘C"
-              startContent={<CopyDocumentIcon className={iconClasses} />}
-            >
-              Copy link
+              New diagnosis
             </DropdownItem>
             <DropdownItem
               key="edit"
-              description="Allows you to edit the file"
-              shortcut="⌘⇧E"
+              description="Allows you to edit existing diagnosis"
               startContent={<EditDocumentIcon className={iconClasses} />}
             >
-              Edit file
+              Edit diagnosis
             </DropdownItem>
           </DropdownSection>
           <DropdownSection title="Danger zone">
@@ -171,11 +161,10 @@ import {
               key="delete"
               className="text-danger"
               color="danger"
-              description="Permanently delete the file"
-              shortcut="⌘⇧D"
+              description="Permanently delete a diagnosis"
               startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
             >
-              Delete file
+              Delete diagnosis
             </DropdownItem>
           </DropdownSection>
         </DropdownMenu>
