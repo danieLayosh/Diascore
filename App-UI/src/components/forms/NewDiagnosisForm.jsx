@@ -42,7 +42,7 @@ const NewDiagnosisForm = () => {
     };
 
     return (
-    <div className="flex flex-col items-center justify-center w-full">
+    <div className="flex flex-col items-center justify-center w-full shadow-card p-4 rounded-xl">
         <Form
         onSubmit={handleSubmit}
         className="flex w-full flex-wrap"
