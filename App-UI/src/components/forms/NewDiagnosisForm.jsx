@@ -32,12 +32,22 @@ const NewDiagnosisForm = () => {
         });
     };
 
+    // Function to get today's date in 'YYYY-MM-DD' format
+    const getTodayDate = () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const dd = String(today.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    };
 
     return (
+    <div className="flex flex-col items-center justify-center w-full">
         <Form
         onSubmit={handleSubmit}
-        className="flex w-full flex-wrap md:flex-nowrap lg:size-96 sm:size-72"
+        className="flex w-full flex-wrap"
         validationBehavior="native"
+        id='new-diagnosis-form'
         >
             <Input
                 isRequired
@@ -62,13 +72,15 @@ const NewDiagnosisForm = () => {
                 type="text" 
                 variant="bordered" 
                 minLength={9}
+                maxLength={9}
                 classNames={{ 
                     label: "text-lg text-black",
                     input: "border-none focus:outline-none focus:ring-0", // Removes inner border and focus ring
+                    errorMessage: "text-red-500 text-lg",
                 }}
                 onClear={() => console.log("input cleared")}
             />
-            <div className="border-white border-2 p-2 rounded-xl mt-5">
+            <div className="border-white border-2 p-2 rounded-xl mt-4">
                 <CheckboxGroup
                     isRequired
                     size="lg"
@@ -85,10 +97,10 @@ const NewDiagnosisForm = () => {
                     <Checkbox value="girl">Girl</Checkbox>
                 </CheckboxGroup>
             </div>
-            <div className="flex w-full flex-wrap mt-5">
+            <div className="flex w-full flex-wrap mt-4">
                 <DateInput
                     isRequired
-                    defaultValue={parseDate("2024-04-04")}
+                    defaultValue={parseDate("2020-04-04")}
                     className="max-w-[220px]"
                     label="Birth date"
                     name='birthDate'
@@ -101,18 +113,35 @@ const NewDiagnosisForm = () => {
                     }}
                  />
             </div>
+            <div className="flex w-full flex-wrap mt-4">
+                <DateInput
+                    isRequired
+                    defaultValue={parseDate(getTodayDate())}
+                    className="max-w-[220px]"
+                    label="diagnosis date"
+                    name='diagnosisDate'
+                    placeholderValue={new CalendarDate(1995, 11, 6)}
+                    variant='bordered'
+                    classNames={{ 
+                        label: "text-lg text-black",
+                        input: "text-lg mb-2 ",
+                        errorMessage: "text-red-500 text-lg",
+                    }}
+                 />
+            </div>
 
-
-            <Button type="submit" variant="bordered">
-                Submit
-            </Button>
             {submitted && (
                 <div className="text-small text-default-500">
                     You submitted: <code>{JSON.stringify(submitted)}</code>
                 </div>
             )}
         </Form>
-    );
+
+        <Button type="submit" form='new-diagnosis-form' variant="bordered" className='mt-4' >
+            Submit
+        </Button>
+    </div>    
+);
 };
 
 export default NewDiagnosisForm;

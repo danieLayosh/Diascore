@@ -30,7 +30,7 @@ const NewDiagnosis = () => {
     }
 
     return (
-        <div className="flex flex-col items-start w-screen bg-gradient-bg text-text-light min-h-screen">
+        <div className="flex flex-col items-start bg-gradient-bg text-text-light min-h-screen">
             {/* Header Section */}
             <div className="flex justify-between items-center w-full px-4 sm:px-12 lg:px-12 py-4 bg-card-bg shadow-lg">
                 <h3 className="text-5xl sm:text-6xl font-island-moments text-primary-color font-semibold">Diascore</h3>
@@ -44,7 +44,7 @@ const NewDiagnosis = () => {
                     />
                 </div>
             </div>
-            <div className="mx-auto justify-center items-center mt-60"> 
+            <div className="mx-auto justify-center items-center mt-10"> 
                 <NewDiagnosisForm />
             </div>
         </div>
