@@ -44,7 +44,7 @@ const NewDiagnosis = () => {
                     />
                 </div>
             </div>
-            <div className="mx-auto justify-center items-center mt-32"> 
+            <div className="mx-auto justify-center items-center lg:mt-20 sm:mt-10 mt-8"> 
                 <NewDiagnosisForm />
             </div>
         </div>
