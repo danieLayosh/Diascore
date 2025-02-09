@@ -147,6 +147,7 @@ import { useNavigate } from "react-router-dom";
             <DropdownItem
               key="process"
               description="Allows you to process the diagnosis"
+              onPress={handleProcessDiagnosis}
               startContent={<EditDocumentIcon className={iconClasses} />}
             >
               Process diagnosis
@@ -158,6 +159,7 @@ import { useNavigate } from "react-router-dom";
               className="text-danger"
               color="danger"
               description="Permanently delete a diagnosis"
+              onPress={handleDeleteDiagnosis}
               startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
             >
               Delete diagnosis
