@@ -94,8 +94,6 @@ import { useNavigate } from "react-router-dom";
   export default function ActionNewDiagnosis() {
     const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
     
-    const navigate = useNavigate();
-
     const handleCloseWithOutSave = async () => {
       console.log("Closing without saving");
       // TODO: Add close without saving logic
@@ -103,9 +101,27 @@ import { useNavigate } from "react-router-dom";
 
     const handleSaveDiagnosis = async () => {
       console.log("Saving diagnosis");
+      const form = document.querySelector("form"); // Make sure your form has the right selector
+    
+      if (form) {
+        // Trigger form submit action
+        form.requestSubmit();
+    
+        // Extracting data from the form fields
+        const formData = new FormData(form); // Creates a FormData object with the form's data
+    
+        // Print the form data
+        const formDataObj = {};
+        formData.forEach((value, key) => {
+          formDataObj[key] = value; // Store each key-value pair in an object
+        });
+    
+        console.log("Form Data:", formDataObj);
+      }
+      
       // TODO: Add save diagnosis logic
     };
-
+    
     const handleProcessDiagnosis = async () => {
       console.log("Processing diagnosis");
       // TODO: Add process diagnosis logic
