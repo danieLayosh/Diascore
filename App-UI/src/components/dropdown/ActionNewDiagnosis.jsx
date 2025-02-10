@@ -7,7 +7,6 @@ import {
     Button,
     cn,
   } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
   
   export const AddNoteIcon = (props) => {
     return (
@@ -115,7 +114,13 @@ import { useNavigate } from "react-router-dom";
         formData.forEach((value, key) => {
           formDataObj[key] = value; // Store each key-value pair in an object
         });
-    
+
+        if (formDataObj["patientName"] === "" || formDataObj["DiagnosisFillerName"] === "") {
+            alert("Please fill in the required fields");
+            return;
+        } else {
+          alert("Diagnosis saved successfully");
+        }
         console.log("Form Data:", formDataObj);
       }
       
