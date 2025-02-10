@@ -10,7 +10,7 @@
  - kORs (kids or students - kids or school)
  - Diagnosis (link to Diagnosis Form || Dianosis Form Photo || Fill Manual)
 */}
-import { Form, Input, Button, CheckboxGroup, Checkbox, DateInput} from '@heroui/react';
+import { Form, Input, CheckboxGroup, Checkbox, DateInput} from '@heroui/react';
 import {CalendarDate, parseDate} from "@internationalized/date";
 import { useState } from 'react';
 
@@ -98,7 +98,7 @@ const NewDiagnosisForm = () => {
                     <CheckboxGroup
                         isRequired
                         size="lg"
-                        label="gender"
+                        label="Gender"
                         name='gender'
                         defaultValue={["boy"]}
                         orientation="horizontal"
@@ -132,7 +132,7 @@ const NewDiagnosisForm = () => {
                         isRequired
                         defaultValue={parseDate(getTodayDate())}
                         className="max-w-[220px]"
-                        label="diagnosis date"
+                        label="Diagnosis date"
                         name='diagnosisDate'
                         placeholderValue={new CalendarDate(1995, 11, 6)}
                         variant='bordered'
@@ -191,17 +191,7 @@ const NewDiagnosisForm = () => {
                         <Checkbox value="t">Teacher</Checkbox>
                     </CheckboxGroup>
                 </div>
-                
-                {submitted && (
-                    <div className="text-small text-default-500">
-                        You submitted: <code>{JSON.stringify(submitted)}</code>
-                    </div>
-                )}
             </Form>
-            
-            <Button type="submit" form='new-diagnosis-form' variant="bordered" className='mt-4' >
-                Submit
-            </Button>
         </div>    
 );
 };
