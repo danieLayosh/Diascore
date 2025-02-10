@@ -116,7 +116,15 @@ import useAlert from "../../context/useAlert";
         formData.forEach((value, key) => {
           formDataObj[key] = value; // Store each key-value pair in an object
         });
-
+        
+        if (formDataObj["patientID"] !== "") {
+          // Check if the patient ID is valid with 9 digits
+          if (formDataObj["patientID"].length !== 9) {
+            showAlert("Please enter a valid patient ID with 9 digits", "error");
+            return;
+          }
+        }
+        
         if (formDataObj["patientName"] === "" || formDataObj["DiagnosisFillerName"] === "") {
             showAlert("Please fill in the required fields", "error");
             return;
