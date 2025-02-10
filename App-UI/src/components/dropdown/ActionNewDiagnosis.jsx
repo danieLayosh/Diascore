@@ -8,7 +8,8 @@ import {
     cn,
   } from "@heroui/react";
 import useAlert from "../../context/useAlert"; 
-  
+import { useAuth } from "../../context/useAuth";
+
   export const AddNoteIcon = (props) => {
     return (
       <svg
@@ -94,6 +95,7 @@ import useAlert from "../../context/useAlert";
   export default function ActionNewDiagnosis() {
     const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
     const { showAlert } = useAlert();
+    const { user } = useAuth();
 
     const handleCloseWithOutSave = async () => {
       console.log("Closing without saving");
@@ -116,6 +118,8 @@ import useAlert from "../../context/useAlert";
         formData.forEach((value, key) => {
           formDataObj[key] = value; // Store each key-value pair in an object
         });
+
+        formDataObj["therapistID"] = user.uid;
         
         if (formDataObj["patientID"] !== "") {
           // Check if the patient ID is valid with 9 digits
@@ -124,7 +128,7 @@ import useAlert from "../../context/useAlert";
             return;
           }
         }
-        
+
         if (formDataObj["patientName"] === "" || formDataObj["DiagnosisFillerName"] === "") {
             showAlert("Please fill in the required fields", "error");
             return;
