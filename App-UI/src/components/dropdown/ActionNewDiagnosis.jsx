@@ -9,6 +9,7 @@ import {
   } from "@heroui/react";
 import useAlert from "../../context/useAlert"; 
 import { useAuth } from "../../context/useAuth";
+import { addNewDiagnosticData } from "../../firebase/firestore/diagnoses";
 
   export const AddNoteIcon = (props) => {
     return (
@@ -120,6 +121,7 @@ import { useAuth } from "../../context/useAuth";
         });
 
         formDataObj["therapistID"] = user.uid;
+        formDataObj["answers"] = [];
         
         if (formDataObj["patientID"] !== "") {
           // Check if the patient ID is valid with 9 digits
@@ -133,6 +135,7 @@ import { useAuth } from "../../context/useAuth";
             showAlert("Please fill in the required fields", "error");
             return;
         } else {
+          addNewDiagnosticData(formDataObj);
           showAlert("Diagnosis saved successfully", "success");
           // TODO: Store the data in the database and move to Diagnosis page for the next steps
         }
