@@ -111,12 +111,12 @@ import { useAuth } from "../../context/useAuth";
         form.requestSubmit();
     
         // Extracting data from the form fields
-        const formData = new FormData(form); // Creates a FormData object with the form's data
+        const formData = new FormData(form);
     
         // Print the form data
         const formDataObj = {};
         formData.forEach((value, key) => {
-          formDataObj[key] = value; // Store each key-value pair in an object
+          formDataObj[key] = value; 
         });
 
         formDataObj["therapistID"] = user.uid;
