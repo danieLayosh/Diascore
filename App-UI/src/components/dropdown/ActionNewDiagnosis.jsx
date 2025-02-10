@@ -7,6 +7,7 @@ import {
     Button,
     cn,
   } from "@heroui/react";
+import useAlert from "../../context/useAlert"; 
   
   export const AddNoteIcon = (props) => {
     return (
@@ -92,7 +93,8 @@ import {
   
   export default function ActionNewDiagnosis() {
     const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
-    
+    const { showAlert } = useAlert();
+
     const handleCloseWithOutSave = async () => {
       console.log("Closing without saving");
       // TODO: Add close without saving logic
@@ -116,10 +118,11 @@ import {
         });
 
         if (formDataObj["patientName"] === "" || formDataObj["DiagnosisFillerName"] === "") {
-            alert("Please fill in the required fields");
+            showAlert("Please fill in the required fields", "error");
             return;
         } else {
-          alert("Diagnosis saved successfully");
+          showAlert("Diagnosis saved successfully", "success");
+          // TODO: Store the data in the database and move to Diagnosis page for the next steps
         }
         console.log("Form Data:", formDataObj);
       }
