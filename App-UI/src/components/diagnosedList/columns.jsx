@@ -17,11 +17,11 @@
 
 export const columns = [
     {
-        name: 'PATIENT NAME',
+        name: 'NAME',
         uid: 'patientName',
     },
     {
-        name: 'DIAGNOSIS DATE',
+        name: 'DATE',
         uid: 'diagnosisDate',
     },
     {
