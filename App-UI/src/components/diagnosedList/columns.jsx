@@ -11,21 +11,26 @@
  * @property {string} kORs // "kids" or "school"
  * @property {number[]} answers
  * @property {string} status
+ * @property {string} avatar // path to image
  */
 
 
 export const columns = [
     {
-        key: 'patientName',
-        label: 'NAME',
+        name: 'PATIENT NAME',
+        uid: 'patientName',
     },
     {
-        key: 'diagnosisDate',
-        label: 'CREATED AT',
+        name: 'DIAGNOSIS DATE',
+        uid: 'diagnosisDate',
     },
     {
-        key: 'status',
-        label: 'STATUS',
+        name: 'STATUS',
+        uid: 'status',
+    },
+    {
+        name: 'ACTIONS',
+        uid: 'actions',
     },
 ];
 
