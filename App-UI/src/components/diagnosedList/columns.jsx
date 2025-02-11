@@ -1,12 +1,12 @@
 /**
  * @typedef {Object} AnswerSumRequest
- * @property {string} name
+ * @property {string} patientName
  * @property {string} patient_id
  * @property {string} gender
  * @property {number} age
  * @property {string} birth_date
  * @property {string} text_filler_name
- * @property {string} createdAt
+ * @property {string} diagnosisDate
  * @property {string} pORt // "p" for parent, "t" for teacher
  * @property {string} kORs // "kids" or "school"
  * @property {number[]} answers
@@ -16,11 +16,11 @@
 
 export const columns = [
     {
-        key: 'name',
+        key: 'patientName',
         label: 'NAME',
     },
     {
-        key: 'createdAt',
+        key: 'diagnosisDate',
         label: 'CREATED AT',
     },
     {
