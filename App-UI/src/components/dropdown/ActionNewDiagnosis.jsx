@@ -122,7 +122,7 @@ import { addNewDiagnosticData } from "../../firebase/firestore/diagnoses";
 
         formDataObj["therapistID"] = user.uid;
         formDataObj["answers"] = [];
-        formDataObj["status"] = "pending";
+        formDataObj["status"] = "PENDING";
         
         if (formDataObj["patientID"] !== "") {
           // Check if the patient ID is valid with 9 digits
