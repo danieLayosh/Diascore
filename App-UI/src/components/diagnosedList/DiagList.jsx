@@ -79,7 +79,12 @@ export const DiagList = ({ Diagnoses }) => {
   }, []);
 
   return (
-    <Table aria-label="Example table with custom cells">
+    <Table 
+      aria-label="Example table with custom cells"
+      color='secondary'
+      defaultSelectedKeys={["2"]}
+      selectionMode="single"
+    >
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
