@@ -123,6 +123,12 @@ import { addNewDiagnosticData } from "../../firebase/firestore/diagnoses";
         formDataObj["therapistID"] = user.uid;
         formDataObj["answers"] = [];
         formDataObj["status"] = "PENDING";
+
+        if (formDataObj["gender"] === "boy") {
+          formDataObj["avatar"] = "public/avatars/boy_avatar.jpg"
+        } else if (formDataObj["gender"] === "girl") {
+          formDataObj["avatar"] = "public/avatars/girl_avatar.jpg"
+        }
         
         if (formDataObj["patientID"] !== "") {
           // Check if the patient ID is valid with 9 digits
